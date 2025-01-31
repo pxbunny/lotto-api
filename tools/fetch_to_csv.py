@@ -9,6 +9,7 @@ from dotenv import load_dotenv
 
 ENDPOINT = 'https://developers.lotto.pl/api/open/v1/lotteries/draw-results/by-date-per-game'
 OUTPUT_FILE = 'data.csv'
+DELAY_SEC = 0.5
 
 
 def fetch_draw_results(date, api_key):
@@ -20,8 +21,8 @@ def fetch_draw_results(date, api_key):
         params = {
             'gameType': 'Lotto',
             'drawDate': date,
-            'index': '1',
-            'size': '2',
+            'index': 1,
+            'size': 100,
             'sort': 'drawSystemId',
             'order': 'ASC'
         }
@@ -76,7 +77,7 @@ if __name__ == '__main__':
             print(f"Numbers: {date_str} -> {numbers}, (plus: {plus_numbers})")
 
         date += timedelta(days=1)
-        time.sleep(1)
+        time.sleep(DELAY_SEC) # To prevent the 429 error code
 
     save_to_csv(results, OUTPUT_FILE)
     print(f"Data saved to '{OUTPUT_FILE}'")
