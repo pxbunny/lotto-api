@@ -1,3 +1,6 @@
 {
-  "recommendations": ["humao.rest-client"]
+  "recommendations": [
+    "ms-azuretools.vscode-bicep",
+    "humao.rest-client"
+  ]
 }
