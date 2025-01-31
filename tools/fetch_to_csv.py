@@ -7,16 +7,21 @@ import requests
 from dotenv import load_dotenv
 
 
+load_dotenv()
+
+LOTTO_API_KEY = os.getenv('LOTTO_API_KEY')
+USER_AGENT = os.getenv('USER_AGENT')
+
 ENDPOINT = 'https://developers.lotto.pl/api/open/v1/lotteries/draw-results/by-date-per-game'
 OUTPUT_FILE = 'data.csv'
 DELAY_SEC = 0.5
 
 
-def fetch_draw_results(date, api_key, user_agent):
+def fetch_draw_results(date):
     try:
         headers = {
-            'User-Agent': user_agent,
-            'secret': api_key
+            'User-Agent': USER_AGENT,
+            'secret': LOTTO_API_KEY
         }
         params = {
             'gameType': 'Lotto',
@@ -53,15 +58,11 @@ if __name__ == '__main__':
     date = datetime(2000, 1, 1)
     end_date = datetime.today()
 
-    load_dotenv()
-    api_key = os.getenv('LOTTO_API_KEY')
-    user_agent = os.getenv('USER_AGENT')
-
     while date <= end_date:
         date_str = date.strftime('%Y-%m-%d')
 
         try:
-            data = fetch_draw_results(date_str, api_key, user_agent)
+            data = fetch_draw_results(date_str)
         except:
             break
 

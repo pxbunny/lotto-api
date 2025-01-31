@@ -5,5 +5,5 @@ var appName = 'lotto-draw-history'
 param appServicePlanName = 'asp-${appName}'
 param functionAppName = 'func-${appName}'
 param storageAccountName = replace('st${appName}', '-', '')
-param drawResultsTableName = 'DrawResults'
+param drawResultsTableName = 'LottoResults'
 param errorsTableName = 'Errors'
