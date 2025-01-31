@@ -64,9 +64,9 @@ if __name__ == '__main__':
             break
 
         if data and data.get('items'):
-            items = data['items']
-            numbers = items[0]['results'][0]['resultsJson']
-            plus_numbers = items[1]['results'][0]['resultsJson'] if len(items) > 1 else []
+            game_results = {item['gameType']: item['results'][0]['resultsJson'] for item in data['items']}
+            numbers = game_results.get('Lotto', [])
+            plus_numbers = game_results.get('LottoPlus', [])
             
             results.append([
                 date_str,
