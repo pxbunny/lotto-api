@@ -1,7 +1,9 @@
 using './main.bicep'
 
-param appServicePlanName = 'asp-lotto-draw-history'
-param functionAppName = 'func-lotto-draw-history'
-param storageAccountName = toLower('stLottoDrawHistory')
+var appName = 'lotto-draw-history'
+
+param appServicePlanName = 'asp-${appName}'
+param functionAppName = 'func-${appName}'
+param storageAccountName = replace('st${appName}', '-', '')
 param drawResultsTableName = 'DrawResults'
 param errorsTableName = 'Errors'
