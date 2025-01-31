@@ -11,7 +11,7 @@ load_dotenv()
 STORAGE_CONNECTION_STRING = os.getenv('STORAGE_CONNECTION_STRING')
 
 TABLE_NAME = 'LottoResults'
-CSV_FILE = 'data_full_2025-01-31.csv'
+CSV_FILE = 'data.csv'
 
 
 def upload_batch(table_client, batch):
