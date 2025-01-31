@@ -12,10 +12,10 @@ OUTPUT_FILE = 'data.csv'
 DELAY_SEC = 0.5
 
 
-def fetch_draw_results(date, api_key):
+def fetch_draw_results(date, api_key, user_agent):
     try:
         headers = {
-            'User-Agent': 'rczajka.me',
+            'User-Agent': user_agent,
             'secret': api_key
         }
         params = {
@@ -55,12 +55,13 @@ if __name__ == '__main__':
 
     load_dotenv()
     api_key = os.getenv('LOTTO_API_KEY')
+    user_agent = os.getenv('USER_AGENT')
 
     while date <= end_date:
         date_str = date.strftime('%Y-%m-%d')
 
         try:
-            data = fetch_draw_results(date_str, api_key)
+            data = fetch_draw_results(date_str, api_key, user_agent)
         except:
             break
 
