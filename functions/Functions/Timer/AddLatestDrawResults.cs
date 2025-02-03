@@ -3,7 +3,7 @@ using Microsoft.Extensions.Logging;
 
 namespace LottoDrawHistory.Functions.Timer;
 
-class AddLatestDrawResults(ILogger<AddLatestDrawResults> logger)
+sealed class AddLatestDrawResults(ILogger<AddLatestDrawResults> logger)
 {
     [Function(nameof(AddLatestDrawResults))]
     public void Run([TimerTrigger("0 0 23 * * 2,4,6")] TimerInfo myTimer)

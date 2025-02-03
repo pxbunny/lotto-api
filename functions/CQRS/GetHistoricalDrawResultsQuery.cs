@@ -4,7 +4,7 @@ using Microsoft.Extensions.Logging;
 
 namespace LottoDrawHistory.CQRS;
 
-record GetHistoricalDrawResultsQuery(
+sealed record GetHistoricalDrawResultsQuery(
     DateOnly? DateFrom,
     DateOnly? DateTo,
     int Limit)

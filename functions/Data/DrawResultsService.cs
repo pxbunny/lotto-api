@@ -2,7 +2,7 @@
 
 namespace LottoDrawHistory.Data;
 
-class DrawResultsService(TableServiceClient tableServiceClient)
+sealed class DrawResultsService(TableServiceClient tableServiceClient)
 {
     private const string TableName = "LottoResults";
     private const int MaxPageSize = 1_000;
