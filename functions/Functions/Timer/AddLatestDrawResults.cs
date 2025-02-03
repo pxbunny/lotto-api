@@ -1,9 +1,9 @@
 ﻿using Microsoft.Azure.Functions.Worker;
 using Microsoft.Extensions.Logging;
 
-namespace LottoDrawHistory.Functions;
+namespace LottoDrawHistory.Functions.Timer;
 
-public class AddLatestDrawResults(ILogger<AddLatestDrawResults> logger)
+class AddLatestDrawResults(ILogger<AddLatestDrawResults> logger)
 {
     [Function(nameof(AddLatestDrawResults))]
     public void Run([TimerTrigger("0 0 23 * * 2,4,6")] TimerInfo myTimer)
