@@ -26,13 +26,16 @@ sealed class GetHistoricalDrawResultsQueryHandler(
             "Handling GetHistoricalDrawResultsQuery - DateFrom: {DateFrom}, DateTo: {DateTo}, Limit: {Limit}",
             dateFrom, dateTo, limit);
         
-        var filter = "PartitionKey eq 'LottoData'";
+        var filter = "";
 
         if (dateFrom is not null)
-            filter = $"{filter} and DrawDate ge '{((DateOnly)dateFrom).ToString(Constants.DateFormat)}'";
+            filter = $"DrawDate ge '{((DateOnly)dateFrom).ToString(Constants.DateFormat)}'";
 
         if (dateTo is not null)
             filter = $"{filter} and DrawDate le '{((DateOnly)dateTo).ToString(Constants.DateFormat)}'";
+
+        if (filter.StartsWith(" and"))
+            filter = filter.Remove(0, 4);
         
         logger.LogInformation("Final query filter: {Filter}", filter);
         logger.LogInformation("Fetching results from DrawResultsService...");

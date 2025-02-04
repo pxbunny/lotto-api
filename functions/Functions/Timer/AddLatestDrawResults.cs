@@ -1,18 +1,25 @@
-﻿using Microsoft.Azure.Functions.Worker;
+﻿using LottoDrawHistory.CQRS;
+using MediatR;
+using Microsoft.Azure.Functions.Worker;
 using Microsoft.Extensions.Logging;
 
 namespace LottoDrawHistory.Functions.Timer;
 
-sealed class AddLatestDrawResults(ILogger<AddLatestDrawResults> logger)
+sealed class AddLatestDrawResults(IMediator mediator, ILogger<AddLatestDrawResults> logger)
 {
     [Function(nameof(AddLatestDrawResults))]
-    public void Run([TimerTrigger("0 0 23 * * 2,4,6")] TimerInfo myTimer)
+    public async Task Run(
+        [TimerTrigger(
+            "0 0 23 * * 2,4,6"
+#if DEBUG
+            //, RunOnStartup = true
+#endif
+            )] TimerInfo timer,
+        CancellationToken cancellationToken)
     {
-        logger.LogInformation($"C# Timer trigger function executed at: {DateTime.Now}");
-
-        if (myTimer.ScheduleStatus is not null)
-        {
-            logger.LogInformation($"Next timer schedule at: {myTimer.ScheduleStatus.Next}");
-        }
+        await mediator.Send(new AddLatestDrawResultsCommand(), cancellationToken);
+        
+        if (timer.ScheduleStatus is not null)
+            logger.LogInformation("Next timer schedule at: {NextScheduledTrigger}", timer.ScheduleStatus.Next);
     }
 }
