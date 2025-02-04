@@ -15,7 +15,8 @@ sealed class GetHistoricalDrawResults(
 {
     [Function(nameof(GetHistoricalDrawResults))]
     public async Task<IActionResult> Run(
-        [HttpTrigger(AuthorizationLevel.Anonymous, "get", Route = "historical-draw-results")] HttpRequest req)
+        [HttpTrigger(AuthorizationLevel.Anonymous, "get", Route = "historical-draw-results")] HttpRequest req,
+        CancellationToken cancellationToken)
     {
         logger.LogInformation("Received request for historical draw results. Parameters : {QueryString}", req.QueryString);
         
@@ -30,7 +31,7 @@ sealed class GetHistoricalDrawResults(
         var (dateFrom, dateTo, limit) = req.ParseQueryString();
         
         var query = new GetHistoricalDrawResultsQuery(dateFrom, dateTo, limit);
-        var response = (await mediator.Send(query)).ToList();
+        var response = (await mediator.Send(query, cancellationToken)).ToList();
         
         if (response.Count == 0)
         {
