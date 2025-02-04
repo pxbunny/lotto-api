@@ -2,7 +2,6 @@ param appServicePlanName string
 param functionAppName string
 param storageAccountName string
 param drawResultsTableName string
-param errorsTableName string
 
 param location string = resourceGroup().location
 
