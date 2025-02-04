@@ -1,4 +1,5 @@
-﻿using JetBrains.Annotations;
+﻿using System.Text.Json;
+using JetBrains.Annotations;
 using LottoDrawHistory.Functions.Http.Shared;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
@@ -7,7 +8,9 @@ using Microsoft.Extensions.Logging;
 
 namespace LottoDrawHistory.Functions.Http;
 
-sealed class GetHistoricalDrawResults(HttpRequestHandler<GetHistoricalDrawResults> handler)
+sealed class GetHistoricalDrawResults(
+    HttpRequestHandler<GetHistoricalDrawResults> handler,
+    JsonSerializerOptions jsonSerializerOptions)
 {
     [Function(nameof(GetHistoricalDrawResults))]
     public async Task<IActionResult> Run(
@@ -17,11 +20,17 @@ sealed class GetHistoricalDrawResults(HttpRequestHandler<GetHistoricalDrawResult
         return await handler.HandleAsync(req, CreateResponse, cancellationToken);
     }
 
-    private static IActionResult CreateResponse(IList<DrawResults> data, ILogger<GetHistoricalDrawResults> logger)
+    private IActionResult CreateResponse(IList<DrawResults> data, ILogger<GetHistoricalDrawResults> logger)
     {
-        var dto = data.Select(r => new DrawResultsDto(r.DrawDate, r.LottoNumbers, r.PlusNumbers));
-        logger.LogInformation("Successfully retrieved {ResultCount} results. Sending JSON response...", dto.Count());
-        return new OkObjectResult(dto);
+        var dto = data.Select(r => new DrawResultsDto(r.DrawDate, r.LottoNumbers, r.PlusNumbers)).ToList();
+        logger.LogInformation("Successfully retrieved {ResultCount} results. Sending JSON response...", dto.Count);
+
+        return new ContentResult
+        {
+            Content = JsonSerializer.Serialize(dto, jsonSerializerOptions),
+            ContentType = "application/json",
+            StatusCode = 200
+        };
     }
 }
 

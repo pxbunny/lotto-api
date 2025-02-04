@@ -1,3 +1,4 @@
+using System.Text.Json;
 using LottoDrawHistory.Data;
 using LottoDrawHistory.Functions.Http.Shared;
 using Microsoft.Azure.Functions.Worker.Builder;
@@ -9,6 +10,16 @@ var builder = FunctionsApplication.CreateBuilder(args);
 var assembly = typeof(IAssemblyFlag).Assembly;
 
 builder.ConfigureFunctionsWebApplication();
+
+var jsonSerializerOptions = new JsonSerializerOptions
+{
+    PropertyNamingPolicy = JsonNamingPolicy.SnakeCaseLower,
+    DictionaryKeyPolicy = JsonNamingPolicy.SnakeCaseLower,
+    WriteIndented = false
+};
+
+builder.Services
+    .AddSingleton(jsonSerializerOptions);
 
 builder.Services
     .AddScoped<DrawResultsService>()
