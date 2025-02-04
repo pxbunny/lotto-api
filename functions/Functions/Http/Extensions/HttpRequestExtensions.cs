@@ -26,11 +26,11 @@ static class HttpRequestExtensions
         return (true, null);
     }
     
-    public static (DateOnly?, DateOnly?, int) ParseQueryString(this HttpRequest req)
+    public static (DateOnly?, DateOnly?, int?) ParseQueryString(this HttpRequest req)
     {
         DateOnly? dateFrom = null;
         DateOnly? dateTo = null;
-        var limit = 100;
+        int? limit = null;
 
         if (req.Query.TryGetValue("dateFrom", out var dateFromStr) &&
             DateOnly.TryParse(dateFromStr, out var parsedDateFrom))

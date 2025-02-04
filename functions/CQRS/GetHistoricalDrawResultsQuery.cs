@@ -7,7 +7,7 @@ namespace LottoDrawHistory.CQRS;
 sealed record GetHistoricalDrawResultsQuery(
     DateOnly? DateFrom,
     DateOnly? DateTo,
-    int Limit)
+    int? Limit)
     : IRequest<IEnumerable<DrawResults>>;
 
 sealed class GetHistoricalDrawResultsQueryHandler(
@@ -20,6 +20,7 @@ sealed class GetHistoricalDrawResultsQueryHandler(
         CancellationToken cancellationToken)
     {
         var (dateFrom, dateTo, limit) = request;
+        const int defaultLimit = 100;
         
         logger.LogInformation(
             "Handling GetHistoricalDrawResultsQuery - DateFrom: {DateFrom}, DateTo: {DateTo}, Limit: {Limit}",
@@ -28,15 +29,19 @@ sealed class GetHistoricalDrawResultsQueryHandler(
         var filter = "PartitionKey eq 'LottoData'";
 
         if (dateFrom is not null)
-            filter = $"{filter} and DrawDate ge '${((DateOnly)dateFrom).ToString(Constants.DateFormat)}'";
+            filter = $"{filter} and DrawDate ge '{((DateOnly)dateFrom).ToString(Constants.DateFormat)}'";
 
         if (dateTo is not null)
-            filter = $"{filter} and DrawDate le '${((DateOnly)dateTo).ToString(Constants.DateFormat)}'";
+            filter = $"{filter} and DrawDate le '{((DateOnly)dateTo).ToString(Constants.DateFormat)}'";
         
         logger.LogInformation("Final query filter: {Filter}", filter);
         logger.LogInformation("Fetching results from DrawResultsService...");
-        
-        var results = (await drawResultsService.GetAsync(filter, limit, cancellationToken)).ToList();
+
+        var resultsLimit = limit ?? (dateFrom is null && dateTo is null
+            ? defaultLimit
+            : int.MaxValue);
+
+        var results = (await drawResultsService.GetAsync(filter, resultsLimit, cancellationToken)).ToList();
         
         if (results.Count == 0)
         {
@@ -44,13 +49,13 @@ sealed class GetHistoricalDrawResultsQueryHandler(
             return [];
         }
         
-        logger.LogInformation("Successfully retrieved {Count} historical draw results.", results.Count);
+        logger.LogInformation("Handled GetHistoricalDrawResultsQuery. Successfully retrieved {Count} results.", results.Count);
         
         return results.Select(r => new DrawResults
         {
             DrawDate = r.DrawDate,
             LottoNumbers = r.LottoNumbers.Split(',').Select(int.Parse),
-            PlusNumbers = r.PlusNumbers?.Split(',').Select(int.Parse) ?? [],
+            PlusNumbers = !string.IsNullOrWhiteSpace(r.PlusNumbers) ? r.PlusNumbers.Split(',').Select(int.Parse) : [],
             LottoNumbersString = r.LottoNumbers,
             PlusNumbersString = r.PlusNumbers
         });

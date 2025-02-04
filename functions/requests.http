@@ -1,1 +1,29 @@
-﻿GET http://localhost:7163/api/historical-draw-results
+﻿### Get historical draw results | default parameters
+GET http://localhost:7163/api/historical-draw-results
+
+### Get historical draw results | limit=12
+GET http://localhost:7163/api/historical-draw-results?limit=12
+
+### Get historical draw results | limit=1000
+GET http://localhost:7163/api/historical-draw-results?limit=1000
+
+### Get historical draw results | limit=1500
+GET http://localhost:7163/api/historical-draw-results?limit=1500
+
+### Get historical draw results | dateFrom=2025-01-01
+GET http://localhost:7163/api/historical-draw-results?dateFrom=2025-01-01
+
+### Get historical draw results | dateFrom=2025-01-01, dateTo=2025-01-20
+GET http://localhost:7163/api/historical-draw-results?dateFrom=2025-01-01&dateTo=2025-01-20
+
+### Get historical draw results | dateTo=2012-01-01, limit=10
+GET http://localhost:7163/api/historical-draw-results?dateTo=2012-01-01&limit=10
+
+### Get historical draw results | dateFrom=2025-01-01, dateTo=2025-01-20, limit=2
+GET http://localhost:7163/api/historical-draw-results?dateFrom=2025-01-01&dateTo=2025-01-20&limit=2
+
+### Get historical draw results | dateFrom=2012-01-01
+GET http://localhost:7163/api/historical-draw-results?dateFrom=2012-01-01
+
+### Get historical draw results | dateFrom=2000-01-01
+GET http://localhost:7163/api/historical-draw-results?dateFrom=2000-01-01
