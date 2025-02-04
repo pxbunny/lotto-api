@@ -14,7 +14,7 @@ sealed class DownloadHistoricalDrawResultsCsv(HttpRequestHandler<DownloadHistori
 {
     [Function(nameof(DownloadHistoricalDrawResultsCsv))]
     public async Task<IActionResult> Run(
-        [HttpTrigger(AuthorizationLevel.Anonymous, "get", Route = "historical-draw-results/download")] HttpRequest req,
+        [HttpTrigger("get", Route = "historical-draw-results/download")] HttpRequest req,
         CancellationToken cancellationToken)
     {
         return await handler.HandleAsync(req, CreateResponseAsync, cancellationToken);

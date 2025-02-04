@@ -14,7 +14,7 @@ sealed class GetHistoricalDrawResults(
 {
     [Function(nameof(GetHistoricalDrawResults))]
     public async Task<IActionResult> Run(
-        [HttpTrigger(AuthorizationLevel.Anonymous, "get", Route = "historical-draw-results")] HttpRequest req,
+        [HttpTrigger("get", Route = "historical-draw-results")] HttpRequest req,
         CancellationToken cancellationToken)
     {
         return await handler.HandleAsync(req, CreateResponse, cancellationToken);
