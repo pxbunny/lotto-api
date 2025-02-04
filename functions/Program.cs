@@ -1,4 +1,5 @@
 using LottoDrawHistory.Data;
+using LottoDrawHistory.Functions.Http.Shared;
 using Microsoft.Azure.Functions.Worker.Builder;
 using Microsoft.Extensions.Azure;
 using Microsoft.Extensions.DependencyInjection;
@@ -9,7 +10,9 @@ var assembly = typeof(IAssemblyFlag).Assembly;
 
 builder.ConfigureFunctionsWebApplication();
 
-builder.Services.AddScoped<DrawResultsService>();
+builder.Services
+    .AddScoped<DrawResultsService>()
+    .AddScoped(typeof(HttpRequestHandler<>));
 
 builder.Services.AddAzureClients(clientBuilder =>
 {

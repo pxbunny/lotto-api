@@ -1,6 +1,6 @@
 ﻿using Microsoft.AspNetCore.Http;
 
-namespace LottoDrawHistory.Functions.Http.Extensions;
+namespace LottoDrawHistory.Functions.Http.Shared;
 
 static class HttpRequestExtensions
 {

@@ -1,7 +1,5 @@
 ﻿using JetBrains.Annotations;
-using LottoDrawHistory.CQRS;
-using LottoDrawHistory.Functions.Http.Extensions;
-using MediatR;
+using LottoDrawHistory.Functions.Http.Shared;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Azure.Functions.Worker;
@@ -9,38 +7,20 @@ using Microsoft.Extensions.Logging;
 
 namespace LottoDrawHistory.Functions.Http;
 
-sealed class GetHistoricalDrawResults(
-    IMediator mediator,
-    ILogger<GetHistoricalDrawResults> logger)
+sealed class GetHistoricalDrawResults(HttpRequestHandler<GetHistoricalDrawResults> handler)
 {
     [Function(nameof(GetHistoricalDrawResults))]
     public async Task<IActionResult> Run(
         [HttpTrigger(AuthorizationLevel.Anonymous, "get", Route = "historical-draw-results")] HttpRequest req,
         CancellationToken cancellationToken)
     {
-        logger.LogInformation("Received request for historical draw results. Parameters : {QueryString}", req.QueryString);
-        
-        var (isValid, errorMessage) = req.ValidateQueryString();
+        return await handler.HandleAsync(req, CreateResponse, cancellationToken);
+    }
 
-        if (!isValid)
-        {
-            logger.LogError("Query string validation failed: {ErrorMessage}", errorMessage);
-            return new BadRequestObjectResult(new { error = errorMessage });
-        }
-        
-        var (dateFrom, dateTo, limit) = req.ParseQueryString();
-        
-        var query = new GetHistoricalDrawResultsQuery(dateFrom, dateTo, limit);
-        var response = (await mediator.Send(query, cancellationToken)).ToList();
-        
-        if (response.Count == 0)
-        {
-            logger.LogWarning("No results found for the given query parameters.");
-            return new NotFoundObjectResult("No historical draw results found.");
-        }
-        
-        var dto = response.Select(r => new DrawResultsDto(r.DrawDate, r.LottoNumbers, r.PlusNumbers));
-        logger.LogInformation("Successfully retrieved {ResultCount} results. Response code 200 (OK).", dto.Count());
+    private static IActionResult CreateResponse(IList<DrawResults> data, ILogger<GetHistoricalDrawResults> logger)
+    {
+        var dto = data.Select(r => new DrawResultsDto(r.DrawDate, r.LottoNumbers, r.PlusNumbers));
+        logger.LogInformation("Successfully retrieved {ResultCount} results. Sending JSON response...", dto.Count());
         return new OkObjectResult(dto);
     }
 }
