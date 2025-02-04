@@ -46,8 +46,3 @@ resource drawResultsTable 'Microsoft.Storage/storageAccounts/tableServices/table
   name: drawResultsTableName
   parent: tableService
 }
-
-resource errorsTable 'Microsoft.Storage/storageAccounts/tableServices/tables@2023-05-01' = {
-  name: errorsTableName
-  parent: tableService
-}

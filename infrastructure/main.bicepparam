@@ -6,4 +6,3 @@ param appServicePlanName = 'asp-${appName}'
 param functionAppName = 'func-${appName}'
 param storageAccountName = replace('st${appName}', '-', '')
 param drawResultsTableName = 'LottoResults'
-param errorsTableName = 'Errors'
