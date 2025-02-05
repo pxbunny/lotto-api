@@ -4,14 +4,12 @@ on:
   push:
     branches: [ main ]
     paths:
-      - '.github/workflows/**'
       - 'infrastructure/**'
       - 'functions/**'
 
   pull_request:
     branches: [ main ]
     paths:
-      - '.github/workflows/**'
       - 'infrastructure/**'
       - 'functions/**'
 
@@ -20,7 +18,8 @@ on:
 env:
   BICEP_FILE: infrastructure/main.bicep
   BICEP_PARAMS_FILE: infrastructure/main.bicepparam
-  DOTNET_VERSION: '9.0.x' 
+  DOTNET_VERSION: '9.0.x'
+  FUNCTIONS_PROJECT_DIRECTORY: functions/
 
 jobs:
   validate-infrastructure:
@@ -65,7 +64,8 @@ jobs:
             --resource-group ${{ secrets.AZURE_RESOURCE_GROUP }} \
             --template-file ${{ env.BICEP_FILE }} \
             --parameters ${{ env.BICEP_PARAMS_FILE }} \
-            --query properties.outputs.appName.value)
+            --query properties.outputs.appName.value \
+            --output tsv)
           
           echo "appName=$deploymentOutput" >> $GITHUB_OUTPUT
 
@@ -88,10 +88,10 @@ jobs:
         run: dotnet restore
 
       - name: Build
-        run: dotnet build --configuration Release --no-restore
+        run: dotnet build ${{ env.FUNCTIONS_PROJECT_DIRECTORY }} --configuration Release --no-restore
 
       - name: Publish
-        run: dotnet publish --configuration Release --no-build -o ./publish
+        run: dotnet publish ${{ env.FUNCTIONS_PROJECT_DIRECTORY }} --configuration Release --no-build -o ./publish
 
       - name: Package Function App
         run: zip -r functionapp.zip ./publish
