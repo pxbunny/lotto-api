@@ -32,7 +32,7 @@ resource appServicePlan 'Microsoft.Web/serverfarms@2024-04-01' = {
   }
 }
 
-resource funclottodrawhistory 'Microsoft.Web/sites@2024-04-01' = {
+resource functionApp 'Microsoft.Web/sites@2024-04-01' = {
   name: functionAppName
   kind: 'functionapp'
   location: location
@@ -45,3 +45,5 @@ resource drawResultsTable 'Microsoft.Storage/storageAccounts/tableServices/table
   name: drawResultsTableName
   parent: tableService
 }
+
+output appName string = functionApp.name

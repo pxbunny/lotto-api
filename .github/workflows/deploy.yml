@@ -1,0 +1,99 @@
+name: Build and Deploy Azure Resources
+
+on:
+  push:
+    branches: [ main ]
+  pull_request:
+    branches: [ main ]
+
+env:
+  BICEP_FILE: infrastructure/main.bicep
+  BICEP_PARAMS_FILE: infrastructure/main.bicepparam
+  DOTNET_VERSION: '9.0.x' 
+
+jobs:
+  validate-infrastructure:
+    name: Validate Bicep Infrastructure
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout Repository
+        uses: actions/checkout@v4
+
+      - name: Azure Login
+        uses: azure/login@v2
+        with:
+          creds: ${{ secrets.AZURE_CREDENTIALS }}
+
+      - name: Validate Bicep
+        run: |
+          az bicep install
+          az bicep build -f ${{ env.BICEP_FILE }} --stdout
+          az bicep build-params -f ${{ env.BICEP_PARAMS_FILE }} --stdout
+
+  deploy-infrastructure:
+    name: Deploy Infrastructure
+    runs-on: ubuntu-latest
+    needs: validate-infrastructure
+    environment: production
+    outputs:
+      appName: ${{ steps.deploy.outputs.appName }}
+
+    steps:
+      - name: Checkout Repository
+        uses: actions/checkout@v4
+
+      - name: Azure Login
+        uses: azure/login@v2
+        with:
+          creds: ${{ secrets.AZURE_CREDENTIALS }}
+
+      - name: Deploy Bicep
+        id: deploy
+        run: |
+          deploymentOutput=$(az deployment group create \
+            --resource-group ${{ env.RESOURCE_GROUP_NAME }} \
+            --template-file ${{ env.BICEP_FILE }} \
+            --parameters ${{ env.BICEP_PARAMS_FILE }} \
+            --query properties.outputs.appName.value \
+            --output tsv)
+          
+          echo "appName=$deploymentOutput" >> $GITHUB_OUTPUT
+
+  build-and-deploy-app:
+    name: Build and Deploy Function App
+    runs-on: ubuntu-latest
+    needs: deploy-infrastructure
+    environment: production
+
+    steps:
+      - name: Checkout Repository
+        uses: actions/checkout@v4
+
+      - name: Setup .NET
+        uses: actions/setup-dotnet@v4
+        with:
+          dotnet-version: ${{ env.DOTNET_VERSION }}
+
+      - name: Restore Dependencies
+        run: dotnet restore
+
+      - name: Build
+        run: dotnet build --configuration Release --no-restore
+
+      - name: Publish
+        run: dotnet publish --configuration Release --no-build -o ./publish
+
+      - name: Package Function App
+        run: zip -r functionapp.zip ./publish
+
+      - name: Azure Login
+        uses: azure/login@v2
+        with:
+          creds: ${{ secrets.AZURE_CREDENTIALS }}
+
+      - name: Deploy Azure Function App
+        run: |
+          az functionapp deployment source config-zip \
+            --resource-group ${{ secrets.AZURE_RESOURCE_GROUP }} \
+            --name ${{ needs.deploy-infrastructure.outputs.appName }} \
+            --src functionapp.zip
