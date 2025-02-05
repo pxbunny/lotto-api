@@ -7,7 +7,7 @@ namespace LottoDrawHistory.CQRS;
 sealed record GetHistoricalDrawResultsQuery(
     DateOnly? DateFrom,
     DateOnly? DateTo,
-    int? Limit)
+    int? Top)
     : IRequest<IEnumerable<DrawResults>>;
 
 sealed class GetHistoricalDrawResultsQueryHandler(
@@ -19,12 +19,12 @@ sealed class GetHistoricalDrawResultsQueryHandler(
         GetHistoricalDrawResultsQuery request,
         CancellationToken cancellationToken)
     {
-        var (dateFrom, dateTo, limit) = request;
-        const int defaultLimit = 100;
+        var (dateFrom, dateTo, top) = request;
+        const int defaultTopValue = 100;
         
         logger.LogInformation(
-            "Handling GetHistoricalDrawResultsQuery - DateFrom: {DateFrom}, DateTo: {DateTo}, Limit: {Limit}",
-            dateFrom, dateTo, limit);
+            "Handling GetHistoricalDrawResultsQuery - DateFrom: {DateFrom}, DateTo: {DateTo}, Top: {Top}",
+            dateFrom, dateTo, top);
         
         var filter = "";
 
@@ -40,11 +40,11 @@ sealed class GetHistoricalDrawResultsQueryHandler(
         logger.LogInformation("Final query filter: {Filter}", filter);
         logger.LogInformation("Fetching results from DrawResultsService...");
 
-        var resultsLimit = limit ?? (dateFrom is null && dateTo is null
-            ? defaultLimit
+        var resultsTopValue = top ?? (dateFrom is null && dateTo is null
+            ? defaultTopValue
             : int.MaxValue);
 
-        var results = (await drawResultsService.GetAsync(filter, resultsLimit, cancellationToken)).ToList();
+        var results = (await drawResultsService.GetAsync(filter, resultsTopValue, cancellationToken)).ToList();
         
         if (results.Count == 0)
         {

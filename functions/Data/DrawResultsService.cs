@@ -34,29 +34,29 @@ sealed class DrawResultsService(TableServiceClient tableServiceClient)
                ?? throw new InvalidOperationException("Couldn't retrieve the latest draw results.");
     }
     
-    public async Task<IEnumerable<DrawResultsEntity>> GetAsync(int limit, CancellationToken cancellationToken)
+    public async Task<IEnumerable<DrawResultsEntity>> GetAsync(int top, CancellationToken cancellationToken)
     {
-        return await GetAsync("", limit, cancellationToken);
+        return await GetAsync("", top, cancellationToken);
     }
 
-    public async Task<IEnumerable<DrawResultsEntity>> GetAsync(string filter, int limit, CancellationToken cancellationToken)
+    public async Task<IEnumerable<DrawResultsEntity>> GetAsync(string filter, int top, CancellationToken cancellationToken)
     {
         var fullFilter = !string.IsNullOrWhiteSpace(filter) ? $"{BaseFilter} and ({filter})" : BaseFilter;
         var query = _client.QueryAsync<DrawResultsEntity>(fullFilter, cancellationToken: cancellationToken);
-        var pageSize = limit > MaxPageSize ? MaxPageSize : limit;
+        var pageSize = top > MaxPageSize ? MaxPageSize : top;
         
         var results = new List<DrawResultsEntity>();
 
         await foreach (var page in query.AsPages(pageSizeHint: pageSize).WithCancellation(cancellationToken))
         {
-            var remaining = limit - results.Count;
+            var remaining = top - results.Count;
             var values = remaining < page.Values.Count
                 ? page.Values.Take(remaining)
                 : page.Values;
             
             results.AddRange(values);
             
-            if (results.Count >= limit) break;
+            if (results.Count >= top) break;
         }
 
         return results;

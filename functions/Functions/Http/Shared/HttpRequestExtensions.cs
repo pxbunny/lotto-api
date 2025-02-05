@@ -16,11 +16,11 @@ static class HttpRequestExtensions
             return (false, $"'dateTo' must be a valid date in the format {Constants.DateFormat}.");
         }
 
-        if (request.Query.TryGetValue("limit", out var limitStr) &&
-            !string.IsNullOrWhiteSpace(limitStr) &&
-            (!int.TryParse(limitStr, out var limit) || limit <= 0))
+        if (request.Query.TryGetValue("top", out var topStr) &&
+            !string.IsNullOrWhiteSpace(topStr) &&
+            (!int.TryParse(topStr, out var top) || top <= 0))
         {
-            return (false, "'limit' must be a positive integer.");
+            return (false, "'top' must be a positive integer.");
         }
 
         return (true, null);
@@ -30,7 +30,7 @@ static class HttpRequestExtensions
     {
         DateOnly? dateFrom = null;
         DateOnly? dateTo = null;
-        int? limit = null;
+        int? top = null;
 
         if (req.Query.TryGetValue("dateFrom", out var dateFromStr) &&
             DateOnly.TryParse(dateFromStr, out var parsedDateFrom))
@@ -44,13 +44,13 @@ static class HttpRequestExtensions
             dateTo = parsedDateTo;
         }
 
-        if (req.Query.TryGetValue("limit", out var limitStr) &&
-            int.TryParse(limitStr, out var parsedLimit))
+        if (req.Query.TryGetValue("top", out var topStr) &&
+            int.TryParse(topStr, out var parsedTopValue))
         {
-            limit = parsedLimit;
+            top = parsedTopValue;
         }
 
-        return (dateFrom, dateTo, limit);
+        return (dateFrom, dateTo, top);
     }
 
     private static bool ValidateDateQueryStringValue(IQueryCollection query, string name) =>

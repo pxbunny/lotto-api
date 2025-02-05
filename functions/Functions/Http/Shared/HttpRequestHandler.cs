@@ -31,9 +31,9 @@ sealed class HttpRequestHandler<TFunction>(IMediator mediator, ILogger<TFunction
             return new BadRequestObjectResult(new { error = errorMessage });
         }
 
-        var (dateFrom, dateTo, limit) = req.ParseQueryString();
+        var (dateFrom, dateTo, top) = req.ParseQueryString();
 
-        var query = new GetHistoricalDrawResultsQuery(dateFrom, dateTo, limit);
+        var query = new GetHistoricalDrawResultsQuery(dateFrom, dateTo, top);
         var response = (await mediator.Send(query, cancellationToken)).ToList();
 
         if (response.Count > 0)
