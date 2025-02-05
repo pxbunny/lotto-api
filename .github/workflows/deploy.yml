@@ -54,8 +54,7 @@ jobs:
             --resource-group ${{ secrets.AZURE_RESOURCE_GROUP }} \
             --template-file ${{ env.BICEP_FILE }} \
             --parameters ${{ env.BICEP_PARAMS_FILE }} \
-            --query properties.outputs.appName.value \
-            --output tsv)
+            --query properties.outputs.appName.value)
           
           echo "appName=$deploymentOutput" >> $GITHUB_OUTPUT
 
