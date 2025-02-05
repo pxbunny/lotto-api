@@ -84,7 +84,7 @@ jobs:
             --resource-group ${{ secrets.AZURE_RESOURCE_GROUP }} \
             --template-file ${{ env.BICEP_FILE }} \
             --parameters @${{ env.BICEP_PARAMS_FILE }} \
-            --parameters githubSpObjectId"${{ steps.get_sp_id.outputs.objectId }}" \
+            --parameters githubSpObjectId="${{ steps.get_sp_id.outputs.objectId }}" \
             --query properties.outputs \
             --output json)
           
