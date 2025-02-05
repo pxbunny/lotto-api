@@ -63,17 +63,17 @@ jobs:
         id: get_sp_id
         run: |
           CLIENT_ID=$(echo '${{ secrets.AZURE_CREDENTIALS }}' | jq -r '.clientId')
-          
+
           OBJECT_ID=$(az ad sp list \
             --filter "appId eq '$CLIENT_ID'" \
             --query "[0].id" \
             --output tsv)
-          
+
           if [ -z "$OBJECT_ID" ]; then
             echo "Error: Failed to retrieve objectId for clientId $CLIENT_ID"
             exit 1
           fi
-          
+
           echo "objectId=$OBJECT_ID" >> $GITHUB_OUTPUT
           echo "Retrieved Service Principal Object ID: $OBJECT_ID"
 
@@ -87,7 +87,7 @@ jobs:
             --parameters githubSpObjectId="${{ steps.get_sp_id.outputs.objectId }}" \
             --query properties.outputs \
             --output json)
-          
+
           appName=$(echo $deploymentOutput | jq -r '.appName.value')
           keyVaultName=$(echo $deploymentOutput | jq -r '.keyVaultName.value')
           secretName=$(echo $deploymentOutput | jq -r '.secretName.value')
@@ -129,7 +129,7 @@ jobs:
         uses: azure/login@v2
         with:
           creds: ${{ secrets.AZURE_CREDENTIALS }}
-      
+
       - name: Set Key Vault Secret
         run: |
           az keyvault secret set \
