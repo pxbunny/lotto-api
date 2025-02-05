@@ -59,13 +59,32 @@ jobs:
         with:
           creds: ${{ secrets.AZURE_CREDENTIALS }}
 
+      - name: Get Service Principal Object ID
+        id: get_sp_id
+        run: |
+          CLIENT_ID=$(echo '${{ secrets.AZURE_CREDENTIALS }}' | jq -r '.clientId')
+          
+          OBJECT_ID=$(az ad sp list \
+            --filter "appId eq '$CLIENT_ID'" \
+            --query "[0].id" \
+            --output tsv)
+          
+          if [ -z "$OBJECT_ID" ]; then
+            echo "Error: Failed to retrieve objectId for clientId $CLIENT_ID"
+            exit 1
+          fi
+          
+          echo "objectId=$OBJECT_ID" >> $GITHUB_OUTPUT
+          echo "Retrieved Service Principal Object ID: $OBJECT_ID"
+
       - name: Deploy Bicep
         id: deploy
         run: |
           deploymentOutput=$(az deployment group create \
             --resource-group ${{ secrets.AZURE_RESOURCE_GROUP }} \
             --template-file ${{ env.BICEP_FILE }} \
-            --parameters ${{ env.BICEP_PARAMS_FILE }} \
+            --parameters @${{ env.BICEP_PARAMS_FILE }} \
+            --parameters githubSpObjectId"${{ steps.get_sp_id.outputs.objectId }}" \
             --query properties.outputs \
             --output json)
           

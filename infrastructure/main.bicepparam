@@ -8,3 +8,4 @@ param storageAccountName = replace('st${appName}', '-', '')
 param keyVaultName = 'kv-${appName}'
 param drawResultsTableName = 'LottoResults'
 param lottoApiKeySecretName = 'LottoApiKey'
+param githubSpObjectId = '' // Set through GitHub Actions

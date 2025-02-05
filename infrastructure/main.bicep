@@ -4,6 +4,7 @@ param storageAccountName string
 param drawResultsTableName string
 param keyVaultName string
 param lottoApiKeySecretName string
+param githubSpObjectId string
 
 param location string = resourceGroup().location
 
@@ -51,7 +52,15 @@ resource keyVault 'Microsoft.KeyVault/vaults@2023-07-01' = {
       name: 'standard'
       family: 'A'
     }
-    accessPolicies: []
+    accessPolicies: [
+      {
+        tenantId: subscription().tenantId
+        objectId: githubSpObjectId
+        permissions: {
+          secrets: ['set', 'get', 'list']
+        }
+      }
+    ]
   }
 }
 
