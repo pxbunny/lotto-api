@@ -67,7 +67,7 @@ jobs:
             --template-file ${{ env.BICEP_FILE }} \
             --parameters ${{ env.BICEP_PARAMS_FILE }} \
             --query properties.outputs \
-            --output tsv)
+            --output json)
           
           appName=$(echo $deploymentOutput | jq -r '.appName.value')
           keyVaultName=$(echo $deploymentOutput | jq -r '.keyVaultName.value')
