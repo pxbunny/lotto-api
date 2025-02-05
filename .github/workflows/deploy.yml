@@ -47,6 +47,8 @@ jobs:
     environment: production
     outputs:
       appName: ${{ steps.deploy.outputs.appName }}
+      keyVaultName: ${{ steps.deploy.outputs.keyVaultName }}
+      secretName: ${{ steps.deploy.outputs.secretName }}
 
     steps:
       - name: Checkout Repository
@@ -64,10 +66,16 @@ jobs:
             --resource-group ${{ secrets.AZURE_RESOURCE_GROUP }} \
             --template-file ${{ env.BICEP_FILE }} \
             --parameters ${{ env.BICEP_PARAMS_FILE }} \
-            --query properties.outputs.appName.value \
+            --query properties.outputs \
             --output tsv)
           
-          echo "appName=$deploymentOutput" >> $GITHUB_OUTPUT
+          appName=$(echo $deploymentOutput | jq -r '.appName.value')
+          keyVaultName=$(echo $deploymentOutput | jq -r '.keyVaultName.value')
+          secretName=$(echo $deploymentOutput | jq -r '.secretName.value')
+
+          echo "appName=$appName" >> $GITHUB_OUTPUT
+          echo "keyVaultName=$keyVaultName" >> $GITHUB_OUTPUT
+          echo "secretName=$secretName" >> $GITHUB_OUTPUT
 
   build-and-deploy-app:
     name: Build and Deploy Function App
@@ -100,6 +108,13 @@ jobs:
         uses: azure/login@v2
         with:
           creds: ${{ secrets.AZURE_CREDENTIALS }}
+      
+      - name: Set Key Vault Secret
+        run: |
+          az keyvault secret set \
+            --vault-name ${{ needs.deploy-infrastructure.outputs.keyVaultName }} \
+            --name ${{ needs.deploy-infrastructure.outputs.secretName }} \
+            --value "${{ secrets.LOTTO_API_KEY }}"
 
       - name: Deploy Azure Function App
         run: |
