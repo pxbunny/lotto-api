@@ -121,7 +121,9 @@ jobs:
         run: dotnet publish ${{ env.FUNCTIONS_PROJECT_DIRECTORY }} --configuration Release --no-build -o ./publish
 
       - name: Package Function App
-        run: zip -r functionapp.zip ./publish
+        run: |
+          cd publish
+          zip -r ../functionapp.zip .
 
       - name: Azure Login
         uses: azure/login@v2
