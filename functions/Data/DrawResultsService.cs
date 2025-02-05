@@ -14,7 +14,9 @@ sealed class DrawResultsService(TableServiceClient tableServiceClient)
     public async Task AddAsync(DrawResults data, CancellationToken cancellationToken)
     {
         var drawDate = DateTime.Parse(data.DrawDate);
-        var rowKey = (DateTime.MaxValue - drawDate).ToString(Constants.DateFormat).Replace("-", "");
+        var dateDifference = DateTime.MaxValue - drawDate;
+        var reversedDrawDate = DateTime.MinValue + dateDifference;
+        var rowKey = reversedDrawDate.ToString(Constants.DateFormat).Replace("-", "");
         
         var entity = new DrawResultsEntity
         {
