@@ -1,0 +1,146 @@
+openapi: 3.1.0
+info:
+  title: Historical Lotto Results API
+  description: API for retrieving historical lottery draw results with filtering capabilities
+  version: 1.0.0
+servers:
+  - url: https://func-lotto-draw-history.azurewebsites.net/api
+    description: Production server
+
+paths:
+  /historical-draw-results:
+    get:
+      tags:
+        - Lotto Results
+      operationId: getHistoricalDrawResults
+      summary: Retrieve historical lottery draw results
+      description: |
+        Returns historical lottery draw results optionally filtered by date range.
+        Results are returned in reverse chronological order (newest first).
+        When no parameters are provided, returns up to 100 most recent results by default.
+      security:
+        - apiKeyAuth: []
+      parameters:
+        - name: dateFrom
+          in: query
+          description: >
+            Start date for filtering results (inclusive).
+            Format: YYYY-MM-DD.
+            Must be before or equal to dateTo.
+          schema:
+            type: string
+            format: date
+          example: "2025-01-01"
+          required: false
+        - name: dateTo
+          in: query
+          description: >
+            End date for filtering results (inclusive).
+            Format: YYYY-MM-DD.
+            Must be after or equal to dateFrom.
+          schema:
+            type: string
+            format: date
+          example: "2025-02-05"
+          required: false
+        - name: top
+          in: query
+          description: >
+            Optional maximum number of most recent results to return.
+            Defaults to 100 when not specified.
+            Must be a positive integer (≥1).
+          schema:
+            type: integer
+            minimum: 1
+            default: 100
+          example: 150
+          required: false
+      responses:
+        '200':
+          description: Successfully retrieved historical draw results
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/HistoricalDrawResult'
+              example: [
+                {
+                  "draw_date": "2050-01-04",
+                  "lotto_numbers": [6, 49, 26, 24, 9, 16],
+                  "plus_numbers": [4, 23, 12, 49, 14, 33]
+                },
+                {
+                  "draw_date": "2050-01-01",
+                  "lotto_numbers": [37, 30, 42, 1, 28, 20],
+                  "plus_numbers": [8, 40, 12, 44, 33, 9]
+                }
+              ]
+        '400':
+          description: |
+            Invalid request parameters:
+            - Dates not in YYYY-MM-DD format
+            - dateFrom is after dateTo
+            - top parameter is not a positive integer
+            - Invalid parameter types
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  error:
+                    type: string
+                    example: "dateFrom must be before dateTo"
+        '404':
+          description: |
+            No results found for the specified criteria. This could occur when:
+            - The date range contains no draws
+            - All parameters are valid but no matching records exist
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  error:
+                    type: string
+                    example: "No draws found between 2050-03-01 and 2050-03-31"
+
+components:
+  schemas:
+    HistoricalDrawResult:
+      type: object
+      properties:
+        draw_date:
+          type: string
+          format: date
+          description: Date of the lottery draw in YYYY-MM-DD format
+          example: "2050-01-04"
+        lotto_numbers:
+          type: array
+          description: Main lottery numbers drawn (6 numbers)
+          items:
+            type: integer
+            minimum: 1
+            maximum: 49
+          minItems: 6
+          maxItems: 6
+          example: [6, 49, 26, 24, 9, 16]
+        plus_numbers:
+          type: array
+          description: Additional bonus numbers drawn (6 numbers)
+          items:
+            type: integer
+            minimum: 1
+            maximum: 49
+          minItems: 6
+          maxItems: 6
+          example: [4, 23, 12, 49, 14, 33]
+      required:
+        - draw_date
+        - lotto_numbers
+  securitySchemes:
+    apiKeyAuth:
+      type: apiKey
+      in: header
+      name: x-functions-key
+      description: API key for authentication
