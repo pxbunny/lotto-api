@@ -1,6 +1,7 @@
 import csv
 import os
 import uuid
+from argparse import ArgumentParser
 from datetime import datetime
 
 from dotenv import load_dotenv
@@ -12,7 +13,14 @@ load_dotenv()
 STORAGE_CONNECTION_STRING = os.getenv('STORAGE_CONNECTION_STRING')
 
 TABLE_NAME = 'LottoResults'
-CSV_FILE = 'data.csv'
+DEFAULT_CSV_FILE_NAME = 'data.csv'
+
+
+def parse_args():
+    parser = ArgumentParser()
+    parser.add_argument('-f', '--file', default=DEFAULT_CSV_FILE_NAME,
+                        help='the csv file name to get the data from (default: %(default)s)')
+    return parser.parse_args()
 
 
 def upload_batch(table_client, batch):
@@ -23,7 +31,7 @@ def upload_batch(table_client, batch):
         print(f"Batch upload failed: {e}")
 
 
-def upload_data_to_azure(csv_file, batch_size=100):
+def upload_data_to_storage(csv_file, batch_size=100):
     table_service = TableServiceClient.from_connection_string(STORAGE_CONNECTION_STRING)
     table_client = table_service.get_table_client(TABLE_NAME)
     batch = []
@@ -48,11 +56,12 @@ def upload_data_to_azure(csv_file, batch_size=100):
             if len(batch) >= batch_size:
                 upload_batch(table_client, batch)
                 batch = []
-    
+
     if batch:
         upload_batch(table_client, batch)
 
 
 if __name__ == '__main__':
-    upload_data_to_azure(CSV_FILE)
+    args = parse_args()
+    upload_data_to_storage(args.file)
     print("Upload completed successfully!")

@@ -1,6 +1,7 @@
 import csv
 import os
 import time
+from argparse import ArgumentParser
 from datetime import datetime, timedelta
 
 import requests
@@ -13,8 +14,19 @@ LOTTO_API_KEY = os.getenv('LOTTO_API_KEY')
 USER_AGENT = os.getenv('USER_AGENT')
 
 ENDPOINT = 'https://developers.lotto.pl/api/open/v1/lotteries/draw-results/by-date-per-game'
-OUTPUT_FILE = 'data.csv'
+DEFAULT_CSV_FILE_NAME = 'data.csv'
+DEFAULT_START_DATE = '2000-01-01'
+DATE_FORMAT = '%Y-%m-%d'
 DELAY_SEC = 0.5
+
+
+def parse_args():
+    parser = ArgumentParser()
+    parser.add_argument('-f', '--file', default=DEFAULT_CSV_FILE_NAME,
+                        help='the csv file name to save the data to (default: %(default)s)')
+    parser.add_argument('-d', '--date', default=DEFAULT_START_DATE,
+                        help='date from which data collection starts (default: %(default)s)')
+    return parser.parse_args()
 
 
 def fetch_draw_results(date):
@@ -48,18 +60,19 @@ def save_to_csv(data, filename):
     with open(filename, mode='w', newline='', encoding='utf-8') as file:
         writer = csv.writer(file)
         writer.writerow(["Draw date", "Lotto numbers", "Plus numbers"])
-        
+
         for draw in data:
             writer.writerow(draw)
 
 
 if __name__ == '__main__':
-    results = []
-    date = datetime(2000, 1, 1)
+    args = parse_args()
+    date = datetime.strptime(args.date, DATE_FORMAT)
     end_date = datetime.today()
+    results = []
 
     while date <= end_date:
-        date_str = date.strftime('%Y-%m-%d')
+        date_str = date.strftime(DATE_FORMAT)
 
         try:
             data = fetch_draw_results(date_str)
@@ -70,7 +83,7 @@ if __name__ == '__main__':
             game_results = {item['gameType']: item['results'][0]['resultsJson'] for item in data['items']}
             numbers = game_results.get('Lotto', [])
             plus_numbers = game_results.get('LottoPlus', [])
-            
+
             results.append([
                 date_str,
                 ','.join(map(str, numbers)),
@@ -81,5 +94,5 @@ if __name__ == '__main__':
         date += timedelta(days=1)
         time.sleep(DELAY_SEC) # To prevent the 429 error code
 
-    save_to_csv(results, OUTPUT_FILE)
-    print(f"Data saved to '{OUTPUT_FILE}'")
+    save_to_csv(results, args.file)
+    print(f"Data saved to '{args.file}'")
