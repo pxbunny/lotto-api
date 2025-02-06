@@ -16,7 +16,7 @@ sealed class AddLatestDrawResultsCommandHandler(
     public async Task Handle(AddLatestDrawResultsCommand request, CancellationToken cancellationToken)
     {
         logger.LogInformation("Handling AddLatestDrawResultsCommand");
-        
+
         var getDataFromStorageTask = drawResultsService.GetLatestAsync(cancellationToken);
         var getDataFromApiTask = lottoService.GetLatestDrawResultsAsync(cancellationToken);
 
@@ -27,8 +27,8 @@ sealed class AddLatestDrawResultsCommandHandler(
 
             if (storageData.DrawDate == apiData.DrawDate)
             {
-                logger.LogInformation("Data storage already has the latest lotto draw data. Skipping.");
-                return;
+                logger.LogWarning("Data storage already has the latest lotto draw data.");
+                throw new InvalidOperationException("Cannot add the latest draw results. Latest data already exist.");
             }
 
             await drawResultsService.AddAsync(apiData, cancellationToken);
@@ -36,6 +36,7 @@ sealed class AddLatestDrawResultsCommandHandler(
         catch (Exception e)
         {
             logger.LogError("Error occurred while trying do add latest data to the storage: {ErrorMessage}", e.Message);
+            throw;
         }
     }
 }

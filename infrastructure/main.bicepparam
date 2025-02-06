@@ -9,3 +9,4 @@ param keyVaultName = 'kv-${appName}'
 param drawResultsTableName = 'LottoResults'
 param lottoApiKeySecretName = 'LottoApiKey'
 param githubSpObjectId = '' // Set through GitHub Actions
+param dataUpdateSchedule = '0 30 21 * * 2,4,6'

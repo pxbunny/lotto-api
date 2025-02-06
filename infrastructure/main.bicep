@@ -5,6 +5,7 @@ param drawResultsTableName string
 param keyVaultName string
 param lottoApiKeySecretName string
 param githubSpObjectId string
+param dataUpdateSchedule string
 
 param location string = resourceGroup().location
 
@@ -90,6 +91,10 @@ resource functionApp 'Microsoft.Web/sites@2024-04-01' = {
         {
           name: 'AzureWebJobsStorage'
           value: 'DefaultEndpointsProtocol=https;AccountName=${storageAccount.name};AccountKey=${storageAccount.listKeys().keys[0].value};EndpointSuffix=${environment().suffixes.storage}'
+        }
+        {
+          name: 'DataUpdateSchedule'
+          value: dataUpdateSchedule
         }
         {
           name: 'LottoBaseUrl'

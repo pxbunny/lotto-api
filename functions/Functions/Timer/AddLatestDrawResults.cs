@@ -8,11 +8,12 @@ namespace LottoDrawHistory.Functions.Timer;
 sealed class AddLatestDrawResults(IMediator mediator, ILogger<AddLatestDrawResults> logger)
 {
     private const string FunctionName = nameof(AddLatestDrawResults);
-    
+
     [Function(FunctionName)]
+    [FixedDelayRetry(3, "00:15:00")]
     public async Task Run(
         [TimerTrigger(
-            "0 0 23 * * 2,4,6"
+            "%DataUpdateSchedule%"
 #if DEBUG
             //, RunOnStartup = true
 #endif
@@ -20,11 +21,18 @@ sealed class AddLatestDrawResults(IMediator mediator, ILogger<AddLatestDrawResul
         CancellationToken cancellationToken)
     {
         logger.LogInformation("{FunctionName} function triggered at: {TriggerTime}", FunctionName, DateTime.UtcNow);
-        
-        await mediator.Send(new AddLatestDrawResultsCommand(), cancellationToken);
-        
-        logger.LogInformation("{FunctionName} finished its job.", FunctionName);
-        
+
+        try
+        {
+            await mediator.Send(new AddLatestDrawResultsCommand(), cancellationToken);
+            logger.LogInformation("{FunctionName} finished successfully.", FunctionName);
+        }
+        catch (Exception e)
+        {
+            logger.LogError("{FunctionName} Failed.", FunctionName);
+            throw;
+        }
+
         if (timer.ScheduleStatus is not null)
             logger.LogInformation("Next timer schedule at: {NextScheduledTrigger}", timer.ScheduleStatus.Next);
     }
