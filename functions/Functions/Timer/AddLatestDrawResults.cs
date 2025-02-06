@@ -29,7 +29,7 @@ sealed class AddLatestDrawResults(IMediator mediator, ILogger<AddLatestDrawResul
         }
         catch (Exception e)
         {
-            logger.LogError("{FunctionName} Failed.", FunctionName);
+            logger.LogError("{FunctionName} Failed. Error: {ErrorMessage}", FunctionName, e.Message);
             throw;
         }
 

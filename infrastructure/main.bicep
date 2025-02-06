@@ -4,8 +4,10 @@ param storageAccountName string
 param drawResultsTableName string
 param keyVaultName string
 param lottoApiKeySecretName string
+param lottoBaseUrl string
 param githubSpObjectId string
 param dataUpdateSchedule string
+param timeZone string
 
 param location string = resourceGroup().location
 
@@ -89,6 +91,10 @@ resource functionApp 'Microsoft.Web/sites@2024-04-01' = {
           value: 'dotnet-isolated'
         }
         {
+          name: 'WEBSITE_TIME_ZONE'
+          value: timeZone
+        }
+        {
           name: 'AzureWebJobsStorage'
           value: 'DefaultEndpointsProtocol=https;AccountName=${storageAccount.name};AccountKey=${storageAccount.listKeys().keys[0].value};EndpointSuffix=${environment().suffixes.storage}'
         }
@@ -98,7 +104,7 @@ resource functionApp 'Microsoft.Web/sites@2024-04-01' = {
         }
         {
           name: 'LottoBaseUrl'
-          value: 'https://developers.lotto.pl/api/'
+          value: lottoBaseUrl
         }
         {
           name: 'LottoApiKey'
