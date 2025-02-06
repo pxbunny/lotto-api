@@ -30,30 +30,26 @@ def parse_args():
 
 
 def fetch_draw_results(date):
-    try:
-        headers = {
-            'User-Agent': USER_AGENT,
-            'secret': LOTTO_API_KEY
-        }
-        params = {
-            'gameType': 'Lotto',
-            'drawDate': date,
-            'index': 1,
-            'size': 100,
-            'sort': 'drawSystemId',
-            'order': 'ASC'
-        }
-        response = requests.get(ENDPOINT, headers=headers, params=params)
+    headers = {
+        'User-Agent': USER_AGENT,
+        'secret': LOTTO_API_KEY
+    }
+    params = {
+        'gameType': 'Lotto',
+        'drawDate': date,
+        'index': 1,
+        'size': 100,
+        'sort': 'drawSystemId',
+        'order': 'ASC'
+    }
+    response = requests.get(ENDPOINT, headers=headers, params=params)
+    code = response.status_code
 
-        if response.status_code == 404:
-            print(f"No data for {date}, skipping...")
-            return None
+    if code == 404 or code == 500:
+        return code, response.json()
 
-        response.raise_for_status()
-        return response.json()
-    except requests.RequestException as e:
-        print(e)
-        raise e
+    response.raise_for_status()
+    return code, response.json()
 
 
 def save_to_csv(data, filename):
@@ -75,21 +71,32 @@ if __name__ == '__main__':
         date_str = date.strftime(DATE_FORMAT)
 
         try:
-            data = fetch_draw_results(date_str)
-        except:
+            code, data = fetch_draw_results(date_str)
+
+            if data and data.get('items'):
+                game_results = {item['gameType']: item['results'][0]['resultsJson'] for item in data['items']}
+                numbers = game_results.get('Lotto', [])
+                plus_numbers = game_results.get('LottoPlus', [])
+
+                results.append([
+                    date_str,
+                    ','.join(map(str, numbers)),
+                    ','.join(map(str, plus_numbers))
+                ])
+                print(f"Numbers: {date_str} -> {numbers}, (plus: {plus_numbers})")
+
+            elif code == 500:
+                delay = DELAY_SEC * 10
+                print(f'Request failed (response code: {code}). Retrying after {delay} seconds...')
+                time.sleep(delay)
+                continue
+
+            else:
+                print(f"No data for {date_str}, skipping...")
+
+        except Exception as e:
+            print(e)
             break
-
-        if data and data.get('items'):
-            game_results = {item['gameType']: item['results'][0]['resultsJson'] for item in data['items']}
-            numbers = game_results.get('Lotto', [])
-            plus_numbers = game_results.get('LottoPlus', [])
-
-            results.append([
-                date_str,
-                ','.join(map(str, numbers)),
-                ','.join(map(str, plus_numbers))
-            ])
-            print(f"Numbers: {date_str} -> {numbers}, (plus: {plus_numbers})")
 
         date += timedelta(days=1)
         time.sleep(DELAY_SEC) # To prevent the 429 error code
