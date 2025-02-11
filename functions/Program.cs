@@ -1,6 +1,5 @@
 using System.Text.Json;
 using LottoDrawHistory.Data;
-using LottoDrawHistory.Functions.Http.Shared;
 using LottoDrawHistory.Lotto;
 using Microsoft.Azure.Functions.Worker.Builder;
 using Microsoft.Extensions.Azure;
@@ -19,12 +18,8 @@ var jsonSerializerOptions = new JsonSerializerOptions
     WriteIndented = false
 };
 
-builder.Services
-    .AddSingleton(jsonSerializerOptions);
-
-builder.Services
-    .AddScoped<DrawResultsService>()
-    .AddScoped(typeof(HttpRequestHandler<>));
+builder.Services.AddSingleton(jsonSerializerOptions);
+builder.Services.AddScoped<DrawResultsService>();
 
 builder.Services.AddAzureClients(clientBuilder =>
 {
@@ -38,12 +33,12 @@ builder.Services.AddHttpClient<LottoService>(client =>
 
     var baseUrlConfigValue = builder.Configuration[baseUrlPropertyName];
     var apiKeyConfigValue = builder.Configuration[apiKeyPropertyName];
-    
+
     var baseUrl = !string.IsNullOrWhiteSpace(baseUrlConfigValue)
         ? baseUrlConfigValue : throw new Exception($"'{baseUrlPropertyName}' missing in the configuration.");
     var apiKey = !string.IsNullOrWhiteSpace(apiKeyConfigValue)
         ? apiKeyConfigValue : throw new Exception($"'{apiKeyPropertyName}' missing in the configuration.");
-    
+
     client.BaseAddress = new Uri(baseUrl);
     client.DefaultRequestHeaders.Add("secret", apiKey);
 });

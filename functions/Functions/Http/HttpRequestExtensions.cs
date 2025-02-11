@@ -1,6 +1,6 @@
 ﻿using Microsoft.AspNetCore.Http;
 
-namespace LottoDrawHistory.Functions.Http.Shared;
+namespace LottoDrawHistory.Functions.Http;
 
 static class HttpRequestExtensions
 {
@@ -25,7 +25,7 @@ static class HttpRequestExtensions
 
         return (true, null);
     }
-    
+
     public static (DateOnly?, DateOnly?, int?) ParseQueryString(this HttpRequest req)
     {
         DateOnly? dateFrom = null;
@@ -51,6 +51,25 @@ static class HttpRequestExtensions
         }
 
         return (dateFrom, dateTo, top);
+    }
+
+    public static ContentType? GetContentType(this HttpRequest req)
+    {
+        var acceptHeader = req.Headers.Accept.ToString();
+
+        if (string.IsNullOrWhiteSpace(acceptHeader))
+            return null;
+
+        if (acceptHeader.Contains("application/json"))
+            return ContentType.ApplicationJson;
+
+        if (acceptHeader.Contains("application/octet-stream"))
+            return ContentType.ApplicationOctetStream;
+
+        if (new[] { "*/*", "application/*" }.Any(x => acceptHeader.Contains(x)))
+            return ContentType.ApplicationJson;
+
+        return null;
     }
 
     private static bool ValidateDateQueryStringValue(IQueryCollection query, string name) =>
