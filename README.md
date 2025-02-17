@@ -62,7 +62,7 @@ A REST API providing historical draw results for Polish Lotto and Lotto Plus gam
    python fetch_to_csv.py -d 2000-01-01 -f data.csv
 
    # Upload to Azure Storage
-   python csv_to_storage.py -f
+   python csv_to_storage.py -f data.csv
    ```
 
 ## Future Improvements
