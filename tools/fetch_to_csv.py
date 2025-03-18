@@ -55,7 +55,7 @@ def fetch_draw_results(date):
 def save_to_csv(data, filename):
     with open(filename, mode='w', newline='', encoding='utf-8') as file:
         writer = csv.writer(file)
-        writer.writerow(["Draw date", "Lotto numbers", "Plus numbers"])
+        writer.writerow(["DrawDate", "LottoNumbers", "PlusNumbers"])
 
         for draw in data:
             writer.writerow(draw)

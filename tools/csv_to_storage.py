@@ -41,15 +41,15 @@ def upload_data_to_storage(csv_file, batch_size=100):
         reader = csv.DictReader(file)
 
         for row in reader:
-            draw_date_str = row['Draw date']
+            draw_date_str = row['DrawDate']
             draw_date = datetime.strptime(draw_date_str, "%Y-%m-%d")
             reversed_draw_date = datetime(1, 1, 1) + (MAX_DATE - draw_date)
             entity = {
                 'PartitionKey': 'LottoData',
                 'RowKey': reversed_draw_date.strftime("%Y-%m-%d").replace('-', ''),
                 'DrawDate': draw_date_str,
-                'LottoNumbers': row['Lotto numbers'],
-                'PlusNumbers': row['Plus numbers']
+                'LottoNumbers': row['LottoNumbers'],
+                'PlusNumbers': row['PlusNumbers']
             }
             batch.append(('upsert', entity, {'mode': UpdateMode.REPLACE}))
 
