@@ -1,6 +1,4 @@
-﻿using JetBrains.Annotations;
-
-namespace LottoDrawHistory.Lotto;
+﻿namespace LottoDrawHistory.Lotto;
 
 [UsedImplicitly]
 sealed record LottoDrawResponse(int DrawSystemId, DateTime DrawDate, string GameType, IEnumerable<LottoDrawResults> Results);

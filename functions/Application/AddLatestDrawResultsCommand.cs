@@ -1,7 +1,5 @@
 ﻿using LottoDrawHistory.Data;
 using LottoDrawHistory.Lotto;
-using MediatR;
-using Microsoft.Extensions.Logging;
 
 namespace LottoDrawHistory.Application;
 

@@ -1,6 +1,4 @@
-﻿using Microsoft.AspNetCore.Http;
-
-namespace LottoDrawHistory.Functions.Http.Headers;
+﻿namespace LottoDrawHistory.Functions.Http.Headers;
 
 static class HttpRequestExtensions
 {

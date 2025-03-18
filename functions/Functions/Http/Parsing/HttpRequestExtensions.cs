@@ -1,5 +1,4 @@
 ﻿using LottoDrawHistory.Application;
-using Microsoft.AspNetCore.Http;
 
 namespace LottoDrawHistory.Functions.Http.Parsing;
 

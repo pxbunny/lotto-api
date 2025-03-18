@@ -1,6 +1,4 @@
-﻿using Microsoft.AspNetCore.Http;
-
-namespace LottoDrawHistory.Functions.Http.Validation;
+﻿namespace LottoDrawHistory.Functions.Http.Validation;
 
 static class HttpRequestExtensions
 {

@@ -2,15 +2,10 @@
 using System.Text;
 using System.Text.Json;
 using CsvHelper;
-using JetBrains.Annotations;
 using LottoDrawHistory.Functions.Http.Headers;
 using LottoDrawHistory.Functions.Http.Parsing;
 using LottoDrawHistory.Functions.Http.Validation;
-using MediatR;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.Azure.Functions.Worker;
-using Microsoft.Extensions.Logging;
 
 namespace LottoDrawHistory.Functions.Http;
 
