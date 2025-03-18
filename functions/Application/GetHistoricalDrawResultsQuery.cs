@@ -2,7 +2,7 @@
 using MediatR;
 using Microsoft.Extensions.Logging;
 
-namespace LottoDrawHistory.CQRS;
+namespace LottoDrawHistory.Application;
 
 sealed record GetHistoricalDrawResultsQuery(
     DateOnly? DateFrom,

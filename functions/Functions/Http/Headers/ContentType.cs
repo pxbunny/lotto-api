@@ -1,4 +1,4 @@
-﻿namespace LottoDrawHistory.Functions.Http;
+﻿namespace LottoDrawHistory.Functions.Http.Headers;
 
 enum ContentType
 {

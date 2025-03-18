@@ -3,7 +3,7 @@ using LottoDrawHistory.Lotto;
 using MediatR;
 using Microsoft.Extensions.Logging;
 
-namespace LottoDrawHistory.CQRS;
+namespace LottoDrawHistory.Application;
 
 sealed record AddLatestDrawResultsCommand : IRequest;
 

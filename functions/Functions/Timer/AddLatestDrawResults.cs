@@ -1,4 +1,4 @@
-﻿using LottoDrawHistory.CQRS;
+﻿using LottoDrawHistory.Application;
 using MediatR;
 using Microsoft.Azure.Functions.Worker;
 using Microsoft.Extensions.Logging;

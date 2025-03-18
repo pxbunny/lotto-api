@@ -3,7 +3,9 @@ using System.Text;
 using System.Text.Json;
 using CsvHelper;
 using JetBrains.Annotations;
-using LottoDrawHistory.CQRS;
+using LottoDrawHistory.Functions.Http.Headers;
+using LottoDrawHistory.Functions.Http.Parsing;
+using LottoDrawHistory.Functions.Http.Validation;
 using MediatR;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
@@ -11,6 +13,12 @@ using Microsoft.Azure.Functions.Worker;
 using Microsoft.Extensions.Logging;
 
 namespace LottoDrawHistory.Functions.Http;
+
+[UsedImplicitly]
+sealed record DrawResultsDto(string DrawDate, IEnumerable<int> LottoNumbers, IEnumerable<int> PlusNumbers);
+
+[UsedImplicitly]
+sealed record DrawResultsCsvRecord(string DrawDate, string LottoNumbers, string? PlusNumbers);
 
 sealed class GetHistoricalDrawResults(
     IMediator mediator,
@@ -42,9 +50,7 @@ sealed class GetHistoricalDrawResults(
             return new BadRequestObjectResult(new { error = $"Invalid 'Accept' header value: {acceptHeader}" });
         }
 
-        var (dateFrom, dateTo, top) = req.ParseQueryString();
-
-        var query = new GetHistoricalDrawResultsQuery(dateFrom, dateTo, top);
+        var query = req.ParseQueryString();
         var response = (await mediator.Send(query, cancellationToken)).ToList();
 
         if (response.Count == 0)
@@ -92,9 +98,3 @@ sealed class GetHistoricalDrawResults(
         };
     }
 }
-
-[UsedImplicitly]
-sealed record DrawResultsDto(string DrawDate, IEnumerable<int> LottoNumbers, IEnumerable<int> PlusNumbers);
-
-[UsedImplicitly]
-sealed record DrawResultsCsvRecord(string DrawDate, string LottoNumbers, string? PlusNumbers);
