@@ -18,11 +18,9 @@ static class HttpRequestExtensions
 
     private static bool ValidateDateQueryStringValue(IQueryCollection query, string name) =>
         query.TryGetValue(name, out var dateStr) &&
-        !string.IsNullOrWhiteSpace(dateStr) &&
-        !DateOnly.TryParseExact(dateStr, Constants.DateFormat, out _);
+        (string.IsNullOrWhiteSpace(dateStr) || !DateOnly.TryParseExact(dateStr, Constants.DateFormat, out _));
 
     private static bool ValidateIntQueryStringValue(IQueryCollection query, string name) =>
         query.TryGetValue(name, out var intStr) &&
-        !string.IsNullOrWhiteSpace(intStr) &&
-        (!int.TryParse(intStr, out var value) || value <= 0);
+        (string.IsNullOrWhiteSpace(intStr) || !int.TryParse(intStr, out var value) || value <= 0);
 }

@@ -36,7 +36,7 @@ sealed class GetHistoricalDrawResults(
             return new BadRequestObjectResult(new { error = errorMessage });
         }
 
-        var contentType = req.GetContentType();
+        var contentType = req.GetAcceptHeader();
 
         if (contentType is null)
         {
