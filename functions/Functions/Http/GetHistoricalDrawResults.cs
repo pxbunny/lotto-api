@@ -28,6 +28,22 @@ sealed class GetHistoricalDrawResults(
         CancellationToken cancellationToken)
     {
         logger.LogInformation("Handling {FunctionName}. Parameters : {QueryString}", FunctionName, req.QueryString);
+
+        try
+        {
+            var response = await Handle(req, cancellationToken);
+            logger.LogInformation("{FunctionName} finished successfully.", FunctionName);
+            return response;
+        }
+        catch (Exception e)
+        {
+            logger.LogError("{FunctionName} Failed. Error: {ErrorMessage}", FunctionName, e.Message);
+            throw;
+        }
+    }
+
+    private async Task<IActionResult> Handle(HttpRequest req, CancellationToken cancellationToken)
+    {
         var (isValid, errorMessage) = req.ValidateQueryString();
 
         if (!isValid)
