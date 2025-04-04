@@ -22,7 +22,7 @@
   </ItemGroup>
 
     <ItemGroup>
-      <ProjectReference Include="..\..\functions\LottoDrawHistory.csproj" />
+      <ProjectReference Include="..\..\api\LottoDrawHistory.csproj" />
     </ItemGroup>
 
 </Project>

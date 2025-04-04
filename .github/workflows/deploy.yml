@@ -4,22 +4,22 @@ on:
   push:
     branches: [ main ]
     paths:
-      - 'infrastructure/**'
-      - 'functions/**'
+      - 'infra/**'
+      - 'api/**'
 
   pull_request:
     branches: [ main ]
     paths:
-      - 'infrastructure/**'
-      - 'functions/**'
+      - 'infra/**'
+      - 'api/**'
 
   workflow_dispatch:
 
 env:
-  BICEP_FILE: infrastructure/main.bicep
-  BICEP_PARAMS_FILE: infrastructure/main.bicepparam
+  BICEP_FILE: infra/main.bicep
+  BICEP_PARAMS_FILE: infra/main.bicepparam
   DOTNET_VERSION: '9.0.x'
-  FUNCTIONS_PROJECT_DIRECTORY: functions/
+  API_PROJECT_DIRECTORY: api/
 
 jobs:
   validate-infrastructure:
@@ -115,10 +115,10 @@ jobs:
         run: dotnet restore
 
       - name: Build
-        run: dotnet build ${{ env.FUNCTIONS_PROJECT_DIRECTORY }} --configuration Release --no-restore
+        run: dotnet build ${{ env.API_PROJECT_DIRECTORY }} --configuration Release --no-restore
 
       - name: Publish
-        run: dotnet publish ${{ env.FUNCTIONS_PROJECT_DIRECTORY }} --configuration Release --no-build -o ./publish
+        run: dotnet publish ${{ env.API_PROJECT_DIRECTORY }} --configuration Release --no-build -o ./publish
 
       - name: Package Function App
         run: |
