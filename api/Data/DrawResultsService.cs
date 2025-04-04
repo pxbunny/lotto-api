@@ -9,8 +9,6 @@ sealed class DrawResultsService(TableServiceClient tableServiceClient)
     private const string BaseFilter = $"PartitionKey eq '{PartitionKey}'";
     private const int MaxPageSize = 1_000;
 
-    private readonly TableClient _client = tableServiceClient.GetTableClient(TableName);
-
     public async Task AddAsync(DrawResults data, CancellationToken cancellationToken)
     {
         var drawDate = DateTime.Parse(data.DrawDate);
@@ -27,7 +25,8 @@ sealed class DrawResultsService(TableServiceClient tableServiceClient)
             PlusNumbers = data.PlusNumbersString
         };
 
-        await _client.AddEntityAsync(entity, cancellationToken);
+        var client = tableServiceClient.GetTableClient(TableName);
+        await client.AddEntityAsync(entity, cancellationToken);
     }
 
     public async Task<DrawResultsEntity> GetLatestAsync(CancellationToken cancellationToken)
@@ -41,7 +40,8 @@ sealed class DrawResultsService(TableServiceClient tableServiceClient)
         var results = new List<DrawResultsEntity>();
 
         var fullFilter = !string.IsNullOrWhiteSpace(filter) ? $"{BaseFilter} and ({filter})" : BaseFilter;
-        var query = _client.QueryAsync<DrawResultsEntity>(fullFilter, cancellationToken: cancellationToken);
+        var client = tableServiceClient.GetTableClient(TableName);
+        var query = client.QueryAsync<DrawResultsEntity>(fullFilter, cancellationToken: cancellationToken);
         var pageSize = Math.Min(MaxPageSize, top);
 
         await foreach (var page in query.AsPages(pageSizeHint: pageSize).WithCancellation(cancellationToken))
