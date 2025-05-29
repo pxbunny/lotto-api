@@ -6,8 +6,7 @@ sealed class AddLatestDrawResults(IMediator mediator, ILogger<AddLatestDrawResul
 {
     private const string FunctionName = nameof(AddLatestDrawResults);
 
-    [Function(FunctionName)]
-    [FixedDelayRetry(3, "00:15:00")]
+    [Function(FunctionName), FixedDelayRetry(3, "00:15:00")]
     public async Task Run(
         [TimerTrigger(
             "%DataUpdateSchedule%"

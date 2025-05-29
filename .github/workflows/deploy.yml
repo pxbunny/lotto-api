@@ -5,13 +5,13 @@ on:
     branches: [ main ]
     paths:
       - 'infra/**'
-      - 'api/**'
+      - 'src/**'
 
   pull_request:
     branches: [ main ]
     paths:
       - 'infra/**'
-      - 'api/**'
+      - 'src/**'
 
   workflow_dispatch:
 
@@ -19,7 +19,7 @@ env:
   BICEP_FILE: infra/main.bicep
   BICEP_PARAMS_FILE: infra/main.bicepparam
   DOTNET_VERSION: '9.0.x'
-  API_PROJECT_DIRECTORY: api/
+  API_PROJECT_DIRECTORY: src/
 
 jobs:
   validate-infrastructure:
