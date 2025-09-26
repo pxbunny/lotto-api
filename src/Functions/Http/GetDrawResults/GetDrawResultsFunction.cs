@@ -15,7 +15,7 @@ internal sealed record DrawResultsCsvRecord(string DrawDate, string LottoNumbers
 
 internal sealed class GetDrawResultsFunction(
     IMediator mediator,
-    IContentNegotiator contentNegotiator,
+    IContentNegotiator<ContentType> contentNegotiator,
     JsonSerializerOptions jsonSerializerOptions,
     ILogger<GetDrawResultsFunction> logger)
 {
@@ -51,9 +51,9 @@ internal sealed class GetDrawResultsFunction(
             return new BadRequestObjectResult(new { error = errorMessage });
         }
 
-        var contentType = contentNegotiator.Negotiate(request);
+        var (negotiationResult, contentType) = contentNegotiator.Negotiate(request);
 
-        if (contentType == ContentType.Unsupported)
+        if (!negotiationResult)
             return HandleUnsupportedContentType(request);
 
         var query = request.ParseQueryString();
@@ -69,7 +69,6 @@ internal sealed class GetDrawResultsFunction(
         {
             ContentType.ApplicationJson => CreateJsonResponse(response),
             ContentType.ApplicationOctetStream => await CreateCsvResponseAsync(response, cancellationToken),
-            ContentType.Unsupported => throw new ArgumentOutOfRangeException(),
             _ => throw new ArgumentOutOfRangeException()
         };
     }
@@ -105,7 +104,7 @@ internal sealed class GetDrawResultsFunction(
         };
     }
 
-    private IActionResult HandleUnsupportedContentType(HttpRequest request)
+    private BadRequestObjectResult HandleUnsupportedContentType(HttpRequest request)
     {
         var acceptHeader = request.Headers.Accept;
         logger.LogError("Unsupported 'Accept' header value: {AcceptHeader}", acceptHeader!);

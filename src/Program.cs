@@ -22,7 +22,14 @@ var jsonSerializerOptions = new JsonSerializerOptions
 builder.Services.AddSingleton(jsonSerializerOptions);
 
 builder.Services.AddScoped<DrawResultsService>();
-builder.Services.AddScoped<IContentNegotiator, ContentNegotiator>();
+
+builder.Services.AddSingleton<IContentNegotiator<ContentType>>(new ContentNegotiator<ContentType>(config =>
+    {
+        config.Add("*/*", ContentType.ApplicationJson);
+        config.Add("application/*", ContentType.ApplicationJson);
+        config.Add("application/json", ContentType.ApplicationJson);
+        config.Add("application/octet-stream", ContentType.ApplicationOctetStream);
+    }));
 
 builder.Services.AddAzureClients(clientBuilder =>
 {

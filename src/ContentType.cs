@@ -3,6 +3,5 @@
 internal enum ContentType
 {
     ApplicationJson,
-    ApplicationOctetStream,
-    Unsupported
+    ApplicationOctetStream
 }
