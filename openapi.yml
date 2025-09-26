@@ -8,7 +8,7 @@ servers:
     description: Production server
 
 paths:
-  /historical-draw-results:
+  /draw-results:
     get:
       tags:
         - Lotto Results

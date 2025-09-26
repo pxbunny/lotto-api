@@ -6,7 +6,7 @@ A REST API providing historical draw results for Polish Lotto and Lotto Plus gam
 
 ## Features
 
-- **Historical Data Endpoint**: Fetch all historical results via `/api/historical-draw-results`.
+- **Historical Data Endpoint**: Fetch all historical results via `/api/draw-results`.
 - **Multiple Formats**: Set `Accept: application/json` (default) or `Accept: application/octet-stream` (to download a CSV file).
 - **Auto-Update**: New results are added automatically 30 minutes after each draw (Tue/Thu/Fri at 22:30 CET/CEST).
 - **Initialization Tools**: Python scripts to populate the database with historical data.
@@ -25,7 +25,7 @@ A REST API providing historical draw results for Polish Lotto and Lotto Plus gam
    ```bash
    ./azure-init.sh
    ```
-   
+
    Follow prompts to create resources. This generates an `azure-credentials.json` file in the root of the repository.
 
 2. **Configure secrets** in your GitHub repository:
@@ -36,7 +36,7 @@ A REST API providing historical draw results for Polish Lotto and Lotto Plus gam
 3. **Trigger deployment workflow**:
 
    Push to main branch or manually run "Build and Deploy Azure Resources" action
-   
+
 ## Post-Deployment Setup
 
 1. **Prepare python environment**:

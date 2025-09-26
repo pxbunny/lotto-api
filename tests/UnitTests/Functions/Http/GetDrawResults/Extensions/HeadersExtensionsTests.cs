@@ -1,7 +1,7 @@
-﻿using LottoDrawHistory.Functions.Http.GetHistoricalDrawResults;
-using LottoDrawHistory.Functions.Http.GetHistoricalDrawResults.Extensions;
+﻿using LottoDrawHistory.Functions.Http.GetDrawResults;
+using LottoDrawHistory.Functions.Http.GetDrawResults.Extensions;
 
-namespace UnitTests.Functions.Http.GetHistoricalDrawResults.Extensions;
+namespace UnitTests.Functions.Http.GetDrawResults.Extensions;
 
 public class HeadersExtensionsTests
 {

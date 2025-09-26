@@ -1,6 +1,6 @@
 ﻿using System.Globalization;
 
-namespace LottoDrawHistory.Functions.Http.GetHistoricalDrawResults.Extensions;
+namespace LottoDrawHistory.Functions.Http.GetDrawResults.Extensions;
 
 internal static class HeadersExtensions
 {

@@ -2,10 +2,10 @@
 using System.Text;
 using System.Text.Json;
 using CsvHelper;
-using LottoDrawHistory.Functions.Http.GetHistoricalDrawResults.Extensions;
+using LottoDrawHistory.Functions.Http.GetDrawResults.Extensions;
 using Microsoft.AspNetCore.Mvc;
 
-namespace LottoDrawHistory.Functions.Http.GetHistoricalDrawResults;
+namespace LottoDrawHistory.Functions.Http.GetDrawResults;
 
 [UsedImplicitly]
 internal sealed record DrawResultsDto(string DrawDate, IEnumerable<int> LottoNumbers, IEnumerable<int> PlusNumbers);
@@ -13,16 +13,16 @@ internal sealed record DrawResultsDto(string DrawDate, IEnumerable<int> LottoNum
 [UsedImplicitly]
 internal sealed record DrawResultsCsvRecord(string DrawDate, string LottoNumbers, string? PlusNumbers);
 
-internal sealed class GetHistoricalDrawResultsFunction(
+internal sealed class GetDrawResultsFunction(
     IMediator mediator,
     JsonSerializerOptions jsonSerializerOptions,
-    ILogger<GetHistoricalDrawResultsFunction> logger)
+    ILogger<GetDrawResultsFunction> logger)
 {
-    private const string FunctionName = nameof(GetHistoricalDrawResultsFunction);
+    private const string FunctionName = nameof(GetDrawResultsFunction);
 
-    [Function(nameof(GetHistoricalDrawResultsFunction))]
+    [Function(nameof(GetDrawResultsFunction))]
     public async Task<IActionResult> Run(
-        [HttpTrigger("get", Route = "historical-draw-results")] HttpRequest req,
+        [HttpTrigger("get", Route = "draw-results")] HttpRequest req,
         CancellationToken cancellationToken)
     {
         logger.LogInformation("Handling {FunctionName}. Parameters : {QueryString}", FunctionName, req.QueryString);

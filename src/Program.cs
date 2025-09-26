@@ -1,4 +1,5 @@
 using System.Text.Json;
+using LottoDrawHistory;
 using LottoDrawHistory.Data;
 using LottoDrawHistory.Lotto;
 using Microsoft.Azure.Functions.Worker.Builder;

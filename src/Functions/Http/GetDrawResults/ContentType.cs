@@ -1,4 +1,4 @@
-﻿namespace LottoDrawHistory.Functions.Http.GetHistoricalDrawResults;
+﻿namespace LottoDrawHistory.Functions.Http.GetDrawResults;
 
 internal enum ContentType
 {
