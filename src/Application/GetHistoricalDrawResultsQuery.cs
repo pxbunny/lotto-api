@@ -2,13 +2,13 @@
 
 namespace LottoDrawHistory.Application;
 
-sealed record GetHistoricalDrawResultsQuery(
+internal sealed record GetHistoricalDrawResultsQuery(
     DateOnly? DateFrom,
     DateOnly? DateTo,
     int? Top)
     : IRequest<IEnumerable<DrawResults>>;
 
-sealed class GetHistoricalDrawResultsQueryHandler(
+internal sealed class GetHistoricalDrawResultsQueryHandler(
     DrawResultsService drawResultsService,
     ILogger<GetHistoricalDrawResultsQueryHandler> logger)
     : IRequestHandler<GetHistoricalDrawResultsQuery, IEnumerable<DrawResults>>

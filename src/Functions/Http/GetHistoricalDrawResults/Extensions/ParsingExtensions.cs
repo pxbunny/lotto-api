@@ -3,7 +3,7 @@ using LottoDrawHistory.Application;
 
 namespace LottoDrawHistory.Functions.Http.GetHistoricalDrawResults.Extensions;
 
-static class ParsingExtensions
+internal static class ParsingExtensions
 {
     public static GetHistoricalDrawResultsQuery ParseQueryString(this HttpRequest req)
     {

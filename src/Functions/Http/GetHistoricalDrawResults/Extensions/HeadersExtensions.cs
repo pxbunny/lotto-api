@@ -2,7 +2,7 @@
 
 namespace LottoDrawHistory.Functions.Http.GetHistoricalDrawResults.Extensions;
 
-static class HeadersExtensions
+internal static class HeadersExtensions
 {
     public static ContentType? GetAcceptHeader(this HttpRequest req)
     {

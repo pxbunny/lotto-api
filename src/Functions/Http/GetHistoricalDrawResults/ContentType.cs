@@ -1,6 +1,6 @@
 ﻿namespace LottoDrawHistory.Functions.Http.GetHistoricalDrawResults;
 
-enum ContentType
+internal enum ContentType
 {
     ApplicationJson,
     ApplicationOctetStream

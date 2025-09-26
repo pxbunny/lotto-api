@@ -2,7 +2,7 @@
 
 namespace LottoDrawHistory.Functions.Timer;
 
-sealed class AddLatestDrawResultsFunction(IMediator mediator, ILogger<AddLatestDrawResultsFunction> logger)
+internal sealed class AddLatestDrawResultsFunction(IMediator mediator, ILogger<AddLatestDrawResultsFunction> logger)
 {
     private const string FunctionName = nameof(AddLatestDrawResultsFunction);
 

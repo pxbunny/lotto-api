@@ -50,4 +50,4 @@ builder.Services.AddMediatR(cfg =>
 
 builder.Build().Run();
 
-interface IAssemblyFlag;
+internal interface IAssemblyFlag;

@@ -2,7 +2,7 @@
 
 namespace LottoDrawHistory.Lotto;
 
-sealed class LottoService(HttpClient client)
+internal sealed class LottoService(HttpClient client)
 {
     public async Task<DrawResults> GetLatestDrawResultsAsync(CancellationToken cancellationToken)
     {

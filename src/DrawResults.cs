@@ -1,6 +1,6 @@
 ﻿namespace LottoDrawHistory;
 
-sealed class DrawResults
+internal sealed class DrawResults
 {
     public required string DrawDate { get; init; }
 

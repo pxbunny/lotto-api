@@ -8,12 +8,12 @@ using Microsoft.AspNetCore.Mvc;
 namespace LottoDrawHistory.Functions.Http.GetHistoricalDrawResults;
 
 [UsedImplicitly]
-sealed record DrawResultsDto(string DrawDate, IEnumerable<int> LottoNumbers, IEnumerable<int> PlusNumbers);
+internal sealed record DrawResultsDto(string DrawDate, IEnumerable<int> LottoNumbers, IEnumerable<int> PlusNumbers);
 
 [UsedImplicitly]
-sealed record DrawResultsCsvRecord(string DrawDate, string LottoNumbers, string? PlusNumbers);
+internal sealed record DrawResultsCsvRecord(string DrawDate, string LottoNumbers, string? PlusNumbers);
 
-sealed class GetHistoricalDrawResultsFunction(
+internal sealed class GetHistoricalDrawResultsFunction(
     IMediator mediator,
     JsonSerializerOptions jsonSerializerOptions,
     ILogger<GetHistoricalDrawResultsFunction> logger)

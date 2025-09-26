@@ -4,7 +4,7 @@ using Azure.Data.Tables;
 namespace LottoDrawHistory.Data;
 
 [UsedImplicitly]
-sealed class DrawResultsEntity : ITableEntity
+internal sealed class DrawResultsEntity : ITableEntity
 {
     public required string PartitionKey { get; set; }
 

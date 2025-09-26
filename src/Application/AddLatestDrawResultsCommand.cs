@@ -3,9 +3,9 @@ using LottoDrawHistory.Lotto;
 
 namespace LottoDrawHistory.Application;
 
-sealed record AddLatestDrawResultsCommand : IRequest;
+internal sealed record AddLatestDrawResultsCommand : IRequest;
 
-sealed class AddLatestDrawResultsCommandHandler(
+internal sealed class AddLatestDrawResultsCommandHandler(
     DrawResultsService drawResultsService,
     LottoService lottoService,
     ILogger<AddLatestDrawResultsCommandHandler> logger)
