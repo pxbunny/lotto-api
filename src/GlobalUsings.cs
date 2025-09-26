@@ -1,4 +1,5 @@
-﻿global using JetBrains.Annotations;
+﻿global using LottoDrawHistory.Models;
+global using JetBrains.Annotations;
 global using MediatR;
 global using Microsoft.AspNetCore.Http;
 global using Microsoft.Azure.Functions.Worker;

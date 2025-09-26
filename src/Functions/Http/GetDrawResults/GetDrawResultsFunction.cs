@@ -15,6 +15,7 @@ internal sealed record DrawResultsCsvRecord(string DrawDate, string LottoNumbers
 
 internal sealed class GetDrawResultsFunction(
     IMediator mediator,
+    IContentNegotiator contentNegotiator,
     JsonSerializerOptions jsonSerializerOptions,
     ILogger<GetDrawResultsFunction> logger)
 {
@@ -40,9 +41,9 @@ internal sealed class GetDrawResultsFunction(
         }
     }
 
-    private async Task<IActionResult> HandleAsync(HttpRequest req, CancellationToken cancellationToken)
+    private async Task<IActionResult> HandleAsync(HttpRequest request, CancellationToken cancellationToken)
     {
-        var (isValid, errorMessage) = req.ValidateQueryString();
+        var (isValid, errorMessage) = request.ValidateQueryString();
 
         if (!isValid)
         {
@@ -50,16 +51,12 @@ internal sealed class GetDrawResultsFunction(
             return new BadRequestObjectResult(new { error = errorMessage });
         }
 
-        var contentType = req.GetAcceptHeader();
+        var contentType = contentNegotiator.Negotiate(request);
 
-        if (contentType is null)
-        {
-            var acceptHeader = req.Headers.Accept;
-            logger.LogError("Invalid 'Accept' header value: {AcceptHeader}", acceptHeader!);
-            return new BadRequestObjectResult(new { error = $"Invalid 'Accept' header value: {acceptHeader}" });
-        }
+        if (contentType == ContentType.Unsupported)
+            return HandleUnsupportedContentType(request);
 
-        var query = req.ParseQueryString();
+        var query = request.ParseQueryString();
         var response = (await mediator.Send(query, cancellationToken)).ToList();
 
         if (response.Count == 0)
@@ -72,6 +69,7 @@ internal sealed class GetDrawResultsFunction(
         {
             ContentType.ApplicationJson => CreateJsonResponse(response),
             ContentType.ApplicationOctetStream => await CreateCsvResponseAsync(response, cancellationToken),
+            ContentType.Unsupported => throw new ArgumentOutOfRangeException(),
             _ => throw new ArgumentOutOfRangeException()
         };
     }
@@ -105,5 +103,12 @@ internal sealed class GetDrawResultsFunction(
         {
             FileDownloadName = $"lotto-export_{DateTime.Now:yyyyMMddHHmmss}.csv"
         };
+    }
+
+    private IActionResult HandleUnsupportedContentType(HttpRequest request)
+    {
+        var acceptHeader = request.Headers.Accept;
+        logger.LogError("Unsupported 'Accept' header value: {AcceptHeader}", acceptHeader!);
+        return new BadRequestObjectResult(new { error = $"Unsupported 'Accept' header value: {acceptHeader}" });
     }
 }

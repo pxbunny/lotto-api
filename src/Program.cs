@@ -20,7 +20,9 @@ var jsonSerializerOptions = new JsonSerializerOptions
 };
 
 builder.Services.AddSingleton(jsonSerializerOptions);
+
 builder.Services.AddScoped<DrawResultsService>();
+builder.Services.AddScoped<IContentNegotiator, ContentNegotiator>();
 
 builder.Services.AddAzureClients(clientBuilder =>
 {
