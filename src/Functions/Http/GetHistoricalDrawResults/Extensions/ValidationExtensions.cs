@@ -1,6 +1,6 @@
-﻿namespace LottoDrawHistory.Functions.Http.Validation;
+﻿namespace LottoDrawHistory.Functions.Http.GetHistoricalDrawResults.Extensions;
 
-static class HttpRequestExtensions
+static class ValidationExtensions
 {
     public static (bool IsValid, string? ErrorMessage) ValidateQueryString(this HttpRequest request)
     {

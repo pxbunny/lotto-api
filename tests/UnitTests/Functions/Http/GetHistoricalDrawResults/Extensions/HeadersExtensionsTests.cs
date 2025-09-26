@@ -1,8 +1,9 @@
-﻿using LottoDrawHistory.Functions.Http.Headers;
+﻿using LottoDrawHistory.Functions.Http.GetHistoricalDrawResults;
+using LottoDrawHistory.Functions.Http.GetHistoricalDrawResults.Extensions;
 
-namespace UnitTests.Functions.Http.Headers;
+namespace UnitTests.Functions.Http.GetHistoricalDrawResults.Extensions;
 
-public class HttpRequestExtensionsTests
+public class HeadersExtensionsTests
 {
     [Theory]
     // Exact matches

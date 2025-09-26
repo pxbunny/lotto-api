@@ -2,9 +2,9 @@
 
 namespace LottoDrawHistory.Functions.Timer;
 
-sealed class AddLatestDrawResults(IMediator mediator, ILogger<AddLatestDrawResults> logger)
+sealed class AddLatestDrawResultsFunction(IMediator mediator, ILogger<AddLatestDrawResultsFunction> logger)
 {
-    private const string FunctionName = nameof(AddLatestDrawResults);
+    private const string FunctionName = nameof(AddLatestDrawResultsFunction);
 
     [Function(FunctionName), FixedDelayRetry(3, "00:15:00")]
     public async Task Run(

@@ -1,9 +1,9 @@
-﻿using LottoDrawHistory.Functions.Http.Validation;
+﻿using LottoDrawHistory.Functions.Http.GetHistoricalDrawResults.Extensions;
 using Microsoft.Extensions.Primitives;
 
-namespace UnitTests.Functions.Http.Validation;
+namespace UnitTests.Functions.Http.GetHistoricalDrawResults.Extensions;
 
-public class HttpRequestExtensionsTests
+public class ValidationExtensionsTests
 {
     private const string ValidDate = "2023-12-31";
     private const string InvalidDate = "31/12/2023";

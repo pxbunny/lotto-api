@@ -1,9 +1,9 @@
 ﻿using System.Globalization;
 using LottoDrawHistory.Application;
 
-namespace LottoDrawHistory.Functions.Http.Parsing;
+namespace LottoDrawHistory.Functions.Http.GetHistoricalDrawResults.Extensions;
 
-static class HttpRequestExtensions
+static class ParsingExtensions
 {
     public static GetHistoricalDrawResultsQuery ParseQueryString(this HttpRequest req)
     {

@@ -1,9 +1,9 @@
 ﻿using System.Globalization;
 using LottoDrawHistory;
-using LottoDrawHistory.Functions.Http.Parsing;
+using LottoDrawHistory.Functions.Http.GetHistoricalDrawResults.Extensions;
 using Microsoft.Extensions.Primitives;
 
-namespace UnitTests.Functions.Http.Parsing;
+namespace UnitTests.Functions.Http.GetHistoricalDrawResults.Extensions;
 
 public class HttpRequestExtensionsParsingTests
 {

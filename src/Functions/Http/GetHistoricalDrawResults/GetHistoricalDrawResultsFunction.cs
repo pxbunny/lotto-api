@@ -2,12 +2,10 @@
 using System.Text;
 using System.Text.Json;
 using CsvHelper;
-using LottoDrawHistory.Functions.Http.Headers;
-using LottoDrawHistory.Functions.Http.Parsing;
-using LottoDrawHistory.Functions.Http.Validation;
+using LottoDrawHistory.Functions.Http.GetHistoricalDrawResults.Extensions;
 using Microsoft.AspNetCore.Mvc;
 
-namespace LottoDrawHistory.Functions.Http;
+namespace LottoDrawHistory.Functions.Http.GetHistoricalDrawResults;
 
 [UsedImplicitly]
 sealed record DrawResultsDto(string DrawDate, IEnumerable<int> LottoNumbers, IEnumerable<int> PlusNumbers);
@@ -15,14 +13,14 @@ sealed record DrawResultsDto(string DrawDate, IEnumerable<int> LottoNumbers, IEn
 [UsedImplicitly]
 sealed record DrawResultsCsvRecord(string DrawDate, string LottoNumbers, string? PlusNumbers);
 
-sealed class GetHistoricalDrawResults(
+sealed class GetHistoricalDrawResultsFunction(
     IMediator mediator,
     JsonSerializerOptions jsonSerializerOptions,
-    ILogger<GetHistoricalDrawResults> logger)
+    ILogger<GetHistoricalDrawResultsFunction> logger)
 {
-    private const string FunctionName = nameof(GetHistoricalDrawResults);
+    private const string FunctionName = nameof(GetHistoricalDrawResultsFunction);
 
-    [Function(nameof(GetHistoricalDrawResults))]
+    [Function(nameof(GetHistoricalDrawResultsFunction))]
     public async Task<IActionResult> Run(
         [HttpTrigger("get", Route = "historical-draw-results")] HttpRequest req,
         CancellationToken cancellationToken)
@@ -31,7 +29,7 @@ sealed class GetHistoricalDrawResults(
 
         try
         {
-            var response = await Handle(req, cancellationToken);
+            var response = await HandleAsync(req, cancellationToken);
             logger.LogInformation("{FunctionName} finished successfully.", FunctionName);
             return response;
         }
@@ -42,7 +40,7 @@ sealed class GetHistoricalDrawResults(
         }
     }
 
-    private async Task<IActionResult> Handle(HttpRequest req, CancellationToken cancellationToken)
+    private async Task<IActionResult> HandleAsync(HttpRequest req, CancellationToken cancellationToken)
     {
         var (isValid, errorMessage) = req.ValidateQueryString();
 

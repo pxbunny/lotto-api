@@ -1,8 +1,8 @@
 ﻿using System.Globalization;
 
-namespace LottoDrawHistory.Functions.Http.Headers;
+namespace LottoDrawHistory.Functions.Http.GetHistoricalDrawResults.Extensions;
 
-static class HttpRequestExtensions
+static class HeadersExtensions
 {
     public static ContentType? GetAcceptHeader(this HttpRequest req)
     {
