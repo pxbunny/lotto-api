@@ -1,6 +1,5 @@
 import csv
 import os
-import uuid
 from argparse import ArgumentParser
 from datetime import datetime
 

@@ -29,6 +29,9 @@ GET http://localhost:7163/api/historical-draw-results?dateFrom=2012-01-01
 GET http://localhost:7163/api/historical-draw-results?dateFrom=2000-01-01
 
 
+### Download historical draw results | all
+GET http://localhost:7163/api/historical-draw-results?dateFrom=0001-01-01
+Accept: application/octet-stream
 
 ### Download historical draw results | top=12
 GET http://localhost:7163/api/historical-draw-results?top=12
