@@ -18,29 +18,17 @@ internal sealed class GetHistoricalDrawResultsQueryHandler(
         CancellationToken cancellationToken)
     {
         var (dateFrom, dateTo, top) = request;
-        const int defaultTopValue = 100;
 
         logger.LogInformation(
             "Handling GetHistoricalDrawResultsQuery - DateFrom: {DateFrom}, DateTo: {DateTo}, Top: {Top}",
             dateFrom, dateTo, top);
 
-        var filter = "";
-
-        if (dateFrom is not null)
-            filter = $"DrawDate ge '{((DateOnly)dateFrom).ToString(Constants.DateFormat)}'";
-
-        if (dateTo is not null)
-            filter = $"{filter} and DrawDate le '{((DateOnly)dateTo).ToString(Constants.DateFormat)}'";
-
-        if (filter.StartsWith(" and"))
-            filter = filter.Remove(0, 4);
+        var filter = CreateFilter(dateFrom, dateTo);
 
         logger.LogInformation("Final query filter: {Filter}", filter);
         logger.LogInformation("Fetching results from DrawResultsService...");
 
-        var resultsTopValue = top ?? (dateFrom is null && dateTo is null
-            ? defaultTopValue
-            : int.MaxValue);
+        var resultsTopValue = top ?? int.MaxValue;
 
         var results = (await drawResultsService.GetAsync(filter, resultsTopValue, cancellationToken)).ToList();
 
@@ -60,5 +48,21 @@ internal sealed class GetHistoricalDrawResultsQueryHandler(
             LottoNumbersString = r.LottoNumbers,
             PlusNumbersString = r.PlusNumbers
         });
+    }
+
+    private static string CreateFilter(DateOnly? dateFrom, DateOnly? dateTo)
+    {
+        var filter = "";
+
+        if (dateFrom is not null)
+            filter = $"DrawDate ge '{((DateOnly)dateFrom).ToString(Constants.DateFormat)}'";
+
+        if (dateTo is not null)
+            filter = $"{filter} and DrawDate le '{((DateOnly)dateTo).ToString(Constants.DateFormat)}'";
+
+        if (filter.StartsWith(" and"))
+            filter = filter.Remove(0, 4);
+
+        return filter;
     }
 }

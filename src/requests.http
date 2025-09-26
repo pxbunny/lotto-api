@@ -29,10 +29,14 @@ GET http://localhost:7163/api/draw-results?dateFrom=2012-01-01
 GET http://localhost:7163/api/draw-results?dateFrom=2000-01-01
 
 
-### Download draw results | all
-GET http://localhost:7163/api/draw-results?dateFrom=0001-01-01
+### Download draw results | default parameters
+GET http://localhost:7163/api/draw-results
 Accept: application/octet-stream
 
 ### Download draw results | top=12
 GET http://localhost:7163/api/draw-results?top=12
+Accept: application/octet-stream
+
+### Download draw results | dateFrom=2025-01-01
+GET http://localhost:7163/api/draw-results?dateFrom=2025-01-01
 Accept: application/octet-stream
