@@ -131,32 +131,32 @@ resource functionApp 'Microsoft.Web/sites@2024-11-01' = {
   }
 }
 
-resource storageFunctionAppPermissions 'Microsoft.Authorization/roleAssignments@2022-04-01' = {
-  name: guid(storageAccount.id, functionApp.name, storageBlobDataContributorRole)
-  scope: storageAccount
-  properties: {
-    roleDefinitionId: storageBlobDataContributorRole
-    principalId: functionApp.identity.principalId
-    principalType: 'ServicePrincipal'
-  }
-}
-
 // Managed manually
-// resource accessPolicies 'Microsoft.KeyVault/vaults/accessPolicies@2024-11-01' = {
-//   name: 'add'
-//   parent: keyVault
+// resource storageFunctionAppPermissions 'Microsoft.Authorization/roleAssignments@2022-04-01' = {
+//   name: guid(storageAccount.id, functionApp.name, storageBlobDataContributorRole)
+//   scope: storageAccount
 //   properties: {
-//     accessPolicies: [
-//       {
-//         tenantId: subscription().tenantId
-//         objectId: functionApp.identity.principalId
-//         permissions: {
-//           secrets: ['get']
-//         }
-//       }
-//     ]
+//     roleDefinitionId: storageBlobDataContributorRole
+//     principalId: functionApp.identity.principalId
+//     principalType: 'ServicePrincipal'
 //   }
 // }
+
+resource accessPolicies 'Microsoft.KeyVault/vaults/accessPolicies@2024-11-01' = {
+  name: 'add'
+  parent: keyVault
+  properties: {
+    accessPolicies: [
+      {
+        tenantId: subscription().tenantId
+        objectId: functionApp.identity.principalId
+        permissions: {
+          secrets: ['get']
+        }
+      }
+    ]
+  }
+}
 
 output appName string = functionApp.name
 output keyVaultName string = keyVault.name
