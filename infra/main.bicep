@@ -141,21 +141,22 @@ resource storageFunctionAppPermissions 'Microsoft.Authorization/roleAssignments@
   }
 }
 
-resource accessPolicies 'Microsoft.KeyVault/vaults/accessPolicies@2024-11-01' = {
-  name: 'add'
-  parent: keyVault
-  properties: {
-    accessPolicies: [
-      {
-        tenantId: subscription().tenantId
-        objectId: functionApp.identity.principalId
-        permissions: {
-          secrets: ['get']
-        }
-      }
-    ]
-  }
-}
+// Managed manually
+// resource accessPolicies 'Microsoft.KeyVault/vaults/accessPolicies@2024-11-01' = {
+//   name: 'add'
+//   parent: keyVault
+//   properties: {
+//     accessPolicies: [
+//       {
+//         tenantId: subscription().tenantId
+//         objectId: functionApp.identity.principalId
+//         permissions: {
+//           secrets: ['get']
+//         }
+//       }
+//     ]
+//   }
+// }
 
 output appName string = functionApp.name
 output keyVaultName string = keyVault.name
