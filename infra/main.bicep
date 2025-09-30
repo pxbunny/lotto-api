@@ -21,6 +21,8 @@ resource storageAccount 'Microsoft.Storage/storageAccounts@2025-01-01' = {
   }
   properties: {
     supportsHttpsTrafficOnly: true
+    allowBlobPublicAccess: true
+    allowSharedKeyAccess: true
     accessTier: 'Hot'
   }
 
@@ -32,6 +34,9 @@ resource storageAccount 'Microsoft.Storage/storageAccounts@2025-01-01' = {
 
     resource content 'containers' = {
       name: 'content'
+      properties: {
+        publicAccess: 'None'
+      }
     }
   }
 
