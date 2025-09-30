@@ -10,7 +10,7 @@ param dataUpdateSchedule string
 param timeZone string
 param location string = resourceGroup().location
 
-var storageBlobDataContributorRole = subscriptionResourceId('Microsoft.Authorization/roleDefinitions', 'ba92f5b4-2d11-453d-a403-e96b0029c9fe')
+// var storageBlobDataContributorRole = subscriptionResourceId('Microsoft.Authorization/roleDefinitions', 'ba92f5b4-2d11-453d-a403-e96b0029c9fe')
 
 resource storageAccount 'Microsoft.Storage/storageAccounts@2025-01-01' = {
   name: storageAccountName
@@ -21,8 +21,6 @@ resource storageAccount 'Microsoft.Storage/storageAccounts@2025-01-01' = {
   }
   properties: {
     supportsHttpsTrafficOnly: true
-    allowBlobPublicAccess: false
-    allowSharedKeyAccess: false
     accessTier: 'Hot'
   }
 
@@ -34,9 +32,6 @@ resource storageAccount 'Microsoft.Storage/storageAccounts@2025-01-01' = {
 
     resource content 'containers' = {
       name: 'content'
-      properties: {
-        publicAccess: 'None'
-      }
     }
   }
 
