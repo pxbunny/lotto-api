@@ -21,23 +21,7 @@ resource storageAccount 'Microsoft.Storage/storageAccounts@2025-01-01' = {
   }
   properties: {
     supportsHttpsTrafficOnly: true
-    allowBlobPublicAccess: true
-    allowSharedKeyAccess: true
     accessTier: 'Hot'
-  }
-
-  resource blobServices 'blobServices' = {
-    name: 'default'
-    properties: {
-      deleteRetentionPolicy: {}
-    }
-
-    resource content 'containers' = {
-      name: 'content'
-      properties: {
-        publicAccess: 'None'
-      }
-    }
   }
 
   resource tableServices 'tableServices' = {
