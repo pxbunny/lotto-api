@@ -8,10 +8,11 @@ param lottoBaseUrl string
 param githubSpObjectId string
 param dataUpdateSchedule string
 param timeZone string
-
 param location string = resourceGroup().location
 
-resource storageAccount 'Microsoft.Storage/storageAccounts@2023-05-01' = {
+var storageBlobDataContributorRole = subscriptionResourceId('Microsoft.Authorization/roleDefinitions', 'ba92f5b4-2d11-453d-a403-e96b0029c9fe')
+
+resource storageAccount 'Microsoft.Storage/storageAccounts@2025-01-01' = {
   name: storageAccountName
   location: location
   kind: 'StorageV2'
@@ -20,21 +21,35 @@ resource storageAccount 'Microsoft.Storage/storageAccounts@2023-05-01' = {
   }
   properties: {
     supportsHttpsTrafficOnly: true
+    allowBlobPublicAccess: false
+    allowSharedKeyAccess: false
     accessTier: 'Hot'
+  }
+
+  resource blobServices 'blobServices' = {
+    name: 'default'
+    properties: {
+      deleteRetentionPolicy: {}
+    }
+
+    resource content 'containers' = {
+      name: 'content'
+      properties: {
+        publicAccess: 'None'
+      }
+    }
+  }
+
+  resource tableServices 'tableServices' = {
+    name: 'default'
+
+    resource drawResultsTable 'tables' = {
+      name: drawResultsTableName
+    }
   }
 }
 
-resource tableService 'Microsoft.Storage/storageAccounts/tableServices@2023-05-01' = {
-  name: 'default'
-  parent: storageAccount
-}
-
-resource drawResultsTable 'Microsoft.Storage/storageAccounts/tableServices/tables@2023-05-01' = {
-  name: drawResultsTableName
-  parent: tableService
-}
-
-resource appServicePlan 'Microsoft.Web/serverfarms@2024-04-01' = {
+resource appServicePlan 'Microsoft.Web/serverfarms@2024-11-01' = {
   name: appServicePlanName
   kind: 'functionapp'
   location: location
@@ -43,7 +58,7 @@ resource appServicePlan 'Microsoft.Web/serverfarms@2024-04-01' = {
   }
 }
 
-resource keyVault 'Microsoft.KeyVault/vaults@2023-07-01' = {
+resource keyVault 'Microsoft.KeyVault/vaults@2024-11-01' = {
   name: keyVaultName
   location: location
   properties: {
@@ -67,7 +82,7 @@ resource keyVault 'Microsoft.KeyVault/vaults@2023-07-01' = {
   }
 }
 
-resource lottoApiKeySecret 'Microsoft.KeyVault/vaults/secrets@2023-07-01' = {
+resource lottoApiKeySecret 'Microsoft.KeyVault/vaults/secrets@2024-11-01' = {
   name: lottoApiKeySecretName
   parent: keyVault
   properties: {
@@ -75,7 +90,7 @@ resource lottoApiKeySecret 'Microsoft.KeyVault/vaults/secrets@2023-07-01' = {
   }
 }
 
-resource functionApp 'Microsoft.Web/sites@2024-04-01' = {
+resource functionApp 'Microsoft.Web/sites@2024-11-01' = {
   name: functionAppName
   kind: 'functionapp'
   location: location
@@ -116,9 +131,19 @@ resource functionApp 'Microsoft.Web/sites@2024-04-01' = {
   }
 }
 
-resource accessPolicies 'Microsoft.KeyVault/vaults/accessPolicies@2023-07-01' = {
-  parent: keyVault
+resource storageFunctionAppPermissions 'Microsoft.Authorization/roleAssignments@2022-04-01' = {
+  name: guid(storageAccount.id, functionApp.name, storageBlobDataContributorRole)
+  scope: storageAccount
+  properties: {
+    roleDefinitionId: storageBlobDataContributorRole
+    principalId: functionApp.identity.principalId
+    principalType: 'ServicePrincipal'
+  }
+}
+
+resource accessPolicies 'Microsoft.KeyVault/vaults/accessPolicies@2024-11-01' = {
   name: 'add'
+  parent: keyVault
   properties: {
     accessPolicies: [
       {
