@@ -6,6 +6,10 @@
 @minLength(3)
 param resourceToken string = toLower(uniqueString(subscription().id, location))
 
+@description('A unique token used for resource name generation without dashes.')
+@minLength(1)
+param resourceTokenWithoutDashes string = replace(resourceToken, '-', '')
+
 @description('Name of the table for storing draw results.')
 param drawResultsTableName string
 
@@ -55,7 +59,7 @@ resource appInsights 'Microsoft.Insights/components@2020-02-02' = {
 }
 
 resource storageAccount 'Microsoft.Storage/storageAccounts@2025-01-01' = {
-  name: 'st${resourceToken}'
+  name: 'st${resourceTokenWithoutDashes}'
   location: location
   kind: 'StorageV2'
   sku: {
