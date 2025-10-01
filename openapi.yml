@@ -1,10 +1,10 @@
 openapi: 3.1.0
 info:
-  title: Historical Lotto Results API
-  description: API for retrieving historical lottery draw results with filtering capabilities
+  title: Lotto API
+  description: API for retrieving lotto draw results with filtering capabilities
   version: 1.0.0
 servers:
-  - url: https://func-lotto-draw-history.azurewebsites.net/api
+  - url: base_url # https://func-lotto-draw-history.azurewebsites.net/api
     description: Production server
 
 paths:
@@ -12,10 +12,10 @@ paths:
     get:
       tags:
         - Lotto Results
-      operationId: getHistoricalDrawResults
-      summary: Retrieve historical lottery draw results
+      operationId: getDrawResults
+      summary: Retrieve draw results
       description: |
-        Returns historical lottery draw results optionally filtered by date range.
+        Returns lottery draw results optionally filtered by date range and top value.
         Results are returned in reverse chronological order (newest first).
       security:
         - apiKeyAuth: []
@@ -54,13 +54,13 @@ paths:
           required: false
       responses:
         '200':
-          description: Successfully retrieved historical draw results
+          description: Successfully retrieved draw results
           content:
             application/json:
               schema:
                 type: array
                 items:
-                  $ref: '#/components/schemas/HistoricalDrawResult'
+                  $ref: '#/components/schemas/DrawResult'
               example: [
                 {
                   "draw_date": "2050-01-04",
@@ -104,7 +104,7 @@ paths:
 
 components:
   schemas:
-    HistoricalDrawResult:
+    DrawResult:
       type: object
       properties:
         draw_date:

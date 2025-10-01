@@ -1,7 +1,7 @@
-﻿using LottoDrawHistory.Data;
-using LottoDrawHistory.Lotto;
+﻿using Lotto.Data;
+using Lotto.Lotto;
 
-namespace LottoDrawHistory.Application;
+namespace Lotto.Application;
 
 internal sealed record AddLatestDrawResultsCommand : IRequest;
 

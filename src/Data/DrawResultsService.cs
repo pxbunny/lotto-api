@@ -1,6 +1,6 @@
 ﻿using Azure.Data.Tables;
 
-namespace LottoDrawHistory.Data;
+namespace Lotto.Data;
 
 internal sealed class DrawResultsService(TableServiceClient tableServiceClient)
 {

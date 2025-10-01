@@ -1,4 +1,4 @@
-﻿namespace LottoDrawHistory.Functions.Http.GetDrawResults.Extensions;
+﻿namespace Lotto.Functions.Http.GetDrawResults.Extensions;
 
 internal static class ValidationExtensions
 {

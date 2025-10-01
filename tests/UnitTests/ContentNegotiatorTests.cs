@@ -1,6 +1,4 @@
-﻿using LottoDrawHistory;
-
-namespace UnitTests;
+﻿namespace Lotto.UnitTests;
 
 public class ContentNegotiatorTests
 {

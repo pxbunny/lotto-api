@@ -1,6 +1,7 @@
 ﻿using System.Net.Http.Json;
+using Lotto.Models;
 
-namespace LottoDrawHistory.Lotto;
+namespace Lotto.Lotto;
 
 internal sealed class LottoService(HttpClient client)
 {

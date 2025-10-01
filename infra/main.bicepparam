@@ -1,6 +1,6 @@
 using './main.bicep'
 
-var appName = 'lotto-draw-history'
+var appName = 'lotto-api'
 
 param appServicePlanName = 'asp-${appName}'
 param functionAppName = 'func-${appName}'

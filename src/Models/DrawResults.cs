@@ -1,4 +1,4 @@
-﻿namespace LottoDrawHistory.Models;
+﻿namespace Lotto.Models;
 
 internal sealed class DrawResults
 {

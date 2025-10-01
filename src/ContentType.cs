@@ -1,4 +1,4 @@
-﻿namespace LottoDrawHistory;
+﻿namespace Lotto;
 
 internal enum ContentType
 {

@@ -1,7 +1,7 @@
-﻿using LottoDrawHistory.Functions.Http.GetDrawResults.Extensions;
+﻿using Lotto.Functions.Http.GetDrawResults.Extensions;
 using Microsoft.Extensions.Primitives;
 
-namespace UnitTests.Functions.Http.GetDrawResults.Extensions;
+namespace Lotto.UnitTests.Functions.Http.GetDrawResults.Extensions;
 
 public class ValidationExtensionsTests
 {

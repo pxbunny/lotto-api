@@ -1,4 +1,4 @@
-﻿global using LottoDrawHistory.Models;
+﻿global using Lotto.Models;
 global using JetBrains.Annotations;
 global using MediatR;
 global using Microsoft.AspNetCore.Http;

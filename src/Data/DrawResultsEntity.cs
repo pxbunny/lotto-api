@@ -1,7 +1,7 @@
 ﻿using Azure;
 using Azure.Data.Tables;
 
-namespace LottoDrawHistory.Data;
+namespace Lotto.Data;
 
 [UsedImplicitly]
 internal sealed class DrawResultsEntity : ITableEntity

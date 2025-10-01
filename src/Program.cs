@@ -1,7 +1,7 @@
 using System.Text.Json;
-using LottoDrawHistory;
-using LottoDrawHistory.Data;
-using LottoDrawHistory.Lotto;
+using Lotto;
+using Lotto.Data;
+using Lotto.Lotto;
 using Microsoft.Azure.Functions.Worker.Builder;
 using Microsoft.Extensions.Azure;
 using Microsoft.Extensions.DependencyInjection;
@@ -60,4 +60,7 @@ builder.Services.AddMediatR(cfg =>
 
 builder.Build().Run();
 
-internal interface IAssemblyFlag;
+namespace Lotto
+{
+    internal interface IAssemblyFlag;
+}

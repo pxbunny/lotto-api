@@ -1,8 +1,9 @@
-﻿using LottoDrawHistory.Data;
+﻿using Lotto.Data;
+using Lotto.Models;
 
-namespace LottoDrawHistory.Application;
+namespace Lotto.Application;
 
-internal sealed record GetHistoricalDrawResultsQuery(
+internal sealed record GetDrawResultsQuery(
     DateOnly? DateFrom,
     DateOnly? DateTo,
     int? Top)
@@ -11,10 +12,10 @@ internal sealed record GetHistoricalDrawResultsQuery(
 internal sealed class GetHistoricalDrawResultsQueryHandler(
     DrawResultsService drawResultsService,
     ILogger<GetHistoricalDrawResultsQueryHandler> logger)
-    : IRequestHandler<GetHistoricalDrawResultsQuery, IEnumerable<DrawResults>>
+    : IRequestHandler<GetDrawResultsQuery, IEnumerable<DrawResults>>
 {
     public async Task<IEnumerable<DrawResults>> Handle(
-        GetHistoricalDrawResultsQuery request,
+        GetDrawResultsQuery request,
         CancellationToken cancellationToken)
     {
         var (dateFrom, dateTo, top) = request;

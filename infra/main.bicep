@@ -8,9 +8,8 @@ param lottoBaseUrl string
 param githubSpObjectId string
 param dataUpdateSchedule string
 param timeZone string
-param location string = resourceGroup().location
 
-// var storageBlobDataContributorRole = subscriptionResourceId('Microsoft.Authorization/roleDefinitions', 'ba92f5b4-2d11-453d-a403-e96b0029c9fe')
+param location string = resourceGroup().location
 
 resource storageAccount 'Microsoft.Storage/storageAccounts@2025-01-01' = {
   name: storageAccountName
@@ -20,6 +19,8 @@ resource storageAccount 'Microsoft.Storage/storageAccounts@2025-01-01' = {
     name: 'Standard_LRS'
   }
   properties: {
+    allowBlobPublicAccess: false
+    minimumTlsVersion: 'TLS1_2'
     supportsHttpsTrafficOnly: true
     accessTier: 'Hot'
   }
@@ -39,6 +40,7 @@ resource appServicePlan 'Microsoft.Web/serverfarms@2024-11-01' = {
   location: location
   sku: {
     name: 'Y1'
+    tier: 'Dynamic'
   }
 }
 
@@ -64,13 +66,12 @@ resource keyVault 'Microsoft.KeyVault/vaults@2024-11-01' = {
       }
     ]
   }
-}
 
-resource lottoApiKeySecret 'Microsoft.KeyVault/vaults/secrets@2024-11-01' = {
-  name: lottoApiKeySecretName
-  parent: keyVault
-  properties: {
-    value: 'PLACEHOLDER' // Set through GitHub Actions
+  resource lottoApiKeySecret 'secrets' = {
+    name: lottoApiKeySecretName
+    properties: {
+      value: 'PLACEHOLDER' // Set through GitHub Actions
+    }
   }
 }
 
@@ -114,17 +115,6 @@ resource functionApp 'Microsoft.Web/sites@2024-11-01' = {
     httpsOnly: true
   }
 }
-
-// Managed manually
-// resource storageFunctionAppPermissions 'Microsoft.Authorization/roleAssignments@2022-04-01' = {
-//   name: guid(storageAccount.id, functionApp.name, storageBlobDataContributorRole)
-//   scope: storageAccount
-//   properties: {
-//     roleDefinitionId: storageBlobDataContributorRole
-//     principalId: functionApp.identity.principalId
-//     principalType: 'ServicePrincipal'
-//   }
-// }
 
 resource accessPolicies 'Microsoft.KeyVault/vaults/accessPolicies@2024-11-01' = {
   name: 'add'

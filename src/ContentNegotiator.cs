@@ -1,6 +1,6 @@
 ﻿using Microsoft.Net.Http.Headers;
 
-namespace LottoDrawHistory;
+namespace Lotto;
 
 internal interface IContentNegotiator<T> where T : struct, Enum
 {

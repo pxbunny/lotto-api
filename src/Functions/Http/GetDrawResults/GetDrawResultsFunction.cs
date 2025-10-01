@@ -2,10 +2,11 @@
 using System.Text;
 using System.Text.Json;
 using CsvHelper;
-using LottoDrawHistory.Functions.Http.GetDrawResults.Extensions;
+using Lotto.Models;
+using Lotto.Functions.Http.GetDrawResults.Extensions;
 using Microsoft.AspNetCore.Mvc;
 
-namespace LottoDrawHistory.Functions.Http.GetDrawResults;
+namespace Lotto.Functions.Http.GetDrawResults;
 
 [UsedImplicitly]
 internal sealed record DrawResultsDto(string DrawDate, IEnumerable<int> LottoNumbers, IEnumerable<int> PlusNumbers);

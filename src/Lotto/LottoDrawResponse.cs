@@ -1,4 +1,4 @@
-﻿namespace LottoDrawHistory.Lotto;
+﻿namespace Lotto.Lotto;
 
 [UsedImplicitly]
 internal sealed record LottoDrawResponse(int DrawSystemId, DateTime DrawDate, string GameType, IEnumerable<LottoDrawResults> Results);

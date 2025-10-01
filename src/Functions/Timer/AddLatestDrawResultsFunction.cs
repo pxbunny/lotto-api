@@ -1,6 +1,6 @@
-﻿using LottoDrawHistory.Application;
+﻿using Lotto.Application;
 
-namespace LottoDrawHistory.Functions.Timer;
+namespace Lotto.Functions.Timer;
 
 internal sealed class AddLatestDrawResultsFunction(IMediator mediator, ILogger<AddLatestDrawResultsFunction> logger)
 {
