@@ -6,7 +6,8 @@ internal sealed class AddLatestDrawResultsFunction(IMediator mediator, ILogger<A
 {
     private const string FunctionName = nameof(AddLatestDrawResultsFunction);
 
-    [Function(FunctionName), FixedDelayRetry(3, "00:15:00")]
+    [Function(FunctionName)]
+    //[FixedDelayRetry(3, "00:15:00")]
     public async Task Run(
         [TimerTrigger(
             "%DataUpdateSchedule%"
@@ -29,7 +30,8 @@ internal sealed class AddLatestDrawResultsFunction(IMediator mediator, ILogger<A
             throw;
         }
 
-        if (timer.ScheduleStatus is not null)
-            logger.LogInformation("Next timer schedule at: {NextScheduledTrigger}", timer.ScheduleStatus.Next);
+        if (timer.ScheduleStatus is null) return;
+
+        logger.LogInformation("Next timer schedule at: {NextScheduledTrigger}", timer.ScheduleStatus.Next);
     }
 }
