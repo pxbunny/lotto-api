@@ -11,7 +11,7 @@ load_dotenv()
 
 STORAGE_CONNECTION_STRING = os.getenv('STORAGE_CONNECTION_STRING')
 
-TABLE_NAME = 'LottoResults'
+TABLE_NAME = 'LottoDrawResults'
 DEFAULT_CSV_FILE_NAME = 'data.csv'
 
 

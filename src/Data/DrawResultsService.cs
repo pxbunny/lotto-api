@@ -4,7 +4,7 @@ namespace Lotto.Data;
 
 internal sealed class DrawResultsService(TableServiceClient tableServiceClient)
 {
-    private const string TableName = "LottoResults";
+    private const string TableName = "LottoDrawResults";
     private const string PartitionKey = "LottoData";
     private const string BaseFilter = $"PartitionKey eq '{PartitionKey}'";
     private const int MaxPageSize = 1_000;
