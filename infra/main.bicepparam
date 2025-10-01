@@ -1,6 +1,6 @@
 using './main.bicep'
 
-param resourceToken = 'lotto-api'
+param resourceToken = 'lotto-api-test1'
 param drawResultsTableName = 'LottoResults'
 param lottoApiKeySecretName = 'LottoApiKey'
 param lottoBaseUrl = 'https://developers.lotto.pl/api/'
