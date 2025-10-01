@@ -71,42 +71,54 @@ resource storageAccount 'Microsoft.Storage/storageAccounts@2025-01-01' = {
     supportsHttpsTrafficOnly: true
     minimumTlsVersion: 'TLS1_2'
   }
+}
 
-  resource tableServices 'tableServices' = {
-    name: 'default'
+resource tableServices 'Microsoft.Storage/storageAccounts/tableServices@2025-01-01' = {
+  name: 'default'
+  parent: storageAccount
 
-    resource drawResultsTable 'tables' = {
-      name: drawResultsTableName
-    }
+  resource drawResultsTable 'tables' = {
+    name: drawResultsTableName
   }
 }
 
-resource storageDiagnostics 'Microsoft.Insights/diagnosticSettings@2021-05-01-preview' = {
-  name: 'storage-account-logs'
-  scope: storageAccount
+resource blobServices 'Microsoft.Storage/storageAccounts/blobServices@2025-01-01' = {
+  name: 'default'
+  parent: storageAccount
+}
+
+resource tableStorageDiagnostics 'Microsoft.Insights/diagnosticSettings@2021-05-01-preview' = {
+  name: 'table-storage-logs'
+  scope: tableServices
   properties: {
     workspaceId: logAnalytics.id
     logs: [
       {
-        category: 'StorageRead'
+        categoryGroup: 'allLogs'
         enabled: true
       }
+    ]
+    metrics: [
       {
-        category: 'StorageWrite'
+        category: 'Transaction'
         enabled: true
       }
+    ]
+  }
+}
+
+resource blobStorageDiagnostics 'Microsoft.Insights/diagnosticSettings@2021-05-01-preview' = {
+  name: 'blob-storage-logs'
+  scope: blobServices
+  properties: {
+    workspaceId: logAnalytics.id
+    logs: [
       {
-        category: 'StorageDelete'
+        categoryGroup: 'allLogs'
         enabled: true
       }
-      {
-        category: 'StorageTableLogs'
-        enabled: true
-      }
-      {
-        category: 'StorageBlobLogs'
-        enabled: true
-      }
+    ]
+    metrics: [
       {
         category: 'Transaction'
         enabled: true
@@ -201,7 +213,7 @@ resource functionApp 'Microsoft.Web/sites@2024-11-01' = {
   }
 }
 
-resource accessPolicies 'Microsoft.KeyVault/vaults/accessPolicies@2024-11-01' = {
+resource kvAccessPolicies 'Microsoft.KeyVault/vaults/accessPolicies@2024-11-01' = {
   name: 'add'
   parent: keyVault
   properties: {
