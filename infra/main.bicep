@@ -178,6 +178,12 @@ resource functionApp 'Microsoft.Web/sites@2024-11-01' = {
   properties: {
     serverFarmId: appServicePlan.id
     siteConfig: {
+      cors: {
+        allowedOrigins: [
+          'https://portal.azure.com'
+        ]
+        supportCredentials: true
+      }
       appSettings: [
         {
           name: 'FUNCTIONS_WORKER_RUNTIME'
