@@ -16,6 +16,7 @@ A REST API providing draw results for Polish Lotto and Lotto Plus games. The API
 ### Prerequisites
 - .NET 9 SDK
 - Azure account with active subscription
+- Azure CLI
 - Python (for initialization scripts, version 3.12+ recommended)
 - Lotto API key from [Lotto Developers Portal](https://developers.lotto.pl/)
 

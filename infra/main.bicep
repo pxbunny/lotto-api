@@ -1,28 +1,71 @@
-param appServicePlanName string
-param functionAppName string
-param storageAccountName string
+//*************************************
+// Parameters
+//*************************************
+
+@description('A unique token used for resource name generation.')
+@minLength(3)
+param resourceToken string = toLower(uniqueString(subscription().id, location))
+
+@description('Name of the table for storing draw results.')
 param drawResultsTableName string
-param keyVaultName string
+
+@description('Name of the secret in Key Vault storing Lotto API key.')
 param lottoApiKeySecretName string
+
+@description('Base URL for the original Lotto API.')
 param lottoBaseUrl string
+
+@description('GitHub Service Principal Object ID.')
 param githubSpObjectId string
+
+@description('Data sync schedule in cron format.')
 param dataUpdateSchedule string
+
+@description('Time zone for scheduling data sync.')
 param timeZone string
 
+@description('Primary region for all Azure resources.')
+@minLength(1)
 param location string = resourceGroup().location
 
+
+//*************************************
+// Resources
+//*************************************
+
+resource logAnalytics 'Microsoft.OperationalInsights/workspaces@2025-02-01' = {
+  name: 'log-${resourceToken}'
+  location: location
+  properties: any({
+    retentionInDays: 7
+    sku: {
+      name: 'PerGB2018'
+    }
+  })
+}
+
+resource appInsights 'Microsoft.Insights/components@2020-02-02' = {
+  name: 'appi-${resourceToken}'
+  location: location
+  kind: 'web'
+  properties: {
+    Application_Type: 'web'
+    WorkspaceResourceId: logAnalytics.id
+  }
+}
+
 resource storageAccount 'Microsoft.Storage/storageAccounts@2025-01-01' = {
-  name: storageAccountName
+  name: 'st${resourceToken}'
   location: location
   kind: 'StorageV2'
   sku: {
     name: 'Standard_LRS'
   }
   properties: {
-    allowBlobPublicAccess: false
-    minimumTlsVersion: 'TLS1_2'
-    supportsHttpsTrafficOnly: true
     accessTier: 'Hot'
+    allowBlobPublicAccess: false
+    supportsHttpsTrafficOnly: true
+    minimumTlsVersion: 'TLS1_2'
   }
 
   resource tableServices 'tableServices' = {
@@ -34,8 +77,42 @@ resource storageAccount 'Microsoft.Storage/storageAccounts@2025-01-01' = {
   }
 }
 
+resource storageDiagnostics 'Microsoft.Insights/diagnosticSettings@2021-05-01-preview' = {
+  name: 'storage-account-logs'
+  scope: storageAccount
+  properties: {
+    workspaceId: logAnalytics.id
+    logs: [
+      {
+        category: 'StorageRead'
+        enabled: true
+      }
+      {
+        category: 'StorageWrite'
+        enabled: true
+      }
+      {
+        category: 'StorageDelete'
+        enabled: true
+      }
+      {
+        category: 'StorageTableLogs'
+        enabled: true
+      }
+      {
+        category: 'StorageBlobLogs'
+        enabled: true
+      }
+      {
+        category: 'Transaction'
+        enabled: true
+      }
+    ]
+  }
+}
+
 resource appServicePlan 'Microsoft.Web/serverfarms@2024-11-01' = {
-  name: appServicePlanName
+  name: 'asp-${resourceToken}'
   kind: 'functionapp'
   location: location
   sku: {
@@ -45,11 +122,11 @@ resource appServicePlan 'Microsoft.Web/serverfarms@2024-11-01' = {
 }
 
 resource keyVault 'Microsoft.KeyVault/vaults@2024-11-01' = {
-  name: keyVaultName
+  name: 'kv-${resourceToken}'
   location: location
   properties: {
     enableSoftDelete: true
-    softDeleteRetentionInDays: 90
+    softDeleteRetentionInDays: 7
     enableRbacAuthorization: false
     tenantId: subscription().tenantId
     sku: {
@@ -76,7 +153,7 @@ resource keyVault 'Microsoft.KeyVault/vaults@2024-11-01' = {
 }
 
 resource functionApp 'Microsoft.Web/sites@2024-11-01' = {
-  name: functionAppName
+  name: 'func-${resourceToken}'
   kind: 'functionapp'
   location: location
   identity: {
@@ -89,6 +166,10 @@ resource functionApp 'Microsoft.Web/sites@2024-11-01' = {
         {
           name: 'FUNCTIONS_WORKER_RUNTIME'
           value: 'dotnet-isolated'
+        }
+        {
+          name: 'APPLICATIONINSIGHTS_CONNECTION_STRING'
+          value: 'InstrumentationKey=${appInsights.properties.InstrumentationKey}'
         }
         {
           name: 'WEBSITE_TIME_ZONE'
@@ -108,7 +189,7 @@ resource functionApp 'Microsoft.Web/sites@2024-11-01' = {
         }
         {
           name: 'LottoApiKey'
-          value: '@Microsoft.KeyVault(SecretUri=${keyVault.properties.vaultUri}secrets/${lottoApiKeySecretName}/)'
+          value: '@Microsoft.KeyVault(VaultName=${keyVault.name};SecretName=${lottoApiKeySecretName})'
         }
       ]
     }
@@ -131,6 +212,11 @@ resource accessPolicies 'Microsoft.KeyVault/vaults/accessPolicies@2024-11-01' = 
     ]
   }
 }
+
+
+//*************************************
+// Outputs
+//*************************************
 
 output appName string = functionApp.name
 output keyVaultName string = keyVault.name

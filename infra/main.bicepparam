@@ -1,11 +1,6 @@
 using './main.bicep'
 
-var appName = 'lotto-api'
-
-param appServicePlanName = 'asp-${appName}'
-param functionAppName = 'func-${appName}'
-param storageAccountName = replace('st${appName}', '-', '')
-param keyVaultName = 'kv-${appName}'
+param resourceToken = 'lotto-api'
 param drawResultsTableName = 'LottoResults'
 param lottoApiKeySecretName = 'LottoApiKey'
 param lottoBaseUrl = 'https://developers.lotto.pl/api/'

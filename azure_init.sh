@@ -2,10 +2,10 @@
 
 set -e
 
+az login --use-device-code
+
 CREDENTIALS_FILE="azure-credentials.json"
 SUBSCRIPTION_ID=$(az account show --query id --output tsv)
-
-az login --use-device-code
 
 read -p "Enter project name (allowed chars: a-z, 0-9, -, _). Prefixes 'rg-' and 'sp-' will be added automatically: " PROJECT_NAME
 
