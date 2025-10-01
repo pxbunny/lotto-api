@@ -6,13 +6,13 @@ internal sealed class AddLatestDrawResultsFunction(IMediator mediator, ILogger<A
 {
     private const string FunctionName = nameof(AddLatestDrawResultsFunction);
 
-    [Function(FunctionName)]
-    //[FixedDelayRetry(3, "00:15:00")]
+    [Function(FunctionName), FixedDelayRetry(3, "00:15:00")]
     public async Task Run(
         [TimerTrigger(
-            "%DataUpdateSchedule%"
+            "%DataUpdateSchedule%",
+            UseMonitor = false
 #if DEBUG
-            //, RunOnStartup = true
+            , RunOnStartup = true
 #endif
             )] TimerInfo timer,
         CancellationToken cancellationToken)
