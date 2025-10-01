@@ -41,7 +41,7 @@ resource logAnalytics 'Microsoft.OperationalInsights/workspaces@2025-02-01' = {
   name: 'log-${resourceToken}'
   location: location
   properties: any({
-    retentionInDays: 7
+    retentionInDays: 30
     sku: {
       name: 'PerGB2018'
     }
