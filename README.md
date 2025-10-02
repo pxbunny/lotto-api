@@ -1,6 +1,6 @@
 # Lotto API
 
-[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](LICENSE)
+[![License: GPL-3.0](https://img.shields.io/badge/License-GPLv3-blue.svg)](LICENSE)
 
 A REST API providing draw results for Polish Lotto and Lotto Plus games. The API supports JSON and CSV formats and includes automated updates for new draws.
 
