@@ -1,6 +1,7 @@
 using System.Text.Json;
 using Lotto;
 using Lotto.Data;
+using Lotto.Functions.Http.GetDrawResults;
 using Lotto.Lotto;
 using Lotto.Services;
 using Microsoft.Azure.Functions.Worker.Builder;
@@ -25,6 +26,8 @@ builder.Services
     .AddScoped<IDrawResultsRepository, DrawResultsRepository>()
     .AddScoped<IDrawResultsService, DrawResultsService>()
     .AddScoped<IDataSyncService, DataSyncService>();
+
+builder.Services.AddScoped<IGetDrawResultsResponseHandler, GetDrawResultsResponseHandler>();
 
 builder.Services.AddSingleton<IContentNegotiator<ContentType>>(new ContentNegotiator<ContentType>(config =>
     {
