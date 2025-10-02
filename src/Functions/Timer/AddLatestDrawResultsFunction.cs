@@ -1,8 +1,8 @@
-﻿using Lotto.Application;
+﻿namespace Lotto.Functions.Timer;
 
-namespace Lotto.Functions.Timer;
-
-internal sealed class AddLatestDrawResultsFunction(IMediator mediator, ILogger<AddLatestDrawResultsFunction> logger)
+internal sealed class AddLatestDrawResultsFunction(
+    IDataSyncService dataSyncService,
+    ILogger<AddLatestDrawResultsFunction> logger)
 {
     private const string FunctionName = nameof(AddLatestDrawResultsFunction);
 
@@ -21,7 +21,7 @@ internal sealed class AddLatestDrawResultsFunction(IMediator mediator, ILogger<A
 
         try
         {
-            await mediator.Send(new AddLatestDrawResultsCommand(), cancellationToken);
+            await dataSyncService.AddLatestDrawResultsAsync(cancellationToken);
             logger.LogInformation("{FunctionName} finished successfully.", FunctionName);
         }
         catch (Exception e)

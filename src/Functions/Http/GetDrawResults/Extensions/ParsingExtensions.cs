@@ -1,11 +1,10 @@
 ﻿using System.Globalization;
-using Lotto.Application;
 
 namespace Lotto.Functions.Http.GetDrawResults.Extensions;
 
 internal static class ParsingExtensions
 {
-    public static GetDrawResultsQuery ParseQueryString(this HttpRequest req)
+    public static GetDrawResultsQueryParams ParseQueryString(this HttpRequest req)
     {
         DateOnly? dateFrom = null;
         DateOnly? dateTo = null;
@@ -20,7 +19,7 @@ internal static class ParsingExtensions
         if (req.Query.TryGetValue("top", out var topStr) && int.TryParse(topStr, out var parsedTopValue))
             top = parsedTopValue;
 
-        return new GetDrawResultsQuery(dateFrom, dateTo, top);
+        return new GetDrawResultsQueryParams(dateFrom, dateTo, top);
     }
 
     private static bool TryParseDate(this IQueryCollection query, string name, out DateOnly date)

@@ -2,7 +2,6 @@
 using System.Text;
 using System.Text.Json;
 using CsvHelper;
-using Lotto.Models;
 using Lotto.Functions.Http.GetDrawResults.Extensions;
 using Microsoft.AspNetCore.Mvc;
 
@@ -15,7 +14,7 @@ internal sealed record DrawResultsDto(string DrawDate, IEnumerable<int> LottoNum
 internal sealed record DrawResultsCsvRecord(string DrawDate, string LottoNumbers, string? PlusNumbers);
 
 internal sealed class GetDrawResultsFunction(
-    IMediator mediator,
+    IDrawResultsService drawResultsService,
     IContentNegotiator<ContentType> contentNegotiator,
     JsonSerializerOptions jsonSerializerOptions,
     ILogger<GetDrawResultsFunction> logger)
@@ -57,10 +56,11 @@ internal sealed class GetDrawResultsFunction(
         if (!negotiationResult)
             return HandleUnsupportedContentType(request);
 
-        var query = request.ParseQueryString();
-        var response = (await mediator.Send(query, cancellationToken)).ToList();
+        var (dateFrom, dateTo, top) = request.ParseQueryString();
+        // var response = (await mediator.Send(query, cancellationToken)).ToList();
+        var results = (await drawResultsService.GetDrawResultsAsync(dateFrom, dateTo, top, cancellationToken)).ToList();
 
-        if (response.Count == 0)
+        if (!results.Any())
         {
             logger.LogWarning("No results found for the given query parameters.");
             return new NotFoundObjectResult("No historical draw results found.");
@@ -68,8 +68,8 @@ internal sealed class GetDrawResultsFunction(
 
         return contentType switch
         {
-            ContentType.ApplicationJson => CreateJsonResponse(response),
-            ContentType.ApplicationOctetStream => await CreateCsvResponseAsync(response, cancellationToken),
+            ContentType.ApplicationJson => CreateJsonResponse(results),
+            ContentType.ApplicationOctetStream => await CreateCsvResponseAsync(results, cancellationToken),
             _ => throw new ArgumentOutOfRangeException()
         };
     }

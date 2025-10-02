@@ -1,37 +1,27 @@
-﻿using Lotto.Data;
-using Lotto.Models;
+﻿namespace Lotto.Services;
 
-namespace Lotto.Application;
-
-internal sealed record GetDrawResultsQuery(
-    DateOnly? DateFrom,
-    DateOnly? DateTo,
-    int? Top)
-    : IRequest<IEnumerable<DrawResults>>;
-
-internal sealed class GetHistoricalDrawResultsQueryHandler(
-    DrawResultsService drawResultsService,
-    ILogger<GetHistoricalDrawResultsQueryHandler> logger)
-    : IRequestHandler<GetDrawResultsQuery, IEnumerable<DrawResults>>
+internal sealed class DrawResultsService(
+    IDrawResultsRepository drawResultsRepository,
+    ILogger<DrawResultsService> logger) : IDrawResultsService
 {
-    public async Task<IEnumerable<DrawResults>> Handle(
-        GetDrawResultsQuery request,
+    public async Task<IEnumerable<DrawResults>> GetDrawResultsAsync(
+        DateOnly? dateFrom,
+        DateOnly? dateTo,
+        int? top,
         CancellationToken cancellationToken)
     {
-        var (dateFrom, dateTo, top) = request;
-
         logger.LogInformation(
             "Handling GetHistoricalDrawResultsQuery - DateFrom: {DateFrom}, DateTo: {DateTo}, Top: {Top}",
             dateFrom, dateTo, top);
 
-        var filter = CreateFilter(dateFrom, dateTo);
+        var filter = BuildGetDrawResultsFilter(dateFrom, dateTo);
 
         logger.LogInformation("Final query filter: {Filter}", filter);
         logger.LogInformation("Fetching results from DrawResultsService...");
 
         var resultsTopValue = top ?? int.MaxValue;
 
-        var results = (await drawResultsService.GetAsync(filter, resultsTopValue, cancellationToken)).ToList();
+        var results = (await drawResultsRepository.GetAsync(filter, resultsTopValue, cancellationToken)).ToList();
 
         if (results.Count == 0)
         {
@@ -51,7 +41,7 @@ internal sealed class GetHistoricalDrawResultsQueryHandler(
         });
     }
 
-    private static string CreateFilter(DateOnly? dateFrom, DateOnly? dateTo)
+    private static string BuildGetDrawResultsFilter(DateOnly? dateFrom, DateOnly? dateTo)
     {
         var filter = "";
 

@@ -2,9 +2,11 @@
 
 namespace Lotto;
 
-internal interface IContentNegotiator<T> where T : struct, Enum
+internal record NegotiationResult<T>(bool Success, T ContentType) where T : struct, Enum
 {
-    NegotiationResult<T> Negotiate(HttpRequest request);
+    public static NegotiationResult<T> Unsupported() => new(false, default);
+
+    public static implicit operator NegotiationResult<T>(T contentType) => new(true, contentType);
 }
 
 internal class ContentNegotiator<T> : IContentNegotiator<T>  where T : struct, Enum
@@ -48,11 +50,4 @@ internal class ContentNegotiator<T> : IContentNegotiator<T>  where T : struct, E
 
         return bestValue;
     }
-}
-
-internal record NegotiationResult<T>(bool Success, T ContentType) where T : struct, Enum
-{
-    public static NegotiationResult<T> Unsupported() => new(false, default);
-
-    public static implicit operator NegotiationResult<T>(T contentType) => new(true, contentType);
 }

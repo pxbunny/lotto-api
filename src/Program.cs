@@ -2,13 +2,13 @@ using System.Text.Json;
 using Lotto;
 using Lotto.Data;
 using Lotto.Lotto;
+using Lotto.Services;
 using Microsoft.Azure.Functions.Worker.Builder;
 using Microsoft.Extensions.Azure;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 
 var builder = FunctionsApplication.CreateBuilder(args);
-var assembly = typeof(IAssemblyFlag).Assembly;
 
 builder.ConfigureFunctionsWebApplication();
 
@@ -21,7 +21,10 @@ var jsonSerializerOptions = new JsonSerializerOptions
 
 builder.Services.AddSingleton(jsonSerializerOptions);
 
-builder.Services.AddScoped<DrawResultsService>();
+builder.Services
+    .AddScoped<IDrawResultsRepository, DrawResultsRepository>()
+    .AddScoped<IDrawResultsService, DrawResultsService>()
+    .AddScoped<IDataSyncService, DataSyncService>();
 
 builder.Services.AddSingleton<IContentNegotiator<ContentType>>(new ContentNegotiator<ContentType>(config =>
     {
@@ -36,7 +39,7 @@ builder.Services.AddAzureClients(clientBuilder =>
     clientBuilder.AddTableServiceClient(builder.Configuration["AzureWebJobsStorage"]);
 });
 
-builder.Services.AddHttpClient<LottoService>(client =>
+builder.Services.AddHttpClient<ILottoClient, LottoClient>(client =>
 {
     const string baseUrlPropertyName = "LottoBaseUrl";
     const string apiKeyPropertyName = "LottoApiKey";
@@ -53,11 +56,4 @@ builder.Services.AddHttpClient<LottoService>(client =>
     client.DefaultRequestHeaders.Add("secret", apiKey);
 });
 
-builder.Services.AddMediatR(cfg =>
-{
-    cfg.RegisterServicesFromAssembly(assembly);
-});
-
 builder.Build().Run();
-
-internal interface IAssemblyFlag;

@@ -11,7 +11,6 @@
     <PackageReference Include="Azure.Data.Tables" />
     <PackageReference Include="CsvHelper" />
     <PackageReference Include="JetBrains.Annotations" />
-    <PackageReference Include="MediatR" />
     <PackageReference Include="Microsoft.Azure.Functions.Worker" />
     <PackageReference Include="Microsoft.Azure.Functions.Worker.Extensions.Http.AspNetCore" />
     <PackageReference Include="Microsoft.Azure.Functions.Worker.Extensions.Timer" />
@@ -29,5 +28,8 @@
   </ItemGroup>
   <ItemGroup>
     <Using Include="System.Threading.ExecutionContext" Alias="ExecutionContext" />
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="Application\" />
   </ItemGroup>
 </Project>

@@ -2,7 +2,7 @@
 
 namespace Lotto.Data;
 
-internal sealed class DrawResultsService(TableServiceClient tableServiceClient)
+internal sealed class DrawResultsRepository(TableServiceClient tableServiceClient) : IDrawResultsRepository
 {
     private const string TableName = "LottoDrawResults";
     private const string PartitionKey = "LottoData";

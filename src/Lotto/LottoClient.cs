@@ -1,9 +1,8 @@
 ﻿using System.Net.Http.Json;
-using Lotto.Models;
 
 namespace Lotto.Lotto;
 
-internal sealed class LottoService(HttpClient client)
+internal sealed class LottoClient(HttpClient client) : ILottoClient
 {
     public async Task<DrawResults> GetLatestDrawResultsAsync(CancellationToken cancellationToken)
     {
