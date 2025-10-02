@@ -252,7 +252,7 @@ resource keyVaultDiagnostics 'Microsoft.Insights/diagnosticSettings@2021-05-01-p
     workspaceId: logAnalytics.id
     logs: [
       {
-        category: 'allLogs'
+        categoryGroup: 'allLogs'
         enabled: true
       }
     ]
