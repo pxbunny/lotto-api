@@ -42,7 +42,7 @@ def fetch_draw_results(date):
         'sort': 'drawSystemId',
         'order': 'ASC'
     }
-    response = requests.get(ENDPOINT, headers=headers, params=params)
+    response = requests.get(ENDPOINT, headers=headers, params=params, timeout=10)
     code = response.status_code
 
     if code == 404 or code == 500:
@@ -61,7 +61,7 @@ def save_to_csv(data, filename):
             writer.writerow(draw)
 
 
-if __name__ == '__main__':
+def main():
     args = parse_args()
     date = datetime.strptime(args.date, DATE_FORMAT)
     end_date = datetime.today()
@@ -103,3 +103,7 @@ if __name__ == '__main__':
 
     save_to_csv(results, args.file)
     print(f"Data saved to '{args.file}'")
+
+
+if __name__ == '__main__':
+    main()

@@ -60,7 +60,4 @@ builder.Services.AddMediatR(cfg =>
 
 builder.Build().Run();
 
-namespace Lotto
-{
-    internal interface IAssemblyFlag;
-}
+internal interface IAssemblyFlag;
