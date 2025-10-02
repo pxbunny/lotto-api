@@ -87,44 +87,14 @@ resource blobServices 'Microsoft.Storage/storageAccounts/blobServices@2025-01-01
   parent: storageAccount
 }
 
-resource tableStorageDiagnostics 'Microsoft.Insights/diagnosticSettings@2021-05-01-preview' = {
-  name: 'table-storage-logs'
-  scope: tableServices
-  properties: {
-    workspaceId: logAnalytics.id
-    logs: [
-      {
-        categoryGroup: 'allLogs'
-        enabled: true
-      }
-    ]
-    metrics: [
-      {
-        category: 'Transaction'
-        enabled: true
-      }
-    ]
-  }
+resource fileServices 'Microsoft.Storage/storageAccounts/fileServices@2025-01-01' = {
+  name: 'default'
+  parent: storageAccount
 }
 
-resource blobStorageDiagnostics 'Microsoft.Insights/diagnosticSettings@2021-05-01-preview' = {
-  name: 'blob-storage-logs'
-  scope: blobServices
-  properties: {
-    workspaceId: logAnalytics.id
-    logs: [
-      {
-        categoryGroup: 'allLogs'
-        enabled: true
-      }
-    ]
-    metrics: [
-      {
-        category: 'Transaction'
-        enabled: true
-      }
-    ]
-  }
+resource queueServices 'Microsoft.Storage/storageAccounts/queueServices@2025-01-01' = {
+  name: 'default'
+  parent: storageAccount
 }
 
 resource appServicePlan 'Microsoft.Web/serverfarms@2024-11-01' = {
@@ -219,7 +189,7 @@ resource functionApp 'Microsoft.Web/sites@2024-11-01' = {
   }
 }
 
-resource kvAccessPolicies 'Microsoft.KeyVault/vaults/accessPolicies@2024-11-01' = {
+resource keyVaultAccessPolicies 'Microsoft.KeyVault/vaults/accessPolicies@2024-11-01' = {
   name: 'add'
   parent: keyVault
   properties: {
@@ -230,6 +200,66 @@ resource kvAccessPolicies 'Microsoft.KeyVault/vaults/accessPolicies@2024-11-01' 
         permissions: {
           secrets: ['get']
         }
+      }
+    ]
+  }
+}
+
+var defaultStorageDiagnosticSettings = {
+  workspaceId: logAnalytics.id
+  logs: [
+    {
+      categoryGroup: 'allLogs'
+      enabled: true
+    }
+  ]
+  metrics: [
+    {
+      category: 'Transaction'
+      enabled: true
+    }
+  ]
+}
+
+resource tableStorageDiagnostics 'Microsoft.Insights/diagnosticSettings@2021-05-01-preview' = {
+  name: 'table-storage-logs'
+  scope: tableServices
+  properties: defaultStorageDiagnosticSettings
+}
+
+resource blobStorageDiagnostics 'Microsoft.Insights/diagnosticSettings@2021-05-01-preview' = {
+  name: 'blob-storage-logs'
+  scope: blobServices
+  properties: defaultStorageDiagnosticSettings
+}
+
+resource queueStorageDiagnostics 'Microsoft.Insights/diagnosticSettings@2021-05-01-preview' = {
+  name: 'queue-storage-logs'
+  scope: queueServices
+  properties: defaultStorageDiagnosticSettings
+}
+
+resource fileStorageDiagnostics 'Microsoft.Insights/diagnosticSettings@2021-05-01-preview' = {
+  name: 'file-storage-logs'
+  scope: fileServices
+  properties: defaultStorageDiagnosticSettings
+}
+
+resource keyVaultDiagnostics 'Microsoft.Insights/diagnosticSettings@2021-05-01-preview' = {
+  name: 'key-vault-logs'
+  scope: keyVault
+  properties: {
+    workspaceId: logAnalytics.id
+    logs: [
+      {
+        category: 'allLogs'
+        enabled: true
+      }
+    ]
+    metrics: [
+      {
+        category: 'AllMetrics'
+        enabled: true
       }
     ]
   }
