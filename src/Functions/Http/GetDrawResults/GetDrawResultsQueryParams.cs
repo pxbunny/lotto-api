@@ -27,11 +27,6 @@ internal sealed record GetDrawResultsQueryParams(DateOnly? DateFrom, DateOnly? D
 
     private static string? ValidateQueryParams(IQueryCollection query, GetDrawResultsQueryParams queryParams)
     {
-        var validParams = new List<string> { "dateFrom",  "dateTo", "top" };
-
-        if (!query.Keys.All(k => validParams.Contains(k)))
-            return $"Only the following query parameters are supported: {string.Join(", ", validParams)}.";
-
         if (query.TryGetValue("dateFrom", out _) && queryParams.DateFrom is null)
             return $"'dateFrom' must be a valid date in the format {Constants.DateFormat}.";
 
