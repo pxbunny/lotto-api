@@ -16,7 +16,7 @@ Desktop.ini
 
 .venv/
 .env
-data*.csv
 
+tools/*.csv
 azure-credentials.json
 todos.txt

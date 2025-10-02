@@ -52,7 +52,7 @@ A REST API providing draw results for Polish Lotto and Lotto Plus games. The API
    Copy `.env.template` to `.env` and update values:
    ```env
    LOTTO_API_KEY="<your-api-key>"
-   USER_AGENT="<your name/contact info>"
+   USER_AGENT="<your_name/contact_info>" # no spaces
    STORAGE_CONNECTION_STRING="<from Azure Portal>"
    ```
 

@@ -17,7 +17,7 @@ ENDPOINT = 'https://developers.lotto.pl/api/open/v1/lotteries/draw-results/by-da
 DEFAULT_CSV_FILE_NAME = 'data.csv'
 DEFAULT_START_DATE = '2000-01-01'
 DATE_FORMAT = '%Y-%m-%d'
-DELAY_SEC = 0.5
+DELAY_SEC = 1
 
 
 def parse_args():
