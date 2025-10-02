@@ -4,7 +4,7 @@ namespace Lotto.Services;
 
 internal sealed class DataSyncService(
     IDrawResultsRepository drawResultsRepository,
-    LottoClient lottoClient,
+    ILottoClient lottoClient,
     ILogger<DataSyncService> logger) : IDataSyncService
 {
     public async Task AddLatestDrawResultsAsync(CancellationToken cancellationToken)
