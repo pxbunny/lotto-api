@@ -8,13 +8,7 @@ internal sealed class AddLatestDrawResultsFunction(
 
     [Function(FunctionName), FixedDelayRetry(3, "00:15:00")]
     public async Task Run(
-        [TimerTrigger(
-            "%DataUpdateSchedule%",
-            UseMonitor = false
-#if DEBUG
-            , RunOnStartup = true
-#endif
-            )] TimerInfo timer,
+        [TimerTrigger("%DataUpdateSchedule%", UseMonitor = false, RunOnStartup = true)] TimerInfo timer,
         CancellationToken cancellationToken)
     {
         logger.LogInformation("{FunctionName} function triggered at: {TriggerTime}", FunctionName, DateTime.UtcNow);
