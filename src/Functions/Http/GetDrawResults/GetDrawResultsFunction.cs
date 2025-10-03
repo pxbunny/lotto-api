@@ -12,14 +12,14 @@ internal sealed class GetDrawResultsFunction(
 
     [Function(nameof(GetDrawResultsFunction))]
     public async Task<IActionResult> Run(
-        [HttpTrigger("get", Route = "draw-results")] HttpRequest req,
+        [HttpTrigger("get", Route = "draw-results")] HttpRequest request,
         CancellationToken cancellationToken)
     {
-        logger.LogInformation("Handling {FunctionName}. Parameters : {QueryString}", FunctionName, req.QueryString);
+        logger.LogInformation("Handling {FunctionName}. Parameters : {QueryString}", FunctionName, request.QueryString);
 
         try
         {
-            var response = await HandleAsync(req, cancellationToken);
+            var response = await HandleAsync(request, cancellationToken);
             logger.LogInformation("{FunctionName} finished successfully.", FunctionName);
             return response;
         }

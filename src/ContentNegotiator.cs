@@ -9,7 +9,7 @@ internal record NegotiationResult<T>(bool Success, T ContentType) where T : stru
     public static implicit operator NegotiationResult<T>(T contentType) => new(true, contentType);
 }
 
-internal class ContentNegotiator<T> : IContentNegotiator<T>  where T : struct, Enum
+internal sealed class ContentNegotiator<T> : IContentNegotiator<T>  where T : struct, Enum
 {
     private readonly Dictionary<string, T> _configuration = new(StringComparer.OrdinalIgnoreCase);
 
