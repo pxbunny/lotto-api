@@ -1,6 +1,4 @@
-﻿using Lotto.Lotto;
-
-namespace Lotto.Services;
+﻿namespace Lotto.Services;
 
 internal sealed class DataSyncService(
     IDrawResultsRepository drawResultsRepository,
@@ -21,8 +19,8 @@ internal sealed class DataSyncService(
 
             if (storageData.DrawDate == apiData.DrawDate)
             {
-                logger.LogWarning("Data storage already has the latest lotto draw data.");
-                throw new InvalidOperationException("Cannot add the latest draw results. Latest data already exist.");
+                logger.LogWarning("Data storage already has the latest lotto draw results.");
+                return;
             }
 
             await drawResultsRepository.AddAsync(apiData, cancellationToken);
