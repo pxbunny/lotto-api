@@ -42,5 +42,8 @@ GET http://localhost:7163/api/draw-results?dateFrom=2025-01-01
 Accept: application/octet-stream
 
 
+### Create draw results table
+POST http://localhost:7163/api/draw-results-table
+
 ### Drop draw results table
 DELETE http://localhost:7163/api/draw-results-table
