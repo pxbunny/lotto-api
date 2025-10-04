@@ -1,0 +1,11 @@
+﻿namespace Lotto.Data;
+
+internal sealed class RowKeyGenerator : IRowKeyGenerator
+{
+    public string GenerateRowKey(DateTime date)
+    {
+        var dateDifference = DateTime.MaxValue - date;
+        var dateReversed = DateTime.MinValue + dateDifference;
+        return dateReversed.ToString(Constants.DateFormat.Replace("-", ""));
+    }
+}

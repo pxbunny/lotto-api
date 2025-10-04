@@ -2,9 +2,10 @@
 
 namespace Lotto.Data;
 
-internal sealed class DrawResultsRepository(TableServiceClient tableServiceClient) : IDrawResultsRepository
+internal sealed class DrawResultsRepository(
+    TableServiceClient tableServiceClient,
+    IRowKeyGenerator rowKeyGenerator) : IDrawResultsRepository
 {
-    private const string TableName = "LottoDrawResults";
     private const string PartitionKey = "LottoData";
     private const string BaseFilter = $"PartitionKey eq '{PartitionKey}'";
     private const int MaxPageSize = 1_000;
@@ -12,9 +13,7 @@ internal sealed class DrawResultsRepository(TableServiceClient tableServiceClien
     public async Task AddAsync(DrawResults data, CancellationToken cancellationToken)
     {
         var drawDate = DateTime.Parse(data.DrawDate);
-        var dateDifference = DateTime.MaxValue - drawDate;
-        var reversedDrawDate = DateTime.MinValue + dateDifference;
-        var rowKey = reversedDrawDate.ToString(Constants.DateFormat.Replace("-", ""));
+        var rowKey = rowKeyGenerator.GenerateRowKey(drawDate);
 
         var entity = new DrawResultsEntity
         {
@@ -25,7 +24,7 @@ internal sealed class DrawResultsRepository(TableServiceClient tableServiceClien
             PlusNumbers = data.PlusNumbersString
         };
 
-        var client = tableServiceClient.GetTableClient(TableName);
+        var client = tableServiceClient.GetTableClient(Constants.DrawResultsTableName);
         await client.AddEntityAsync(entity, cancellationToken);
     }
 
@@ -40,7 +39,7 @@ internal sealed class DrawResultsRepository(TableServiceClient tableServiceClien
         var results = new List<DrawResultsEntity>();
 
         var fullFilter = !string.IsNullOrWhiteSpace(filter) ? $"{BaseFilter} and ({filter})" : BaseFilter;
-        var client = tableServiceClient.GetTableClient(TableName);
+        var client = tableServiceClient.GetTableClient(Constants.DrawResultsTableName);
         var query = client.QueryAsync<DrawResultsEntity>(fullFilter, cancellationToken: cancellationToken);
         var pageSize = Math.Min(MaxPageSize, top);
 

@@ -183,6 +183,10 @@ resource functionApp 'Microsoft.Web/sites@2024-11-01' = {
           name: 'LottoApiKey'
           value: '@Microsoft.KeyVault(VaultName=${keyVault.name};SecretName=${lottoApiKeySecretName})'
         }
+        {
+          name: 'AzureWebJobs.DropDrawResultsTableFunction.Disabled'
+          value: 'true'
+        }
       ]
     }
     httpsOnly: true

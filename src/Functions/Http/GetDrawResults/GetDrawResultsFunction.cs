@@ -10,7 +10,7 @@ internal sealed class GetDrawResultsFunction(
 {
     private const string FunctionName = nameof(GetDrawResultsFunction);
 
-    [Function(nameof(GetDrawResultsFunction))]
+    [Function(FunctionName)]
     public async Task<IActionResult> Run(
         [HttpTrigger("get", Route = "draw-results")] HttpRequest request,
         CancellationToken cancellationToken)

@@ -1,0 +1,87 @@
+﻿using Azure;
+using Azure.Data.Tables;
+using Microsoft.AspNetCore.Hosting;
+using Microsoft.Extensions.Hosting;
+
+namespace Lotto.Data;
+
+internal sealed class DevDrawResultsTableSeeder(
+    IWebHostEnvironment env,
+    TableServiceClient tableServiceClient,
+    IRowKeyGenerator rowKeyGenerator) : IHostedService
+{
+    public async Task StartAsync(CancellationToken cancellationToken)
+    {
+        if (!env.IsDevelopment()) return;
+
+        var tableClient = tableServiceClient.GetTableClient(Constants.DrawResultsTableName);
+        var tableAlreadyExists = !await TryCreateTableAsync(tableClient, cancellationToken);
+
+        if (tableAlreadyExists) return;
+
+        var draws = GenerateDrawSchedule(new DateTime(2015, 1, 1, 12, 0, 0));
+        var now = DateTime.UtcNow;
+        var random = new Random();
+
+        foreach (var drawDate in draws)
+        {
+            var lotto = GenerateNumbers(random);
+            var plus  = GenerateNumbers(random);
+            var rowKey = rowKeyGenerator.GenerateRowKey(drawDate);
+
+            var entity = new DrawResultsEntity
+            {
+                PartitionKey = "LottoData",
+                RowKey = rowKey,
+                Timestamp = now,
+                DrawDate     = drawDate.ToString(Constants.DateFormat),
+                LottoNumbers = string.Join(",", lotto),
+                PlusNumbers  = string.Join(",", plus)
+            };
+
+            await tableClient.UpsertEntityAsync(entity, TableUpdateMode.Replace, cancellationToken);
+        }
+    }
+
+    public Task StopAsync(CancellationToken cancellationToken) => Task.CompletedTask;
+
+    private static async Task<bool> TryCreateTableAsync(TableClient tableClient, CancellationToken cancellationToken)
+    {
+        try
+        {
+            await tableClient.CreateAsync(cancellationToken);
+            return true;
+        }
+        catch (RequestFailedException ex) when (ex.Status == 409)
+        {
+            return false;
+        }
+    }
+
+    private static IEnumerable<DateTime> GenerateDrawSchedule(DateTime startDate)
+    {
+        var date = startDate.Date;
+
+        while (date < DateTime.Now.Date)
+        {
+            var dayOfWeek = date.DayOfWeek;
+
+            if (dayOfWeek is DayOfWeek.Tuesday or DayOfWeek.Thursday or DayOfWeek.Saturday)
+                yield return new DateTime(date.Year, date.Month, date.Day);
+
+            date = date.AddDays(1);
+        }
+    }
+
+    private static IEnumerable<int> GenerateNumbers(Random random)
+    {
+        var set = new HashSet<int>();
+
+        while (set.Count < 6)
+            set.Add(random.Next(1, 50));
+
+        var arr = set.ToArray();
+        Array.Sort(arr);
+        return arr;
+    }
+}

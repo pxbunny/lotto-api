@@ -40,3 +40,7 @@ Accept: application/octet-stream
 ### Download draw results | dateFrom=2025-01-01
 GET http://localhost:7163/api/draw-results?dateFrom=2025-01-01
 Accept: application/octet-stream
+
+
+### Drop draw results table
+DELETE http://localhost:7163/api/draw-results-table

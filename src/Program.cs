@@ -28,6 +28,7 @@ builder.Services
     .AddScoped<IDataSyncService, DataSyncService>();
 
 builder.Services.AddScoped<IGetDrawResultsResponseHandler, GetDrawResultsResponseHandler>();
+builder.Services.AddSingleton<IRowKeyGenerator, RowKeyGenerator>();
 
 builder.Services.AddSingleton<IContentNegotiator<ContentType>>(new ContentNegotiator<ContentType>(config =>
     {
@@ -58,5 +59,10 @@ builder.Services.AddHttpClient<ILottoClient, LottoClient>(client =>
     client.BaseAddress = new Uri(baseUrl);
     client.DefaultRequestHeaders.Add("secret", apiKey);
 });
+
+if (builder.Environment.IsDevelopment())
+{
+    builder.Services.AddHostedService<DevDrawResultsTableSeeder>();
+}
 
 builder.Build().Run();

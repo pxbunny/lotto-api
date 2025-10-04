@@ -6,9 +6,13 @@ internal sealed class AddLatestDrawResultsFunction(
 {
     private const string FunctionName = nameof(AddLatestDrawResultsFunction);
 
-    [Function(FunctionName), FixedDelayRetry(3, "00:15:00")]
+    //[Function(FunctionName), FixedDelayRetry(3, "00:15:00")]
     public async Task Run(
+#if RELEASE
         [TimerTrigger("%DataUpdateSchedule%", UseMonitor = false, RunOnStartup = true)] TimerInfo timer,
+#else
+        [TimerTrigger("%DataUpdateSchedule%", UseMonitor = false)] TimerInfo timer,
+#endif
         CancellationToken cancellationToken)
     {
         logger.LogInformation("{FunctionName} function triggered at: {TriggerTime}", FunctionName, DateTime.UtcNow);
