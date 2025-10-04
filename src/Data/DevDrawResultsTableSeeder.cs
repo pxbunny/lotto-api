@@ -19,7 +19,8 @@ internal sealed class DevDrawResultsTableSeeder(
 
         if (tableAlreadyExists) return;
 
-        var draws = GenerateDrawSchedule(new DateTime(2015, 1, 1, 12, 0, 0));
+        var seedStartDate = new DateTime(2015, 1, 1, 12, 0, 0);
+        var draws = GenerateDrawSchedule(seedStartDate);
         var now = DateTime.UtcNow;
         var random = new Random();
 
@@ -75,13 +76,12 @@ internal sealed class DevDrawResultsTableSeeder(
 
     private static IEnumerable<int> GenerateNumbers(Random random)
     {
+        const int numbersInSingleDraw = 6;
         var set = new HashSet<int>();
 
-        while (set.Count < 6)
-            set.Add(random.Next(1, 50));
+        while (set.Count < numbersInSingleDraw)
+            set.Add(random.Next(1, 50)); // between 1 and 49
 
-        var arr = set.ToArray();
-        Array.Sort(arr);
-        return arr;
+        return set.ToList().Order();
     }
 }
