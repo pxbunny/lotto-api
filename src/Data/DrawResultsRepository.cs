@@ -57,4 +57,16 @@ internal sealed class DrawResultsRepository(
 
         return results;
     }
+
+    public async Task CreateTableIfNotExistsAsync(CancellationToken cancellationToken)
+    {
+        var client = tableServiceClient.GetTableClient(Constants.DrawResultsTableName);
+        await client.CreateIfNotExistsAsync(cancellationToken);
+    }
+
+    public async Task DropTableAsync(CancellationToken cancellationToken)
+    {
+        var client = tableServiceClient.GetTableClient(Constants.DrawResultsTableName);
+        await client.DeleteAsync(cancellationToken);
+    }
 }
