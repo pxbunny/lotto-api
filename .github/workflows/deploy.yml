@@ -1,4 +1,4 @@
-name: Build and Deploy Azure Resources
+name: Build and Deploy
 
 on:
   push:
@@ -16,15 +16,22 @@ on:
   workflow_dispatch:
 
 env:
-  BICEP_FILE: infra/main.bicep
-  BICEP_PARAMS_FILE: infra/main.bicepparam
-  DOTNET_VERSION: '9.0.x'
-  API_PROJECT_DIRECTORY: src/
+  FUNCTION_APP_DIRECTORY: src/
+  INFRASTRUCTURE_DIRECTORY: infra/
+
+  BICEP_FILE_NAME: main.bicep
+  BICEP_PARAMS_FILE_NAME: main.bicepparam
+
+  FUNCTION_APP_ARTIFACT_NAME: functionapp
+  FUNCTION_APP_ZIP_NAME: functionapp.zip
+
+  DOTNET_VERSION: 9.0.x
 
 jobs:
   validate-infrastructure:
-    name: Validate Bicep Infrastructure
+    name: Validate Infrastructure
     runs-on: ubuntu-latest
+
     steps:
       - name: Checkout Repository
         uses: actions/checkout@v4
@@ -36,14 +43,52 @@ jobs:
 
       - name: Validate Bicep
         run: |
+          cd ${{ env.INFRASTRUCTURE_DIRECTORY }}
           az bicep install
-          az bicep build -f ${{ env.BICEP_FILE }} --stdout
-          az bicep build-params -f ${{ env.BICEP_PARAMS_FILE }} --stdout
+          az bicep build -f ${{ env.BICEP_FILE_NAME }} --stdout
+          az bicep build-params -f ${{ env.BICEP_PARAMS_FILE_NAME }} --stdout
+
+  build-functionapp:
+    name: Build Function App
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout Repository
+        uses: actions/checkout@v4
+
+      - name: Setup .NET
+        uses: actions/setup-dotnet@v4
+        with:
+          dotnet-version: ${{ env.DOTNET_VERSION }}
+
+      - name: Restore Dependencies
+        run: dotnet restore
+
+      - name: Build
+        run: dotnet build ${{ env.FUNCTION_APP_DIRECTORY }} -c Release --no-restore
+
+      - name: Test
+        run: dotnet test -c Release --no-build --no-restore
+
+      - name: Publish
+        run: dotnet publish ${{ env.FUNCTION_APP_DIRECTORY }} -c Release --no-build -o ./publish
+
+      - name: Package Function App
+        run: |
+          cd publish
+          zip -r ../${{ FUNCTION_APP_ZIP_NAME }} .
+
+      - name: Upload Function App Artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: ${{ env.FUNCTION_APP_ARTIFACT_NAME }}
+          path: ${{ env.FUNCTION_APP_ZIP_NAME }}
+          if-no-files-found: error
 
   deploy-infrastructure:
     name: Deploy Infrastructure
     runs-on: ubuntu-latest
-    needs: validate-infrastructure
+    needs: [validate-infrastructure, build-functionapp]
     environment: production
     outputs:
       appName: ${{ steps.deploy.outputs.appName }}
@@ -82,8 +127,8 @@ jobs:
         run: |
           deploymentOutput=$(az deployment group create \
             --resource-group ${{ secrets.AZURE_RESOURCE_GROUP }} \
-            --template-file ${{ env.BICEP_FILE }} \
-            --parameters ${{ env.BICEP_PARAMS_FILE }} \
+            --template-file ${{ env.INFRASTRUCTURE_DIRECTORY }}${{ env.BICEP_FILE_NAME }} \
+            --parameters ${{ env.INFRASTRUCTURE_DIRECTORY }}${{ env.BICEP_PARAMS_FILE_NAME }} \
             --parameters githubSpObjectId="${{ steps.get_sp_id.outputs.objectId }}" \
             --query properties.outputs \
             --output json)
@@ -96,35 +141,13 @@ jobs:
           echo "keyVaultName=$keyVaultName" >> $GITHUB_OUTPUT
           echo "secretName=$secretName" >> $GITHUB_OUTPUT
 
-  build-and-deploy-app:
-    name: Build and Deploy Function App
+  set-kv-secrets:
+    name: Set Key Vault Secrets
     runs-on: ubuntu-latest
     needs: deploy-infrastructure
     environment: production
 
     steps:
-      - name: Checkout Repository
-        uses: actions/checkout@v4
-
-      - name: Setup .NET
-        uses: actions/setup-dotnet@v4
-        with:
-          dotnet-version: ${{ env.DOTNET_VERSION }}
-
-      - name: Restore Dependencies
-        run: dotnet restore
-
-      - name: Build
-        run: dotnet build ${{ env.API_PROJECT_DIRECTORY }} --configuration Release --no-restore
-
-      - name: Publish
-        run: dotnet publish ${{ env.API_PROJECT_DIRECTORY }} --configuration Release --no-build -o ./publish
-
-      - name: Package Function App
-        run: |
-          cd publish
-          zip -r ../functionapp.zip .
-
       - name: Azure Login
         uses: azure/login@v2
         with:
@@ -137,9 +160,27 @@ jobs:
             --name ${{ needs.deploy-infrastructure.outputs.secretName }} \
             --value "${{ secrets.LOTTO_API_KEY }}"
 
-      - name: Deploy Azure Function App
+  deploy-functionapp:
+    name: Deploy Function App
+    runs-on: ubuntu-latest
+    needs: [build-functionapp, deploy-infrastructure, set-kv-secrets]
+    environment: production
+
+    steps:
+      - name: Download Function App Artifact
+        uses: actions/download-artifact@v5
+        with:
+          name: ${{ env.FUNCTION_APP_ARTIFACT_NAME }}
+          path: functionapp
+
+      - name: Azure Login
+        uses: azure/login@v2
+        with:
+          creds: ${{ secrets.AZURE_CREDENTIALS }}
+
+      - name: Deploy To Azure
         run: |
           az functionapp deployment source config-zip \
             --resource-group ${{ secrets.AZURE_RESOURCE_GROUP }} \
             --name ${{ needs.deploy-infrastructure.outputs.appName }} \
-            --src functionapp.zip
+            --src functionapp/${{ env.FUNCTION_APP_ZIP_NAME }}
