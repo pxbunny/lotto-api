@@ -76,7 +76,7 @@ jobs:
       - name: Package Function App
         run: |
           cd publish
-          zip -r ../${{ FUNCTION_APP_ZIP_NAME }} .
+          zip -r ../${{ env.FUNCTION_APP_ZIP_NAME }} .
 
       - name: Upload Function App Artifact
         uses: actions/upload-artifact@v4
