@@ -16,7 +16,6 @@ on:
   workflow_dispatch:
 
 env:
-  FUNCTION_APP_DIRECTORY: src/
   INFRASTRUCTURE_DIRECTORY: infra/
 
   BICEP_FILE_NAME: main.bicep
@@ -42,8 +41,8 @@ jobs:
           creds: ${{ secrets.AZURE_CREDENTIALS }}
 
       - name: Validate Bicep
+        working-directory: ${{ env.INFRASTRUCTURE_DIRECTORY }}
         run: |
-          cd ${{ env.INFRASTRUCTURE_DIRECTORY }}
           az bicep install
           az bicep build -f ${{ env.BICEP_FILE_NAME }} --stdout
           az bicep build-params -f ${{ env.BICEP_PARAMS_FILE_NAME }} --stdout
@@ -65,13 +64,13 @@ jobs:
         run: dotnet restore
 
       - name: Build
-        run: dotnet build ${{ env.FUNCTION_APP_DIRECTORY }} -c Release --no-restore
+        run: dotnet build -c Release --no-restore
 
       - name: Test
         run: dotnet test -c Release --no-build --no-restore
 
       - name: Publish
-        run: dotnet publish ${{ env.FUNCTION_APP_DIRECTORY }} -c Release --no-build -o ./publish
+        run: dotnet publish -c Release --no-build -o ./publish
 
       - name: Package Function App
         run: |
@@ -124,11 +123,12 @@ jobs:
 
       - name: Deploy Bicep
         id: deploy
+        working-directory: ${{ env.INFRASTRUCTURE_DIRECTORY }}
         run: |
           deploymentOutput=$(az deployment group create \
             --resource-group ${{ secrets.AZURE_RESOURCE_GROUP }} \
-            --template-file ${{ env.INFRASTRUCTURE_DIRECTORY }}${{ env.BICEP_FILE_NAME }} \
-            --parameters ${{ env.INFRASTRUCTURE_DIRECTORY }}${{ env.BICEP_PARAMS_FILE_NAME }} \
+            --template-file ${{ env.BICEP_FILE_NAME }} \
+            --parameters ${{ env.BICEP_PARAMS_FILE_NAME }} \
             --parameters githubSpObjectId="${{ steps.get_sp_id.outputs.objectId }}" \
             --query properties.outputs \
             --output json)
