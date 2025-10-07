@@ -1,0 +1,11 @@
+#!/bin/sh
+
+set -e
+
+echo "🚀 Running pre-push hook 🚀"
+
+echo -e "\n🔍 Running tests...\n"
+
+dotnet test
+
+echo -e "\n🎉 Pre-push status: success 🎉\n"
