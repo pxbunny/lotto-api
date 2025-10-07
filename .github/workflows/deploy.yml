@@ -152,7 +152,7 @@ jobs:
   deploy-functionapp:
     name: Deploy Function App
     runs-on: ubuntu-latest
-    needs: [build-functionapp, deploy-infrastructure, set-kv-secrets]
+    needs: [build-functionapp, deploy-infrastructure]
     environment: production
 
     steps:
