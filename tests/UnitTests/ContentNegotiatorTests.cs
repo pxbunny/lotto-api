@@ -1,4 +1,6 @@
-﻿namespace Lotto.UnitTests;
+﻿using Lotto.Features.GetDrawResults.FunctionHelpers;
+
+namespace Lotto.UnitTests;
 
 public class ContentNegotiatorTests
 {

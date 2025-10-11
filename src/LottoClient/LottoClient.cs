@@ -1,13 +1,13 @@
 ﻿using System.Net.Http.Json;
 
-namespace Lotto.Lotto;
+namespace Lotto.LottoClient;
 
 internal sealed class LottoClient(HttpClient client) : ILottoClient
 {
     public async Task<DrawResults> GetLatestDrawResultsAsync(CancellationToken cancellationToken)
     {
         const string uri = "open/v1/lotteries/draw-results/last-results-per-game?gameType=Lotto";
-        var response = (await client.GetFromJsonAsync<IEnumerable<LottoDrawResponse>>(uri, cancellationToken) ?? []).ToList();
+        var response = (await client.GetFromJsonAsync<IEnumerable<LottoDrawResultsResponse>>(uri, cancellationToken) ?? []).ToList();
 
         if (response.Count == 0) throw new HttpRequestException("Couldn't retrieve data from API.");
 

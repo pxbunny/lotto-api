@@ -1,4 +1,4 @@
-﻿namespace Lotto.Data;
+﻿namespace Lotto.Storage;
 
 internal sealed class RowKeyGenerator : IRowKeyGenerator
 {

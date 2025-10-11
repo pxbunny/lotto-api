@@ -1,11 +1,12 @@
 ﻿using Azure;
 using Azure.Data.Tables;
+using Lotto.Storage.Entities;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Hosting;
 
-namespace Lotto.Data;
+namespace Lotto.Storage;
 
-internal sealed class DevDrawResultsTableSeeder(
+internal sealed class DrawResultsSeeder(
     IWebHostEnvironment env,
     TableServiceClient tableServiceClient,
     IRowKeyGenerator rowKeyGenerator) : IHostedService

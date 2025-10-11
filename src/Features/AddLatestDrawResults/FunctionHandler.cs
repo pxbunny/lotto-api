@@ -1,15 +1,17 @@
-﻿namespace Lotto.Services;
+﻿namespace Lotto.Features.AddLatestDrawResults;
 
-internal sealed class DataSyncService(
-    IDrawResultsRepository drawResultsRepository,
+internal sealed class FunctionHandler(
+    IDrawResultsRepository repository,
     ILottoClient lottoClient,
-    ILogger<DataSyncService> logger) : IDataSyncService
+    ILogger<FunctionHandler> logger) : IHandler<FunctionHandler>
 {
-    public async Task AddLatestDrawResultsAsync(CancellationToken cancellationToken)
-    {
-        logger.LogInformation("Handling AddLatestDrawResults");
+    private const string FunctionName = "AddLatestDrawResults";
 
-        var getDataFromStorageTask = drawResultsRepository.GetLatestAsync(cancellationToken);
+    public async Task HandleAsync(CancellationToken cancellationToken)
+    {
+        logger.LogInformation($"Running {FunctionName} function handler.");
+
+        var getDataFromStorageTask = repository.GetLatestAsync(cancellationToken);
         var getDataFromApiTask = lottoClient.GetLatestDrawResultsAsync(cancellationToken);
 
         try
@@ -23,12 +25,14 @@ internal sealed class DataSyncService(
                 return;
             }
 
-            await drawResultsRepository.AddAsync(apiData, cancellationToken);
+            await repository.AddAsync(apiData, cancellationToken);
         }
         catch (Exception e)
         {
             logger.LogError("Error occurred while trying do add latest data to the storage: {ErrorMessage}", e.Message);
             throw;
         }
+
+        logger.LogInformation($"{FunctionName} function handler finished.");
     }
 }

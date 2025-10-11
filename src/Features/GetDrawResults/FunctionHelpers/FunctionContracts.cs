@@ -1,4 +1,4 @@
-﻿namespace Lotto.Functions.Http.GetDrawResults;
+﻿namespace Lotto.Features.GetDrawResults.FunctionHelpers;
 
 [UsedImplicitly]
 internal sealed record DrawResultsDto(string DrawDate, IEnumerable<int> LottoNumbers, IEnumerable<int> PlusNumbers);

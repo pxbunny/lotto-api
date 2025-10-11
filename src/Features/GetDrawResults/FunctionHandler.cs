@@ -1,15 +1,15 @@
-﻿namespace Lotto.Services;
+﻿namespace Lotto.Features.GetDrawResults;
 
-internal sealed class DrawResultsService(
-    IDrawResultsRepository drawResultsRepository,
-    ILogger<DrawResultsService> logger) : IDrawResultsService
+internal sealed record Request(DateOnly? DateFrom, DateOnly? DateTo, int? Top);
+
+internal sealed class FunctionHandler(
+    IDrawResultsRepository repository,
+    ILogger<FunctionHandler> logger) : IHandler<FunctionHandler, Request, IEnumerable<DrawResults>>
 {
-    public async Task<IEnumerable<DrawResults>> GetDrawResultsAsync(
-        DateOnly? dateFrom,
-        DateOnly? dateTo,
-        int? top,
-        CancellationToken cancellationToken)
+    public async Task<IEnumerable<DrawResults>> HandleAsync(Request request, CancellationToken cancellationToken)
     {
+        var (dateFrom, dateTo, top) = request;
+
         logger.LogInformation(
             "Handling GetDrawResult - DateFrom: {DateFrom}, DateTo: {DateTo}, Top: {Top}",
             dateFrom, dateTo, top);
@@ -21,7 +21,7 @@ internal sealed class DrawResultsService(
 
         var resultsTopValue = top ?? int.MaxValue;
 
-        var results = (await drawResultsRepository.GetAsync(filter, resultsTopValue, cancellationToken)).ToList();
+        var results = (await repository.GetAsync(filter, resultsTopValue, cancellationToken)).ToList();
 
         if (results.Count == 0)
         {

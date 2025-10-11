@@ -1,10 +1,8 @@
-﻿namespace Lotto.Functions.Timer;
+﻿namespace Lotto.Features.AddLatestDrawResults;
 
-internal sealed class AddLatestDrawResultsFunction(
-    IDataSyncService dataSyncService,
-    ILogger<AddLatestDrawResultsFunction> logger)
+internal sealed class TimerFunction(IHandler<FunctionHandler> handler, ILogger<TimerFunction> logger)
 {
-    private const string FunctionName = nameof(AddLatestDrawResultsFunction);
+    private const string FunctionName = "AddLatestDrawResults";
 
     [Function(FunctionName), FixedDelayRetry(3, "00:15:00")]
     public async Task Run(
@@ -19,7 +17,7 @@ internal sealed class AddLatestDrawResultsFunction(
 
         try
         {
-            await dataSyncService.AddLatestDrawResultsAsync(cancellationToken);
+            await handler.HandleAsync(cancellationToken);
             logger.LogInformation("{FunctionName} finished successfully.", FunctionName);
         }
         catch (Exception e)

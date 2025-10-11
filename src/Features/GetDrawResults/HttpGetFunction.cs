@@ -1,14 +1,15 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Lotto.Features.GetDrawResults.FunctionHelpers;
+using Microsoft.AspNetCore.Mvc;
 
-namespace Lotto.Functions.Http.GetDrawResults;
+namespace Lotto.Features.GetDrawResults;
 
-internal sealed class GetDrawResultsFunction(
-    IDrawResultsService drawResultsService,
+internal sealed class HttpGetFunction(
+    IHandler<FunctionHandler, Request, IEnumerable<DrawResults>> handler,
+    IFunctionResponseHandler responseHandler,
     IContentNegotiator<ContentType> contentNegotiator,
-    IGetDrawResultsResponseHandler responseHandler,
-    ILogger<GetDrawResultsFunction> logger)
+    ILogger<HttpGetFunction> logger)
 {
-    private const string FunctionName = nameof(GetDrawResultsFunction);
+    private const string FunctionName =  "GetDrawResults";
 
     [Function(FunctionName)]
     public async Task<IActionResult> Run(
@@ -32,7 +33,7 @@ internal sealed class GetDrawResultsFunction(
 
     private async Task<IActionResult> HandleAsync(HttpRequest request, CancellationToken cancellationToken)
     {
-        var queryParams = GetDrawResultsQueryParams.Parse(request.Query, out var errorMessage);
+        var queryParams = FunctionQueryParams.Parse(request.Query, out var errorMessage);
 
         if (!string.IsNullOrEmpty(errorMessage))
         {
@@ -46,7 +47,7 @@ internal sealed class GetDrawResultsFunction(
             return HandleUnsupportedContentType(request);
 
         var (dateFrom, dateTo, top) = queryParams;
-        var results = (await drawResultsService.GetDrawResultsAsync(dateFrom, dateTo, top, cancellationToken)).ToList();
+        var results = (await handler.HandleAsync(new Request(dateFrom, dateTo, top), cancellationToken)).ToList();
         return await responseHandler.HandleAsync(results, contentType, cancellationToken);
     }
 

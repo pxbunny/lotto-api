@@ -4,9 +4,9 @@ using System.Text.Json;
 using CsvHelper;
 using Microsoft.AspNetCore.Mvc;
 
-namespace Lotto.Functions.Http.GetDrawResults;
+namespace Lotto.Features.GetDrawResults.FunctionHelpers;
 
-internal interface IGetDrawResultsResponseHandler
+internal interface IFunctionResponseHandler
 {
     Task<IActionResult> HandleAsync(
         IList<DrawResults> results,
@@ -14,9 +14,9 @@ internal interface IGetDrawResultsResponseHandler
         CancellationToken cancellationToken);
 }
 
-internal sealed class GetDrawResultsResponseHandler(
+internal sealed class FunctionResponseHandler(
     JsonSerializerOptions jsonSerializerOptions,
-    ILogger<GetDrawResultsResponseHandler> logger) : IGetDrawResultsResponseHandler
+    ILogger<FunctionResponseHandler> logger) : IFunctionResponseHandler
 {
     public async Task<IActionResult> HandleAsync(
         IList<DrawResults> results,

@@ -1,10 +1,10 @@
 ﻿using System.Globalization;
 
-namespace Lotto.Functions.Http.GetDrawResults;
+namespace Lotto.Features.GetDrawResults.FunctionHelpers;
 
-internal sealed record GetDrawResultsQueryParams(DateOnly? DateFrom, DateOnly? DateTo, int? Top)
+internal sealed record FunctionQueryParams(DateOnly? DateFrom, DateOnly? DateTo, int? Top)
 {
-    public static GetDrawResultsQueryParams Parse(IQueryCollection query, out string? errorMessage)
+    public static FunctionQueryParams Parse(IQueryCollection query, out string? errorMessage)
     {
         DateOnly? dateFrom = null;
         DateOnly? dateTo = null;
@@ -19,13 +19,13 @@ internal sealed record GetDrawResultsQueryParams(DateOnly? DateFrom, DateOnly? D
         if (query.TryGetValue("top", out var topStr) && int.TryParse(topStr, out var parsedTopValue))
             top = parsedTopValue;
 
-        var queryParams = new GetDrawResultsQueryParams(dateFrom, dateTo, top);
+        var queryParams = new FunctionQueryParams(dateFrom, dateTo, top);
         errorMessage = ValidateQueryParams(query, queryParams);
 
         return queryParams;
     }
 
-    private static string? ValidateQueryParams(IQueryCollection query, GetDrawResultsQueryParams queryParams)
+    private static string? ValidateQueryParams(IQueryCollection query, FunctionQueryParams queryParams)
     {
         if (query.TryGetValue("dateFrom", out _) && queryParams.DateFrom is null)
             return $"'dateFrom' must be a valid date in the format {Constants.DateFormat}.";
