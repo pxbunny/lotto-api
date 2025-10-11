@@ -7,7 +7,7 @@ internal sealed class DataSyncService(
 {
     public async Task AddLatestDrawResultsAsync(CancellationToken cancellationToken)
     {
-        logger.LogInformation("Handling AddLatestDrawResultsCommand");
+        logger.LogInformation("Handling AddLatestDrawResults");
 
         var getDataFromStorageTask = drawResultsRepository.GetLatestAsync(cancellationToken);
         var getDataFromApiTask = lottoClient.GetLatestDrawResultsAsync(cancellationToken);

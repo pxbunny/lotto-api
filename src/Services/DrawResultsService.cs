@@ -11,13 +11,13 @@ internal sealed class DrawResultsService(
         CancellationToken cancellationToken)
     {
         logger.LogInformation(
-            "Handling GetHistoricalDrawResultsQuery - DateFrom: {DateFrom}, DateTo: {DateTo}, Top: {Top}",
+            "Handling GetDrawResult - DateFrom: {DateFrom}, DateTo: {DateTo}, Top: {Top}",
             dateFrom, dateTo, top);
 
         var filter = BuildGetDrawResultsFilter(dateFrom, dateTo);
 
         logger.LogInformation("Final query filter: {Filter}", filter);
-        logger.LogInformation("Fetching results from DrawResultsService...");
+        logger.LogInformation("Fetching results from storage...");
 
         var resultsTopValue = top ?? int.MaxValue;
 
@@ -25,11 +25,11 @@ internal sealed class DrawResultsService(
 
         if (results.Count == 0)
         {
-            logger.LogWarning("No historical draw results found for the given filter.");
+            logger.LogWarning("No draw results found for the given filter.");
             return [];
         }
 
-        logger.LogInformation("Handled GetHistoricalDrawResultsQuery. Successfully retrieved {Count} results.", results.Count);
+        logger.LogInformation("Handled GetDrawResult. Successfully retrieved {Count} results.", results.Count);
 
         return results.Select(r => new DrawResults
         {
