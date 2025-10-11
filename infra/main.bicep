@@ -10,9 +10,6 @@ param resourceToken string = toLower(uniqueString(subscription().id, location))
 @minLength(1)
 param resourceTokenWithoutDashes string = replace(resourceToken, '-', '')
 
-@description('Name of the table for storing draw results.')
-param drawResultsTableName string
-
 @description('Name of the secret in Key Vault storing Lotto API key.')
 param lottoApiKeySecretName string
 
@@ -27,6 +24,12 @@ param dataUpdateSchedule string
 
 @description('Time zone for scheduling data sync.')
 param timeZone string
+
+@description('Name of the Azure Table to store draw results.')
+param drawResultsTableName string
+
+@description('List of function names to be disabled in the Function App.')
+param disabledFunctions array
 
 @description('Primary region for all Azure resources.')
 @minLength(1)
@@ -138,6 +141,11 @@ resource keyVault 'Microsoft.KeyVault/vaults@2024-11-01' = {
   }
 }
 
+var disabledFunctionsSettings = [for f in disabledFunctions: {
+  name: 'AzureWebJobs.${f}.Disabled'
+  value: 'true'
+}]
+
 resource functionApp 'Microsoft.Web/sites@2024-11-01' = {
   name: 'func-${resourceToken}'
   kind: 'functionapp'
@@ -154,7 +162,7 @@ resource functionApp 'Microsoft.Web/sites@2024-11-01' = {
         ]
         supportCredentials: true
       }
-      appSettings: [
+      appSettings: concat([
         {
           name: 'FUNCTIONS_WORKER_RUNTIME'
           value: 'dotnet-isolated'
@@ -191,7 +199,7 @@ resource functionApp 'Microsoft.Web/sites@2024-11-01' = {
           name: 'AzureWebJobs.DropDrawResultsTable.Disabled'
           value: 'true'
         }
-      ]
+      ], disabledFunctionsSettings)
     }
     httpsOnly: true
   }
