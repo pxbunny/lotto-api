@@ -15,12 +15,14 @@ internal sealed class DrawResultsSeeder(
     {
         if (!env.IsDevelopment()) return;
 
+        const int seedDateRangeInYears = 10;
+
         var tableClient = tableServiceClient.GetTableClient(Constants.DrawResultsTableName);
         var tableAlreadyExists = !await TryCreateTableAsync(tableClient, cancellationToken);
 
         if (tableAlreadyExists) return;
 
-        var seedStartDate = new DateTime(2015, 1, 1, 12, 0, 0);
+        var seedStartDate = DateTime.Now.AddYears(-seedDateRangeInYears);
         var draws = GenerateDrawSchedule(seedStartDate);
         var now = DateTime.UtcNow;
         var random = new Random();
