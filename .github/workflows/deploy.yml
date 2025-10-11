@@ -132,8 +132,7 @@ jobs:
             --parameters ${{ env.BICEP_PARAMS_FILE_NAME }} \
             --parameters githubSpObjectId="${{ steps.get_sp_id.outputs.objectId }}" \
             --query properties.outputs \
-            --output json \
-            --debug)
+            --output json)
 
           appName=$(echo $deploymentOutput | jq -r '.appName.value')
           keyVaultName=$(echo $deploymentOutput | jq -r '.keyVaultName.value')
