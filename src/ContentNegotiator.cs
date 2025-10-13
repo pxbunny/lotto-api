@@ -2,7 +2,7 @@
 
 namespace Lotto;
 
-internal record NegotiationResult<T>(bool Success, T ContentType) where T : struct, Enum
+internal sealed record NegotiationResult<T>(bool Success, T ContentType) where T : struct, Enum
 {
     public static NegotiationResult<T> Unsupported() => new(false, default);
 

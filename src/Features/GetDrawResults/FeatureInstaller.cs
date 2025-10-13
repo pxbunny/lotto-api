@@ -1,11 +1,13 @@
 ﻿using Lotto.Features.GetDrawResults.FunctionHelpers;
+using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Hosting;
 
 namespace Lotto.Features.GetDrawResults;
 
-internal static class DependencyInjection
+internal sealed class FeatureInstaller : IFeatureInstaller
 {
-    public static void Add_GetDrawResults_Feature(this IServiceCollection services)
+    public void Install(IServiceCollection services, IConfiguration configuration, IHostEnvironment environment)
     {
         services.AddScoped<IDrawResultsRepository, DrawResultsRepository>();
         services.AddScoped<IHandler<FunctionHandler, Request, IEnumerable<DrawResults>>, FunctionHandler>();

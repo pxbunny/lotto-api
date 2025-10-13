@@ -20,7 +20,7 @@ internal sealed class HttpGetFunction(
 
         try
         {
-            var response = await HandleAsync(request, cancellationToken);
+            var response = await HandleRequestAsync(request, cancellationToken);
             logger.LogInformation("{FunctionName} finished successfully.", FunctionName);
             return response;
         }
@@ -31,7 +31,7 @@ internal sealed class HttpGetFunction(
         }
     }
 
-    private async Task<IActionResult> HandleAsync(HttpRequest request, CancellationToken cancellationToken)
+    private async Task<IActionResult> HandleRequestAsync(HttpRequest request, CancellationToken cancellationToken)
     {
         var queryParams = FunctionQueryParams.Parse(request.Query, out var errorMessage);
 
