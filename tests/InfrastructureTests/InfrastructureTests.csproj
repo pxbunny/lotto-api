@@ -1,12 +1,12 @@
-<Project Sdk="Microsoft.NET.Sdk">
+﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
     <TargetFramework>net9.0</TargetFramework>
     <Nullable>enable</Nullable>
     <IsPackable>false</IsPackable>
     <IsTestProject>true</IsTestProject>
-    <AssemblyName>Lotto.IntegrationTests</AssemblyName>
-    <RootNamespace>Lotto.IntegrationTests</RootNamespace>
+    <AssemblyName>Lotto.InfrastructureTests</AssemblyName>
+    <RootNamespace>Lotto.InfrastructureTests</RootNamespace>
   </PropertyGroup>
 
   <ItemGroup>

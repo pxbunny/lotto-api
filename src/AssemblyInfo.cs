@@ -1,5 +1,9 @@
 ﻿using System.Runtime.CompilerServices;
 
+[assembly: InternalsVisibleTo("Lotto.InfrastructureTests")]
+[assembly: InternalsVisibleTo("Lotto.IntegrationTests")]
 [assembly: InternalsVisibleTo("Lotto.UnitTests")]
 
-internal interface AssemblyMarker {}
+namespace Lotto;
+
+internal interface IAssemblyMarker { }

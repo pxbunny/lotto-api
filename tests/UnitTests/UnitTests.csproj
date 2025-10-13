@@ -2,7 +2,6 @@
 
   <PropertyGroup>
     <TargetFramework>net9.0</TargetFramework>
-    <ImplicitUsings>enable</ImplicitUsings>
     <Nullable>enable</Nullable>
     <IsPackable>false</IsPackable>
     <IsTestProject>true</IsTestProject>
@@ -25,11 +24,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Using Include="Xunit"/>
+    <ProjectReference Include="..\..\src\Lotto.csproj" />
   </ItemGroup>
-
-    <ItemGroup>
-      <ProjectReference Include="..\..\src\Lotto.csproj" />
-    </ItemGroup>
 
 </Project>
