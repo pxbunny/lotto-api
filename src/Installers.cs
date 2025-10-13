@@ -1,15 +1,13 @@
 ﻿using System.Reflection;
-using Microsoft.Azure.Functions.Worker.Builder;
+using Microsoft.Extensions.Hosting;
 
 namespace Lotto;
 
 internal static class Installers
 {
-    public static void RunFeatureInstallers(this FunctionsApplicationBuilder builder, Assembly? assembly = null)
+    public static void RunFeatureInstallers(this IHostApplicationBuilder builder, Assembly? assembly = null)
     {
-        var installerTypes = (assembly ?? Assembly.GetCallingAssembly()).GetTypes()
-            .Where(t => typeof(IFeatureInstaller).IsAssignableFrom(t) &&
-                        t is { IsAbstract: false, IsInterface: false });
+        var installerTypes = GetFeatureInstallerTypes(assembly);
 
         foreach (var type in installerTypes)
         {
@@ -18,5 +16,12 @@ internal static class Installers
 
             installer.Install(builder.Services, builder.Configuration, builder.Environment);
         }
+    }
+
+    public static IEnumerable<Type> GetFeatureInstallerTypes(Assembly? assembly = null)
+    {
+        return (assembly ?? Assembly.GetCallingAssembly()).GetTypes()
+            .Where(t => typeof(IFeatureInstaller).IsAssignableFrom(t) &&
+                        t is { IsAbstract: false, IsInterface: false });
     }
 }
