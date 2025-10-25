@@ -9,7 +9,7 @@ internal sealed class HttpGetFunction(
     IContentNegotiator<ContentType> contentNegotiator,
     ILogger<HttpGetFunction> logger)
 {
-    private const string FunctionName =  "GetDrawResults";
+    private const string FunctionName = "GetDrawResults";
 
     [Function(FunctionName)]
     public async Task<IActionResult> Run(

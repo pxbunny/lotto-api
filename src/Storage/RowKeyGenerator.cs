@@ -1,4 +1,6 @@
-﻿namespace Lotto.Storage;
+﻿using System.Globalization;
+
+namespace Lotto.Storage;
 
 internal sealed class RowKeyGenerator : IRowKeyGenerator
 {
@@ -6,6 +8,8 @@ internal sealed class RowKeyGenerator : IRowKeyGenerator
     {
         var dateDifference = DateTime.MaxValue - date;
         var dateReversed = DateTime.MinValue + dateDifference;
-        return dateReversed.ToString(Constants.DateFormat.Replace("-", ""));
+        return dateReversed.ToString(
+            Constants.DateFormat.Replace("-", "", StringComparison.InvariantCulture),
+            CultureInfo.InvariantCulture);
     }
 }

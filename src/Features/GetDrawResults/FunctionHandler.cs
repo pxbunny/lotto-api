@@ -1,4 +1,6 @@
-﻿namespace Lotto.Features.GetDrawResults;
+﻿using System.Globalization;
+
+namespace Lotto.Features.GetDrawResults;
 
 internal sealed record Request(DateOnly? DateFrom, DateOnly? DateTo, int? Top);
 
@@ -46,13 +48,13 @@ internal sealed class FunctionHandler(
         var filter = "";
 
         if (dateFrom is not null)
-            filter = $"DrawDate ge '{((DateOnly)dateFrom).ToString(Constants.DateFormat)}'";
+            filter = $"DrawDate ge '{((DateOnly)dateFrom).ToString(Constants.DateFormat, CultureInfo.InvariantCulture)}'";
 
         if (dateTo is not null)
-            filter = $"{filter} and DrawDate le '{((DateOnly)dateTo).ToString(Constants.DateFormat)}'";
+            filter = $"{filter} and DrawDate le '{((DateOnly)dateTo).ToString(Constants.DateFormat, CultureInfo.InvariantCulture)}'";
 
-        if (filter.StartsWith(" and"))
-            filter = filter.Remove(0, 4);
+        if (filter.StartsWith(" and", StringComparison.InvariantCulture))
+            filter = filter[4..];
 
         return filter;
     }

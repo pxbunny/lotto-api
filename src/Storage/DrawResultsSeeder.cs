@@ -1,4 +1,5 @@
-﻿using Azure;
+﻿using System.Globalization;
+using Azure;
 using Azure.Data.Tables;
 using Lotto.Storage.Entities;
 using Microsoft.AspNetCore.Hosting;
@@ -30,7 +31,7 @@ internal sealed class DrawResultsSeeder(
         foreach (var drawDate in draws)
         {
             var lotto = GenerateNumbers(random);
-            var plus  = GenerateNumbers(random);
+            var plus = GenerateNumbers(random);
             var rowKey = rowKeyGenerator.GenerateRowKey(drawDate);
 
             var entity = new DrawResultsEntity
@@ -38,9 +39,9 @@ internal sealed class DrawResultsSeeder(
                 PartitionKey = "LottoData",
                 RowKey = rowKey,
                 Timestamp = now,
-                DrawDate     = drawDate.ToString(Constants.DateFormat),
+                DrawDate = drawDate.ToString(Constants.DateFormat, CultureInfo.InvariantCulture),
                 LottoNumbers = string.Join(",", lotto),
-                PlusNumbers  = string.Join(",", plus)
+                PlusNumbers = string.Join(",", plus)
             };
 
             await tableClient.UpsertEntityAsync(entity, TableUpdateMode.Replace, cancellationToken);

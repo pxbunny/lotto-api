@@ -24,12 +24,15 @@ internal sealed class FunctionResponseHandler(
         ContentType contentType,
         CancellationToken cancellationToken)
     {
-        if (results.Count != 0) return contentType switch
+        if (results.Count != 0)
+        {
+            return contentType switch
             {
                 ContentType.ApplicationJson => CreateJsonResponse(results),
                 ContentType.ApplicationOctetStream => await CreateCsvResponseAsync(results, cancellationToken),
-                _ => throw new ArgumentOutOfRangeException()
+                _ => throw new ArgumentOutOfRangeException(nameof(contentType))
             };
+        }
 
         logger.LogWarning("No results found for the given query parameters.");
         return new NotFoundObjectResult("No historical draw results found.");

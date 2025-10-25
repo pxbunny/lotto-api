@@ -16,9 +16,11 @@ internal static class DependencyInjection
             var apiKeyConfigValue = configuration[apiKeyPropertyName];
 
             var baseUrl = !string.IsNullOrWhiteSpace(baseUrlConfigValue)
-                ? baseUrlConfigValue : throw new Exception($"'{baseUrlPropertyName}' missing in the configuration.");
+                ? baseUrlConfigValue
+                : throw new InvalidOperationException($"'{baseUrlPropertyName}' missing in the configuration.");
             var apiKey = !string.IsNullOrWhiteSpace(apiKeyConfigValue)
-                ? apiKeyConfigValue : throw new Exception($"'{apiKeyPropertyName}' missing in the configuration.");
+                ? apiKeyConfigValue
+                : throw new InvalidOperationException($"'{apiKeyPropertyName}' missing in the configuration.");
 
             client.BaseAddress = new Uri(baseUrl);
             client.DefaultRequestHeaders.Add("secret", apiKey);

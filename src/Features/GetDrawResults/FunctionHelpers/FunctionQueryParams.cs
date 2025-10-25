@@ -27,6 +27,7 @@ internal sealed record FunctionQueryParams(DateOnly? DateFrom, DateOnly? DateTo,
 
     private static string? ValidateQueryParams(IQueryCollection query, FunctionQueryParams queryParams)
     {
+#pragma warning disable IDE0046
         if (query.TryGetValue("dateFrom", out _) && queryParams.DateFrom is null)
             return $"'dateFrom' must be a valid date in the format {Constants.DateFormat}.";
 
@@ -37,6 +38,7 @@ internal sealed record FunctionQueryParams(DateOnly? DateFrom, DateOnly? DateTo,
             return "'top' must be a positive integer.";
 
         return null;
+#pragma warning restore IDE0046
     }
 
     private static bool TryParseDate(IQueryCollection query, string name, out DateOnly date)

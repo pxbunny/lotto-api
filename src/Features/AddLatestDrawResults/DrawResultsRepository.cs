@@ -1,4 +1,5 @@
-﻿using Azure.Data.Tables;
+﻿using System.Globalization;
+using Azure.Data.Tables;
 using Lotto.Storage.Entities;
 
 namespace Lotto.Features.AddLatestDrawResults;
@@ -28,7 +29,7 @@ internal sealed class DrawResultsRepository(
 
     public async Task AddAsync(DrawResults data, CancellationToken cancellationToken)
     {
-        var drawDate = DateTime.Parse(data.DrawDate);
+        var drawDate = DateTime.Parse(data.DrawDate, CultureInfo.InvariantCulture);
         var rowKey = rowKeyGenerator.GenerateRowKey(drawDate);
 
         var entity = new DrawResultsEntity

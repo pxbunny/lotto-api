@@ -1,4 +1,5 @@
-﻿using System.Net.Http;
+﻿using System.Globalization;
+using System.Net.Http;
 using System.Net.Http.Json;
 
 namespace Lotto.LottoClient;
@@ -17,7 +18,7 @@ internal sealed class LottoClient(HttpClient client) : ILottoClient
 
         return new DrawResults
         {
-            DrawDate = response.First().DrawDate.ToString(Constants.DateFormat),
+            DrawDate = response.First().DrawDate.ToString(Constants.DateFormat, CultureInfo.InvariantCulture),
             LottoNumbers = lottoNumbers,
             PlusNumbers = plusNumbers,
             LottoNumbersString = string.Join(",", lottoNumbers),
