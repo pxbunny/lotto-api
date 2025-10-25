@@ -4,7 +4,7 @@ using System.Net.Http.Json;
 
 namespace Lotto.LottoClient;
 
-internal sealed class LottoClient(HttpClient client) : ILottoClient
+sealed class LottoClient(HttpClient client) : ILottoClient
 {
     public async Task<DrawResults> GetLatestDrawResultsAsync(CancellationToken cancellationToken)
     {

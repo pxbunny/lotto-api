@@ -1,6 +1,6 @@
 ﻿namespace Lotto;
 
-internal static class Constants
+static class Constants
 {
     public const string DateFormat = "yyyy-MM-dd";
 

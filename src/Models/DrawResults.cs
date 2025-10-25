@@ -1,6 +1,6 @@
 ﻿namespace Lotto.Models;
 
-internal sealed class DrawResults
+sealed class DrawResults
 {
     public required string DrawDate { get; init; }
 

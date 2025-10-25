@@ -1,6 +1,6 @@
 ﻿namespace Lotto.Features.GetDrawResults.FunctionHelpers;
 
-internal enum ContentType
+enum ContentType
 {
     ApplicationJson,
     ApplicationOctetStream

@@ -3,13 +3,13 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace Lotto.Features.GetDrawResults;
 
-internal sealed class HttpGetFunction(
+sealed class HttpGetFunction(
     IHandler<FunctionHandler, Request, IEnumerable<DrawResults>> handler,
     IFunctionResponseHandler responseHandler,
     IContentNegotiator<ContentType> contentNegotiator,
     ILogger<HttpGetFunction> logger)
 {
-    private const string FunctionName = "GetDrawResults";
+    const string FunctionName = "GetDrawResults";
 
     [Function(FunctionName)]
     public async Task<IActionResult> Run(
@@ -31,7 +31,7 @@ internal sealed class HttpGetFunction(
         }
     }
 
-    private async Task<IActionResult> HandleRequestAsync(HttpRequest request, CancellationToken cancellationToken)
+    async Task<IActionResult> HandleRequestAsync(HttpRequest request, CancellationToken cancellationToken)
     {
         var queryParams = FunctionQueryParams.Parse(request.Query, out var errorMessage);
 
@@ -51,7 +51,7 @@ internal sealed class HttpGetFunction(
         return await responseHandler.HandleAsync(results, contentType, cancellationToken);
     }
 
-    private BadRequestObjectResult HandleUnsupportedContentType(HttpRequest request)
+    BadRequestObjectResult HandleUnsupportedContentType(HttpRequest request)
     {
         var acceptHeader = request.Headers.Accept;
         logger.LogError("Unsupported 'Accept' header value: {AcceptHeader}", acceptHeader!);

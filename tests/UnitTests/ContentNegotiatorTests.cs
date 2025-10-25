@@ -3,7 +3,7 @@ using Microsoft.AspNetCore.Http;
 
 namespace Lotto.UnitTests;
 
-public class ContentNegotiatorTests
+public sealed class ContentNegotiatorTests
 {
     [Theory]
     // Exact matches
@@ -28,7 +28,7 @@ public class ContentNegotiatorTests
     [InlineData("text/plain", false)]
     [InlineData("application/xml", false)]
     [InlineData("application/json; version=2", true, ContentType.ApplicationJson)] // Ignores parameters
-    private void Negotiate_VariousAcceptHeaders_ReturnsExpected(
+    void Negotiate_VariousAcceptHeaders_ReturnsExpected(
         string? acceptHeader,
         bool success,
         ContentType? expected = null)

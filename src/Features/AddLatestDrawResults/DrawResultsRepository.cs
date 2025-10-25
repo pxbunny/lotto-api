@@ -4,18 +4,18 @@ using Lotto.Storage.Entities;
 
 namespace Lotto.Features.AddLatestDrawResults;
 
-internal interface IDrawResultsRepository
+interface IDrawResultsRepository
 {
     Task<DrawResultsEntity> GetLatestAsync(CancellationToken cancellationToken);
 
     Task AddAsync(DrawResults data, CancellationToken cancellationToken);
 }
 
-internal sealed class DrawResultsRepository(
+sealed class DrawResultsRepository(
     TableServiceClient tableServiceClient,
     IRowKeyGenerator rowKeyGenerator) : IDrawResultsRepository
 {
-    private const string PartitionKey = "LottoData";
+    const string PartitionKey = "LottoData";
 
     public async Task<DrawResultsEntity> GetLatestAsync(CancellationToken cancellationToken)
     {

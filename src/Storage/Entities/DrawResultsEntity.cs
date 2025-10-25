@@ -3,7 +3,7 @@ using Azure.Data.Tables;
 
 namespace Lotto.Storage.Entities;
 
-internal sealed class DrawResultsEntity : ITableEntity
+sealed class DrawResultsEntity : ITableEntity
 {
     public required string PartitionKey { get; set; }
 

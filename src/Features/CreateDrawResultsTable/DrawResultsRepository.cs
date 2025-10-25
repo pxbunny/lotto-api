@@ -2,12 +2,12 @@
 
 namespace Lotto.Features.CreateDrawResultsTable;
 
-internal interface IDrawResultsRepository
+interface IDrawResultsRepository
 {
     Task CreateTableIfNotExistsAsync(CancellationToken cancellationToken);
 }
 
-internal sealed class DrawResultsRepository(TableServiceClient tableServiceClient) : IDrawResultsRepository
+sealed class DrawResultsRepository(TableServiceClient tableServiceClient) : IDrawResultsRepository
 {
     public async Task CreateTableIfNotExistsAsync(CancellationToken cancellationToken)
     {

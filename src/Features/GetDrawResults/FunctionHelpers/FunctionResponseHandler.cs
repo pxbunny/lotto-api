@@ -7,7 +7,7 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace Lotto.Features.GetDrawResults.FunctionHelpers;
 
-internal interface IFunctionResponseHandler
+interface IFunctionResponseHandler
 {
     Task<IActionResult> HandleAsync(
         IList<DrawResults> results,
@@ -15,7 +15,7 @@ internal interface IFunctionResponseHandler
         CancellationToken cancellationToken);
 }
 
-internal sealed class FunctionResponseHandler(
+sealed class FunctionResponseHandler(
     JsonSerializerOptions jsonSerializerOptions,
     ILogger<FunctionResponseHandler> logger) : IFunctionResponseHandler
 {
@@ -38,7 +38,7 @@ internal sealed class FunctionResponseHandler(
         return new NotFoundObjectResult("No historical draw results found.");
     }
 
-    private ContentResult CreateJsonResponse(IList<DrawResults> data)
+    ContentResult CreateJsonResponse(IList<DrawResults> data)
     {
         var dto = data.Select(r => new DrawResultsDto(r.DrawDate, r.LottoNumbers, r.PlusNumbers)).ToList();
         logger.LogInformation("Successfully retrieved {ResultCount} results. Sending JSON response...", dto.Count);
@@ -51,7 +51,7 @@ internal sealed class FunctionResponseHandler(
         };
     }
 
-    private async Task<IActionResult> CreateCsvResponseAsync(
+    async Task<IActionResult> CreateCsvResponseAsync(
         IList<DrawResults> data,
         CancellationToken cancellationToken)
     {

@@ -3,7 +3,7 @@ using Microsoft.Extensions.DependencyInjection;
 
 namespace Lotto.LottoClient;
 
-internal static class DependencyInjection
+static class DependencyInjection
 {
     public static void AddLottoClient(this IServiceCollection services, IConfiguration configuration)
     {

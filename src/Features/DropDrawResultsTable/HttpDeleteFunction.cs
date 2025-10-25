@@ -2,9 +2,9 @@
 
 namespace Lotto.Features.DropDrawResultsTable;
 
-internal sealed class HttpDeleteFunction(IDrawResultsRepository repository, ILogger<HttpDeleteFunction> logger)
+sealed class HttpDeleteFunction(IDrawResultsRepository repository, ILogger<HttpDeleteFunction> logger)
 {
-    private const string FunctionName = "DropDrawResultsTable";
+    const string FunctionName = "DropDrawResultsTable";
 
     [Function(FunctionName)]
     public async Task<IActionResult> Run(

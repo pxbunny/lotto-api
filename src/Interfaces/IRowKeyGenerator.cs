@@ -1,6 +1,6 @@
 ﻿namespace Lotto.Interfaces;
 
-internal interface IRowKeyGenerator
+interface IRowKeyGenerator
 {
     string GenerateRowKey(DateTime date);
 }

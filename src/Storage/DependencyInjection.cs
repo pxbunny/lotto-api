@@ -5,7 +5,7 @@ using Microsoft.Extensions.Hosting;
 
 namespace Lotto.Storage;
 
-internal static class DependencyInjection
+static class DependencyInjection
 {
     public static void AddStorage(this IServiceCollection services, IConfiguration configuration, IHostEnvironment environment)
     {

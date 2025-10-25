@@ -2,16 +2,16 @@
 
 namespace Lotto;
 
-internal sealed record NegotiationResult<T>(bool Success, T ContentType) where T : struct, Enum
+sealed record NegotiationResult<T>(bool Success, T ContentType) where T : struct, Enum
 {
     public static NegotiationResult<T> Unsupported() => new(false, default);
 
     public static implicit operator NegotiationResult<T>(T contentType) => new(true, contentType);
 }
 
-internal sealed class ContentNegotiator<T> : IContentNegotiator<T> where T : struct, Enum
+sealed class ContentNegotiator<T> : IContentNegotiator<T> where T : struct, Enum
 {
-    private readonly Dictionary<string, T> _configuration = new(StringComparer.OrdinalIgnoreCase);
+    readonly Dictionary<string, T> _configuration = new(StringComparer.OrdinalIgnoreCase);
 
     public ContentNegotiator(Action<IDictionary<string, T>> config) => config(_configuration);
 
@@ -30,7 +30,7 @@ internal sealed class ContentNegotiator<T> : IContentNegotiator<T> where T : str
             : _configuration[bestAcceptHeader];
     }
 
-    private static bool TryParseAcceptHeaderValues(string header, out IList<MediaTypeHeaderValue>? values)
+    static bool TryParseAcceptHeaderValues(string header, out IList<MediaTypeHeaderValue>? values)
     {
         values = null;
 
@@ -39,7 +39,7 @@ internal sealed class ContentNegotiator<T> : IContentNegotiator<T> where T : str
                values.Count == 0;
     }
 
-    private static string? FindBestAcceptHeader(
+    static string? FindBestAcceptHeader(
         IEnumerable<MediaTypeHeaderValue> acceptHeaderValues,
         IEnumerable<string> supportedContentTypes)
     {

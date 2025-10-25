@@ -1,9 +1,9 @@
 ﻿namespace Lotto.IntegrationTests;
 
-public class TmpTests
+public sealed class TmpTests
 {
     [Fact]
-    private void Test()
+    void Test()
     {
         Assert.True(true);
     }

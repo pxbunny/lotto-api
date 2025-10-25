@@ -2,12 +2,12 @@
 
 namespace Lotto.Features.DropDrawResultsTable;
 
-internal interface IDrawResultsRepository
+interface IDrawResultsRepository
 {
     Task DropTableAsync(CancellationToken cancellationToken);
 }
 
-internal sealed class DrawResultsRepository(TableServiceClient tableServiceClient) : IDrawResultsRepository
+sealed class DrawResultsRepository(TableServiceClient tableServiceClient) : IDrawResultsRepository
 {
     public async Task DropTableAsync(CancellationToken cancellationToken)
     {

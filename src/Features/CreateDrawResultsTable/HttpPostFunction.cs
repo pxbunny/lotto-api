@@ -2,9 +2,9 @@
 
 namespace Lotto.Features.CreateDrawResultsTable;
 
-internal sealed class HttpPostFunction(IDrawResultsRepository drawResultsRepository, ILogger<HttpPostFunction> logger)
+sealed class HttpPostFunction(IDrawResultsRepository drawResultsRepository, ILogger<HttpPostFunction> logger)
 {
-    private const string FunctionName = "CreateDrawResultsTable";
+    const string FunctionName = "CreateDrawResultsTable";
 
     [Function(FunctionName)]
     public async Task<IActionResult> Run(

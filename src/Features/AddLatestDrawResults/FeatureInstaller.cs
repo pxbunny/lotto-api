@@ -4,7 +4,7 @@ using Microsoft.Extensions.Hosting;
 
 namespace Lotto.Features.AddLatestDrawResults;
 
-internal sealed class FeatureInstaller : IFeatureInstaller
+sealed class FeatureInstaller : IFeatureInstaller
 {
     public void Install(IServiceCollection services, IConfiguration configuration, IHostEnvironment environment)
     {

@@ -2,9 +2,9 @@
 
 namespace Lotto.Features.GetDrawResults;
 
-internal sealed record Request(DateOnly? DateFrom, DateOnly? DateTo, int? Top);
+sealed record Request(DateOnly? DateFrom, DateOnly? DateTo, int? Top);
 
-internal sealed class FunctionHandler(
+sealed class FunctionHandler(
     IDrawResultsRepository repository,
     ILogger<FunctionHandler> logger) : IHandler<FunctionHandler, Request, IEnumerable<DrawResults>>
 {
@@ -43,7 +43,7 @@ internal sealed class FunctionHandler(
         });
     }
 
-    private static string BuildGetDrawResultsFilter(DateOnly? dateFrom, DateOnly? dateTo)
+    static string BuildGetDrawResultsFilter(DateOnly? dateFrom, DateOnly? dateTo)
     {
         var filter = "";
 

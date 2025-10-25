@@ -1,8 +1,8 @@
 ﻿namespace Lotto.Features.AddLatestDrawResults;
 
-internal sealed class TimerFunction(IHandler<FunctionHandler> handler, ILogger<TimerFunction> logger)
+sealed class TimerFunction(IHandler<FunctionHandler> handler, ILogger<TimerFunction> logger)
 {
-    private const string FunctionName = "AddLatestDrawResults";
+    const string FunctionName = "AddLatestDrawResults";
 
     [Function(FunctionName), FixedDelayRetry(3, "00:15:00")]
     public async Task Run(

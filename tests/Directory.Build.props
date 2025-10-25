@@ -4,7 +4,6 @@
 
   <PropertyGroup>
     <ImplicitUsings>enable</ImplicitUsings>
-    <IsPackable>false</IsPackable>
     <IsTestProject>true</IsTestProject>
     <EnableNETAnalyzers>false</EnableNETAnalyzers>
   </PropertyGroup>

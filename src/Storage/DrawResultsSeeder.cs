@@ -7,7 +7,7 @@ using Microsoft.Extensions.Hosting;
 
 namespace Lotto.Storage;
 
-internal sealed class DrawResultsSeeder(
+sealed class DrawResultsSeeder(
     IWebHostEnvironment env,
     TableServiceClient tableServiceClient,
     IRowKeyGenerator rowKeyGenerator) : IHostedService
@@ -50,7 +50,7 @@ internal sealed class DrawResultsSeeder(
 
     public Task StopAsync(CancellationToken cancellationToken) => Task.CompletedTask;
 
-    private static async Task<bool> TryCreateTableAsync(TableClient tableClient, CancellationToken cancellationToken)
+    static async Task<bool> TryCreateTableAsync(TableClient tableClient, CancellationToken cancellationToken)
     {
         try
         {
@@ -63,7 +63,7 @@ internal sealed class DrawResultsSeeder(
         }
     }
 
-    private static IEnumerable<DateTime> GenerateDrawSchedule(DateTime startDate)
+    static IEnumerable<DateTime> GenerateDrawSchedule(DateTime startDate)
     {
         var date = startDate.Date;
 
@@ -78,7 +78,7 @@ internal sealed class DrawResultsSeeder(
         }
     }
 
-    private static IEnumerable<int> GenerateNumbers(Random random)
+    static IEnumerable<int> GenerateNumbers(Random random)
     {
         const int numbersInSingleDraw = 6;
         var set = new HashSet<int>();
