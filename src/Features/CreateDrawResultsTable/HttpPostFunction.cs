@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using System.Net;
+using Microsoft.AspNetCore.Mvc;
 
 namespace Lotto.Features.CreateDrawResultsTable;
 
@@ -7,6 +8,8 @@ sealed class HttpPostFunction(IDrawResultsRepository drawResultsRepository, ILog
     const string FunctionName = "CreateDrawResultsTable";
 
     [Function(FunctionName)]
+    [OpenApiOperation(FunctionName, "Dev Helpers")]
+    [OpenApiResponseWithoutBody(HttpStatusCode.OK)]
     public async Task<IActionResult> Run(
         [HttpTrigger("post", Route = "draw-results-table")] HttpRequest _,
         CancellationToken cancellationToken)

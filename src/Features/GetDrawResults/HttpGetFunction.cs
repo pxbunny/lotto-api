@@ -1,4 +1,5 @@
-﻿using Lotto.Features.GetDrawResults.FunctionHelpers;
+﻿using System.Net;
+using Lotto.Features.GetDrawResults.FunctionHelpers;
 using Microsoft.AspNetCore.Mvc;
 
 namespace Lotto.Features.GetDrawResults;
@@ -12,6 +13,12 @@ sealed class HttpGetFunction(
     const string FunctionName = "GetDrawResults";
 
     [Function(FunctionName)]
+    [OpenApiOperation(FunctionName, "Draw Results")]
+    [OpenApiParameter("dateFrom", In = ParameterLocation.Query)]
+    [OpenApiParameter("dateTo", In = ParameterLocation.Query)]
+    [OpenApiParameter("top", In = ParameterLocation.Query, Type = typeof(int))]
+    [OpenApiResponseWithBody(HttpStatusCode.OK, "application/json", typeof(DrawResultsDto[]))]
+    [OpenApiResponseWithBody(0, "application/octet-stream", typeof(byte[]))]
     public async Task<IActionResult> Run(
         [HttpTrigger("get", Route = "draw-results")] HttpRequest request,
         CancellationToken cancellationToken)
