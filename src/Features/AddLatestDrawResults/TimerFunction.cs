@@ -7,9 +7,9 @@ sealed class TimerFunction(IHandler<FunctionHandler> handler, ILogger<TimerFunct
     [Function(FunctionName), FixedDelayRetry(3, "00:15:00")]
     public async Task Run(
 #if RELEASE
-        [TimerTrigger("%DataUpdateSchedule%", UseMonitor = false, RunOnStartup = true)] TimerInfo timer,
+        [TimerTrigger("%DataSyncSchedule%", UseMonitor = false, RunOnStartup = true)] TimerInfo timer,
 #else
-        [TimerTrigger("%DataUpdateSchedule%", UseMonitor = false)] TimerInfo timer,
+        [TimerTrigger("%DataSyncSchedule%", UseMonitor = false)] TimerInfo timer,
 #endif
         CancellationToken cancellationToken)
     {

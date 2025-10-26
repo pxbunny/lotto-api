@@ -20,7 +20,7 @@ param lottoBaseUrl string
 param githubSpObjectId string
 
 @description('Data sync schedule in cron format.')
-param dataUpdateSchedule string
+param dataSyncSchedule string
 
 @description('Time zone for scheduling data sync.')
 param timeZone string
@@ -180,8 +180,8 @@ resource functionApp 'Microsoft.Web/sites@2024-11-01' = {
           value: 'DefaultEndpointsProtocol=https;AccountName=${storageAccount.name};AccountKey=${storageAccount.listKeys().keys[0].value};EndpointSuffix=${environment().suffixes.storage}'
         }
         {
-          name: 'DataUpdateSchedule'
-          value: dataUpdateSchedule
+          name: 'DataSyncSchedule'
+          value: dataSyncSchedule
         }
         {
           name: 'LottoBaseUrl'

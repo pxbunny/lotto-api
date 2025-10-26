@@ -4,7 +4,7 @@
     "FUNCTIONS_WORKER_RUNTIME": "dotnet-isolated",
     "WEBSITE_TIME_ZONE": "Central European Standard Time",
     "AzureWebJobsStorage": "UseDevelopmentStorage=true",
-    "DataUpdateSchedule":  "0 45 22 * * 2,4,6",
+    "DataSyncSchedule":  "0 45 22 * * 2,4,6",
     "LottoBaseUrl": "https://developers.lotto.pl/api/",
     "LottoApiKey": "<lotto-api-key>"
   }
