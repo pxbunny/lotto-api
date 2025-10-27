@@ -13,10 +13,9 @@ sealed class TimerFunction(IHandler<FunctionHandler> handler, ILogger<TimerFunct
 #endif
         CancellationToken cancellationToken)
     {
-        logger.LogInformation("{FunctionName} function triggered at: {TriggerTime}", FunctionName, DateTime.UtcNow);
-
         try
         {
+            logger.LogInformation("{FunctionName} function triggered at: {TriggerTime}", FunctionName, DateTime.UtcNow);
             await handler.HandleAsync(cancellationToken);
             logger.LogInformation("{FunctionName} finished successfully.", FunctionName);
         }

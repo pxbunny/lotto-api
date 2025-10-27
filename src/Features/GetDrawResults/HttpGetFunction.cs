@@ -23,10 +23,9 @@ sealed class HttpGetFunction(
         [HttpTrigger("get", Route = "draw-results")] HttpRequest request,
         CancellationToken cancellationToken)
     {
-        logger.LogInformation("Handling {FunctionName}. Parameters : {QueryString}", FunctionName, request.QueryString);
-
         try
         {
+            logger.LogInformation("Handling {FunctionName}. Parameters : {QueryString}", FunctionName, request.QueryString);
             var response = await HandleRequestAsync(request, cancellationToken);
             logger.LogInformation("{FunctionName} finished successfully.", FunctionName);
             return response;
