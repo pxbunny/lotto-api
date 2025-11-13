@@ -1,17 +1,17 @@
-﻿using Lotto.Features.GetDrawResults.FunctionHelpers;
+﻿using Lotto.Features.Http.GetDrawResults.FunctionHelpers;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 
-namespace Lotto.Features.GetDrawResults;
+namespace Lotto.Features.Http.GetDrawResults;
 
-sealed class FeatureInstaller : IFeatureInstaller
+internal sealed class FeatureInstaller : IFeatureInstaller
 {
     public void Install(IServiceCollection services, IConfiguration configuration, IHostEnvironment environment)
     {
-        services.AddScoped<IDrawResultsRepository, DrawResultsRepository>();
-        services.AddScoped<IHandler<FunctionHandler, Request, IEnumerable<DrawResults>>, FunctionHandler>();
-        services.AddScoped<IFunctionResponseHandler, FunctionResponseHandler>();
+        services.AddScoped<DrawResultsRepository>();
+        services.AddScoped<FunctionHandler>();
+        services.AddScoped<FunctionResponseHandler>();
 
         services.AddSingleton<IContentNegotiator<ContentType>>(new ContentNegotiator<ContentType>(config =>
         {

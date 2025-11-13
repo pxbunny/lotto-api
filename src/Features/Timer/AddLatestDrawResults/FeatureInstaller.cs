@@ -1,13 +1,17 @@
 ﻿using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Hosting;
 
-namespace Lotto.LottoClient;
+namespace Lotto.Features.Timer.AddLatestDrawResults;
 
-static class DependencyInjection
+internal sealed class FeatureInstaller : IFeatureInstaller
 {
-    public static void AddLottoClient(this IServiceCollection services, IConfiguration configuration)
+    public void Install(IServiceCollection services, IConfiguration configuration, IHostEnvironment environment)
     {
-        services.AddHttpClient<ILottoClient, LottoClient>(client =>
+        services.AddScoped<DrawResultsRepository>();
+        services.AddScoped<FunctionHandler>();
+
+        services.AddHttpClient<LottoClient>(client =>
         {
             const string baseUrlPropertyName = "LottoBaseUrl";
             const string apiKeyPropertyName = "LottoApiKey";

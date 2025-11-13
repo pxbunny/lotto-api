@@ -1,13 +1,8 @@
 ﻿using Azure.Data.Tables;
 
-namespace Lotto.Features.DropDrawResultsTable;
+namespace Lotto.Features.Development.DropDrawResultsTable;
 
-interface IDrawResultsRepository
-{
-    Task DropTableAsync(CancellationToken cancellationToken);
-}
-
-sealed class DrawResultsRepository(TableServiceClient tableServiceClient) : IDrawResultsRepository
+internal sealed class DrawResultsRepository(TableServiceClient tableServiceClient)
 {
     public async Task DropTableAsync(CancellationToken cancellationToken)
     {

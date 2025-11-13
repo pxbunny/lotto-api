@@ -1,13 +1,8 @@
 ﻿using Azure.Data.Tables;
 
-namespace Lotto.Features.CreateDrawResultsTable;
+namespace Lotto.Features.Development.CreateDrawResultsTable;
 
-interface IDrawResultsRepository
-{
-    Task CreateTableIfNotExistsAsync(CancellationToken cancellationToken);
-}
-
-sealed class DrawResultsRepository(TableServiceClient tableServiceClient) : IDrawResultsRepository
+internal sealed class DrawResultsRepository(TableServiceClient tableServiceClient)
 {
     public async Task CreateTableIfNotExistsAsync(CancellationToken cancellationToken)
     {

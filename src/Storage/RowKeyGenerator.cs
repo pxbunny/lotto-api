@@ -2,7 +2,7 @@
 
 namespace Lotto.Storage;
 
-sealed class RowKeyGenerator : IRowKeyGenerator
+internal sealed class RowKeyGenerator : IRowKeyGenerator
 {
     public string GenerateRowKey(DateTime date)
     {

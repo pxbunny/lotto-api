@@ -35,4 +35,10 @@
     </None>
   </ItemGroup>
 
+  <ItemGroup>
+    <Folder Include="Features\Development\" />
+    <Folder Include="Features\Http\" />
+    <Folder Include="Features\Timer\" />
+  </ItemGroup>
+
 </Project>

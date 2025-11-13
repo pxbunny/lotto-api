@@ -1,6 +1,6 @@
 ﻿namespace Lotto.Interfaces;
 
-interface IContentNegotiator<T> where T : struct, Enum
+internal interface IContentNegotiator<T> where T : struct, Enum
 {
     NegotiationResult<T> Negotiate(HttpRequest request);
 }

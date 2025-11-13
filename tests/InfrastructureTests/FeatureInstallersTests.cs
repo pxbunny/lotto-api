@@ -29,7 +29,7 @@ public sealed class FeatureInstallersTests
     [Fact]
     void AllFeatureInstallers_Should_HaveExpectedNamespaceDepthLevel()
     {
-        const int expectedNamespaceDepthLevel = 3;
+        const int expectedNamespaceDepthLevel = 4;
         var installerTypes = GetFeatureInstallerTypes().ToList();
         var namespaceParts = installerTypes.Select(t => t.Namespace?.Split('.')).ToList();
         Assert.All(namespaceParts, t => Assert.Equal(t?.Length, expectedNamespaceDepthLevel));

@@ -3,7 +3,7 @@ using Microsoft.Extensions.Hosting;
 
 namespace Lotto;
 
-static class Installers
+internal static class Installers
 {
     public static void RunFeatureInstallers(this IHostApplicationBuilder builder, Assembly? assembly = null)
     {

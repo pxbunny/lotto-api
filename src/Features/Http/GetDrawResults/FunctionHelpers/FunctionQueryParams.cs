@@ -1,8 +1,8 @@
 ﻿using System.Globalization;
 
-namespace Lotto.Features.GetDrawResults.FunctionHelpers;
+namespace Lotto.Features.Http.GetDrawResults.FunctionHelpers;
 
-sealed record FunctionQueryParams(DateOnly? DateFrom, DateOnly? DateTo, int? Top)
+internal sealed record FunctionQueryParams(DateOnly? DateFrom, DateOnly? DateTo, int? Top)
 {
     public static FunctionQueryParams Parse(IQueryCollection query, out string? errorMessage)
     {
@@ -25,7 +25,7 @@ sealed record FunctionQueryParams(DateOnly? DateFrom, DateOnly? DateTo, int? Top
         return queryParams;
     }
 
-    static string? ValidateQueryParams(IQueryCollection query, FunctionQueryParams queryParams)
+    private static string? ValidateQueryParams(IQueryCollection query, FunctionQueryParams queryParams)
     {
 #pragma warning disable IDE0046
         if (query.TryGetValue("dateFrom", out _) && queryParams.DateFrom is null)
@@ -41,7 +41,7 @@ sealed record FunctionQueryParams(DateOnly? DateFrom, DateOnly? DateTo, int? Top
 #pragma warning restore IDE0046
     }
 
-    static bool TryParseDate(IQueryCollection query, string name, out DateOnly date)
+    private static bool TryParseDate(IQueryCollection query, string name, out DateOnly date)
     {
         date = default;
         return query.TryGetValue(name, out var value) &&

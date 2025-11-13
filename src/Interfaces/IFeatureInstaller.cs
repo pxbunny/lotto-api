@@ -4,7 +4,7 @@ using Microsoft.Extensions.Hosting;
 
 namespace Lotto.Interfaces;
 
-interface IFeatureInstaller
+internal interface IFeatureInstaller
 {
     void Install(IServiceCollection services, IConfiguration configuration, IHostEnvironment environment);
 }

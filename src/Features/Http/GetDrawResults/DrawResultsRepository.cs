@@ -1,18 +1,13 @@
 ﻿using Azure.Data.Tables;
 using Lotto.Storage.Entities;
 
-namespace Lotto.Features.GetDrawResults;
+namespace Lotto.Features.Http.GetDrawResults;
 
-interface IDrawResultsRepository
+internal sealed class DrawResultsRepository(TableServiceClient tableServiceClient)
 {
-    Task<IEnumerable<DrawResultsEntity>> GetAsync(string filter, int top, CancellationToken cancellationToken);
-}
-
-sealed class DrawResultsRepository(TableServiceClient tableServiceClient) : IDrawResultsRepository
-{
-    const string PartitionKey = "LottoData";
-    const string BaseFilter = $"PartitionKey eq '{PartitionKey}'";
-    const int MaxPageSize = 1_000;
+    private const string PartitionKey = "LottoData";
+    private const string BaseFilter = $"PartitionKey eq '{PartitionKey}'";
+    private const int MaxPageSize = 1_000;
 
     public async Task<IEnumerable<DrawResultsEntity>> GetAsync(string filter, int top, CancellationToken cancellationToken)
     {

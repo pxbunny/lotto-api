@@ -1,12 +1,10 @@
 ﻿using System.Globalization;
 
-namespace Lotto.Features.GetDrawResults;
+namespace Lotto.Features.Http.GetDrawResults;
 
-sealed record Request(DateOnly? DateFrom, DateOnly? DateTo, int? Top);
+internal sealed record Request(DateOnly? DateFrom, DateOnly? DateTo, int? Top);
 
-sealed class FunctionHandler(
-    IDrawResultsRepository repository,
-    ILogger<FunctionHandler> logger) : IHandler<FunctionHandler, Request, IEnumerable<DrawResults>>
+internal sealed class FunctionHandler(DrawResultsRepository repository, ILogger<FunctionHandler> logger)
 {
     public async Task<IEnumerable<DrawResults>> HandleAsync(Request request, CancellationToken cancellationToken)
     {
@@ -43,7 +41,7 @@ sealed class FunctionHandler(
         });
     }
 
-    static string BuildGetDrawResultsFilter(DateOnly? dateFrom, DateOnly? dateTo)
+    private static string BuildGetDrawResultsFilter(DateOnly? dateFrom, DateOnly? dateTo)
     {
         var filter = "";
 

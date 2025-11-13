@@ -2,12 +2,12 @@
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 
-namespace Lotto.Features.CreateDrawResultsTable;
+namespace Lotto.Features.Development.DropDrawResultsTable;
 
-sealed class FeatureInstaller : IFeatureInstaller
+internal sealed class FeatureInstaller : IFeatureInstaller
 {
     public void Install(IServiceCollection services, IConfiguration configuration, IHostEnvironment environment)
     {
-        services.AddScoped<IDrawResultsRepository, DrawResultsRepository>();
+        services.AddScoped<DrawResultsRepository>();
     }
 }

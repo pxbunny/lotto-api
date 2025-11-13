@@ -1,6 +1,5 @@
 using System.Text.Json;
 using Lotto;
-using Lotto.LottoClient;
 using Lotto.Storage;
 using Microsoft.Azure.Functions.Worker.Builder;
 using Microsoft.Extensions.DependencyInjection;
@@ -18,8 +17,6 @@ builder.Services.AddSingleton(new JsonSerializerOptions
 });
 
 builder.Services.AddStorage(builder.Configuration, builder.Environment);
-builder.Services.AddLottoClient(builder.Configuration);
-
 builder.RunFeatureInstallers();
 
 builder.Build().Run();

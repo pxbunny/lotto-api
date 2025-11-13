@@ -1,11 +1,11 @@
-﻿namespace Lotto.Features.AddLatestDrawResults;
+﻿namespace Lotto.Features.Timer.AddLatestDrawResults;
 
-sealed class FunctionHandler(
-    IDrawResultsRepository repository,
-    ILottoClient lottoClient,
-    ILogger<FunctionHandler> logger) : IHandler<FunctionHandler>
+internal sealed class FunctionHandler(
+    DrawResultsRepository repository,
+    LottoClient lottoClient,
+    ILogger<FunctionHandler> logger)
 {
-    const string FunctionName = "AddLatestDrawResults";
+    private const string FunctionName = "AddLatestDrawResults";
 
     public async Task HandleAsync(CancellationToken cancellationToken)
     {

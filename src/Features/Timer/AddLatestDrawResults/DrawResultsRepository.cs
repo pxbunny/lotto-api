@@ -2,20 +2,11 @@
 using Azure.Data.Tables;
 using Lotto.Storage.Entities;
 
-namespace Lotto.Features.AddLatestDrawResults;
+namespace Lotto.Features.Timer.AddLatestDrawResults;
 
-interface IDrawResultsRepository
+internal sealed class DrawResultsRepository(TableServiceClient tableServiceClient, IRowKeyGenerator rowKeyGenerator)
 {
-    Task<DrawResultsEntity> GetLatestAsync(CancellationToken cancellationToken);
-
-    Task AddAsync(DrawResults data, CancellationToken cancellationToken);
-}
-
-sealed class DrawResultsRepository(
-    TableServiceClient tableServiceClient,
-    IRowKeyGenerator rowKeyGenerator) : IDrawResultsRepository
-{
-    const string PartitionKey = "LottoData";
+    private const string PartitionKey = "LottoData";
 
     public async Task<DrawResultsEntity> GetLatestAsync(CancellationToken cancellationToken)
     {

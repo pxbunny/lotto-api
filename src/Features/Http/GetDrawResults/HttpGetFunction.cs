@@ -1,16 +1,16 @@
 ﻿using System.Net;
-using Lotto.Features.GetDrawResults.FunctionHelpers;
+using Lotto.Features.Http.GetDrawResults.FunctionHelpers;
 using Microsoft.AspNetCore.Mvc;
 
-namespace Lotto.Features.GetDrawResults;
+namespace Lotto.Features.Http.GetDrawResults;
 
-sealed class HttpGetFunction(
-    IHandler<FunctionHandler, Request, IEnumerable<DrawResults>> handler,
-    IFunctionResponseHandler responseHandler,
+internal sealed class HttpGetFunction(
+    FunctionHandler handler,
+    FunctionResponseHandler responseHandler,
     IContentNegotiator<ContentType> contentNegotiator,
     ILogger<HttpGetFunction> logger)
 {
-    const string FunctionName = "GetDrawResults";
+    private const string FunctionName = "GetDrawResults";
 
     [Function(FunctionName)]
     [OpenApiOperation(FunctionName, "Draw Results")]
@@ -18,7 +18,7 @@ sealed class HttpGetFunction(
     [OpenApiParameter("dateTo", In = ParameterLocation.Query)]
     [OpenApiParameter("top", In = ParameterLocation.Query, Type = typeof(int))]
     [OpenApiResponseWithBody(HttpStatusCode.OK, "application/json", typeof(DrawResultsDto[]))]
-    [OpenApiResponseWithBody(0, "application/octet-stream", typeof(byte[]))]
+    [OpenApiResponseWithBody((HttpStatusCode)999, "application/octet-stream", typeof(byte[]))]
     public async Task<IActionResult> Run(
         [HttpTrigger("get", Route = "draw-results")] HttpRequest request,
         CancellationToken cancellationToken)
@@ -37,7 +37,7 @@ sealed class HttpGetFunction(
         }
     }
 
-    async Task<IActionResult> HandleRequestAsync(HttpRequest request, CancellationToken cancellationToken)
+    private async Task<IActionResult> HandleRequestAsync(HttpRequest request, CancellationToken cancellationToken)
     {
         var queryParams = FunctionQueryParams.Parse(request.Query, out var errorMessage);
 
@@ -57,7 +57,7 @@ sealed class HttpGetFunction(
         return await responseHandler.HandleAsync(results, contentType, cancellationToken);
     }
 
-    BadRequestObjectResult HandleUnsupportedContentType(HttpRequest request)
+    private BadRequestObjectResult HandleUnsupportedContentType(HttpRequest request)
     {
         var acceptHeader = request.Headers.Accept;
         logger.LogError("Unsupported 'Accept' header value: {AcceptHeader}", acceptHeader!);

@@ -1,21 +1,21 @@
 ﻿using System.Net;
 using Microsoft.AspNetCore.Mvc;
 
-namespace Lotto.Features.CreateDrawResultsTable;
+namespace Lotto.Features.Development.CreateDrawResultsTable;
 
-sealed class HttpPostFunction(IDrawResultsRepository drawResultsRepository, ILogger<HttpPostFunction> logger)
+internal sealed class HttpPostFunction(DrawResultsRepository repository, ILogger<HttpPostFunction> logger)
 {
-    const string FunctionName = "CreateDrawResultsTable";
+    private const string FunctionName = "CreateDrawResultsTable";
 
     [Function(FunctionName)]
-    [OpenApiOperation(FunctionName, "Dev Helpers")]
+    [OpenApiOperation(FunctionName, "Development")]
     [OpenApiResponseWithoutBody(HttpStatusCode.OK)]
     public async Task<IActionResult> Run(
         [HttpTrigger("post", Route = "draw-results-table")] HttpRequest _,
         CancellationToken cancellationToken)
     {
         logger.LogInformation($"{FunctionName} function triggered.");
-        await drawResultsRepository.CreateTableIfNotExistsAsync(cancellationToken);
+        await repository.CreateTableIfNotExistsAsync(cancellationToken);
         logger.LogInformation($"{FunctionName} function finished.");
         return new OkResult();
     }

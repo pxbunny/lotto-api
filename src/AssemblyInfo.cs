@@ -6,4 +6,4 @@
 
 namespace Lotto;
 
-interface IAssemblyMarker;
+internal interface IAssemblyMarker;
