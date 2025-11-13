@@ -1,6 +1,8 @@
 ﻿using System.Net;
 using Lotto.Features.Http.GetDrawResults.FunctionHelpers;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Azure.WebJobs.Extensions.OpenApi.Core.Attributes;
+using Microsoft.OpenApi.Models;
 
 namespace Lotto.Features.Http.GetDrawResults;
 

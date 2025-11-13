@@ -2,9 +2,7 @@
 global using Lotto.Models;
 global using Microsoft.AspNetCore.Http;
 global using Microsoft.Azure.Functions.Worker;
-global using Microsoft.Azure.WebJobs.Extensions.OpenApi.Core.Attributes;
 global using Microsoft.Extensions.Logging;
-global using Microsoft.OpenApi.Models;
 global using System;
 global using System.Collections.Generic;
 global using System.Linq;

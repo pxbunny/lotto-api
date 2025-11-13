@@ -1,5 +1,6 @@
 ﻿using System.Net;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Azure.WebJobs.Extensions.OpenApi.Core.Attributes;
 
 namespace Lotto.Features.Development.DropDrawResultsTable;
 
