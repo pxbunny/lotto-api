@@ -2,7 +2,7 @@
 
 [![License: GPL-3.0](https://img.shields.io/badge/License-GPLv3-blue.svg)](LICENSE)
 
-A REST API providing draw results for Polish Lotto and Lotto Plus games. The API supports JSON and CSV formats and includes automated updates for new draws.
+A **REST API** providing draw results for Polish **Lotto** and **Lotto Plus** games. The API supports JSON and CSV formats and includes automated updates for new draws.
 
 ## Features
 
@@ -64,7 +64,3 @@ A REST API providing draw results for Polish Lotto and Lotto Plus games. The API
    # Upload to Azure Storage
    python csv_to_storage.py -f data.csv
    ```
-
-## Future Improvements
-
-APIM with some of the Lotto API endpoints integrated.
