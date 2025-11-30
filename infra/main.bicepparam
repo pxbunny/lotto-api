@@ -9,4 +9,11 @@ param timeZone = 'Central European Standard Time'
 
 param drawResultsTableName = 'LottoDrawResults'
 
-param disabledFunctions = ['CreateDrawResultsTable', 'DropDrawResultsTable']
+param disabledFunctions = [
+  'CreateDrawResultsTable'
+  'DropDrawResultsTable'
+  'RenderOAuth2Redirect'
+  'RenderOpenApiDocument'
+  'RenderSwaggerDocument'
+  'RenderSwaggerUI'
+]
