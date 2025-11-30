@@ -12,8 +12,9 @@ internal sealed class DrawResultsRepository(TableServiceClient tableServiceClien
     {
         var client = tableServiceClient.GetTableClient(Constants.DrawResultsTableName);
 
-        var entity = await client.QueryAsync<DrawResultsEntity>(maxPerPage: 1, cancellationToken: cancellationToken)
-            .FirstOrDefaultAsync(cancellationToken: cancellationToken);
+        var entity = await client
+            .QueryAsync<DrawResultsEntity>(maxPerPage: 1, cancellationToken: cancellationToken)
+            .FirstOrDefaultAsync(cancellationToken);
 
         return entity ?? throw new InvalidOperationException("No DrawResults found");
     }

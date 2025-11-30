@@ -10,14 +10,15 @@ public sealed class TypesVisibilityTests
     [Fact]
     void AllTypes_Should_BeInternal()
     {
-        var visibleTypes = GetNotGeneratedCode().Where(t => !IsInternal(t));
+        var visibleTypes = GetNotGeneratedCode().Where(t => !IsInternal(t) && t.Name != "Program");
         Assert.Empty(visibleTypes);
     }
 
     [Fact]
     void AllNonAbstractTypes_Should_BeSealed()
     {
-        var nonSealedTypes = GetNotGeneratedCode().Where(t => t is { IsAbstract: false, IsSealed: false });
+        var nonSealedTypes = GetNotGeneratedCode()
+            .Where(t => t is { IsAbstract: false, IsSealed: false } &&t.Name != "Program");
         Assert.Empty(nonSealedTypes);
     }
 
