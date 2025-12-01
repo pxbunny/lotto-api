@@ -27,14 +27,16 @@ internal sealed class HttpGetFunction(
     {
         try
         {
-            logger.LogInformation("Handling {FunctionName}. Parameters : {QueryString}", FunctionName, request.QueryString);
+            logger.LogInformation(
+                "{FunctionName} handling request with query {QueryString} and accept {AcceptHeader}",
+                FunctionName, request.QueryString, request.Headers.Accept.ToString());
             var response = await HandleRequestAsync(request, cancellationToken);
             logger.LogInformation("{FunctionName} finished successfully.", FunctionName);
             return response;
         }
         catch (Exception e)
         {
-            logger.LogError("{FunctionName} Failed. Error: {ErrorMessage}", FunctionName, e.Message);
+            logger.LogError(e, "{FunctionName} failed while processing request.", FunctionName);
             throw;
         }
     }

@@ -15,9 +15,9 @@ internal sealed class HttpDeleteFunction(DrawResultsRepository repository, ILogg
         [HttpTrigger("delete", Route = "draw-results-table")] HttpRequest _,
         CancellationToken cancellationToken)
     {
-        logger.LogInformation($"{FunctionName} triggered.");
+        logger.LogInformation("{FunctionName} triggered.", FunctionName);
         await repository.DropTableAsync(cancellationToken);
-        logger.LogInformation($"{FunctionName} function finished.");
+        logger.LogInformation("{FunctionName} finished.", FunctionName);
         return new OkResult();
     }
 }

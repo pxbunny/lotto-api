@@ -9,7 +9,7 @@ internal sealed class FunctionHandler(
 
     public async Task HandleAsync(CancellationToken cancellationToken)
     {
-        logger.LogInformation($"Running {FunctionName} function handler.");
+        logger.LogInformation("{FunctionName} handler started.", FunctionName);
 
         var getDataFromStorageTask = repository.GetLatestAsync(cancellationToken);
         var getDataFromApiTask = lottoClient.GetLatestDrawResultsAsync(cancellationToken);
@@ -19,20 +19,28 @@ internal sealed class FunctionHandler(
             var storageData = await getDataFromStorageTask;
             var apiData = await getDataFromApiTask;
 
+            logger.LogInformation(
+                "{FunctionName} comparing draw dates: storage={StorageDate}, api={ApiDate}",
+                FunctionName, storageData.DrawDate, apiData.DrawDate);
+
             if (storageData.DrawDate == apiData.DrawDate)
             {
-                logger.LogWarning("Data storage already has the latest lotto draw results.");
+                logger.LogWarning("{FunctionName} skipped: storage already has the latest draw results.", FunctionName);
                 return;
             }
+
+            logger.LogInformation(
+                "{FunctionName} persisting new draw results for {DrawDate}",
+                FunctionName, apiData.DrawDate);
 
             await repository.AddAsync(apiData, cancellationToken);
         }
         catch (Exception e)
         {
-            logger.LogError("Error occurred while trying do add latest data to the storage: {ErrorMessage}", e.Message);
+            logger.LogError("{FunctionName} failed while adding latest data: {ErrorMessage}", FunctionName, e.Message);
             throw;
         }
 
-        logger.LogInformation($"{FunctionName} function handler finished.");
+        logger.LogInformation("{FunctionName} handler finished successfully.", FunctionName);
     }
 }

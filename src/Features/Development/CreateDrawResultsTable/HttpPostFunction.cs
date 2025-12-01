@@ -15,9 +15,9 @@ internal sealed class HttpPostFunction(DrawResultsRepository repository, ILogger
         [HttpTrigger("post", Route = "draw-results-table")] HttpRequest _,
         CancellationToken cancellationToken)
     {
-        logger.LogInformation($"{FunctionName} function triggered.");
+        logger.LogInformation("{FunctionName} triggered.", FunctionName);
         await repository.CreateTableIfNotExistsAsync(cancellationToken);
-        logger.LogInformation($"{FunctionName} function finished.");
+        logger.LogInformation("{FunctionName} finished.", FunctionName);
         return new OkResult();
     }
 }
