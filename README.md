@@ -14,7 +14,7 @@ A **REST API** providing draw results for Polish **Lotto** and **Lotto Plus** ga
 ## Getting Started
 
 ### Prerequisites
-- .NET 9 SDK
+- .NET 10.0.100 or later
 - Azure account with active subscription
 - Azure CLI
 - Python (for initialization scripts, version 3.12+ recommended)
