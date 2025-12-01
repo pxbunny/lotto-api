@@ -59,10 +59,13 @@ internal sealed class HttpGetFunction(
         return await responseHandler.HandleAsync(results, contentType, cancellationToken);
     }
 
-    private BadRequestObjectResult HandleUnsupportedContentType(HttpRequest request)
+    private ObjectResult HandleUnsupportedContentType(HttpRequest request)
     {
         var acceptHeader = request.Headers.Accept;
         logger.LogError("Unsupported 'Accept' header value: {AcceptHeader}", acceptHeader!);
-        return new BadRequestObjectResult(new { error = $"Unsupported 'Accept' header value: {acceptHeader}" });
+        return new ObjectResult(new { error = $"Unsupported 'Accept' header value: {acceptHeader}" })
+        {
+            StatusCode = StatusCodes.Status406NotAcceptable
+        };
     }
 }
