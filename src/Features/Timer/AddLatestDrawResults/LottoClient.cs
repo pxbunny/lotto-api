@@ -22,7 +22,7 @@ internal sealed class LottoClient(HttpClient client)
 
         return new DrawResults
         {
-            DrawDate = response.First().DrawDate.ToString(Constants.DateFormat, CultureInfo.InvariantCulture),
+            DrawDate = response.First().DrawDate.ToString(Defaults.DateFormat, CultureInfo.InvariantCulture),
             LottoNumbers = lottoNumbers,
             PlusNumbers = plusNumbers,
             LottoNumbersString = string.Join(",", lottoNumbers),

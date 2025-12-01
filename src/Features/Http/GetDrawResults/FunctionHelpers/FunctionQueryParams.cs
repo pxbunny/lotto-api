@@ -29,10 +29,10 @@ internal sealed record FunctionQueryParams(DateOnly? DateFrom, DateOnly? DateTo,
     {
 #pragma warning disable IDE0046
         if (query.TryGetValue("dateFrom", out _) && queryParams.DateFrom is null)
-            return $"'dateFrom' must be a valid date in the format {Constants.DateFormat}.";
+            return $"'dateFrom' must be a valid date in the format {Defaults.DateFormat}.";
 
         if (query.TryGetValue("dateTo", out _) && queryParams.DateTo is null)
-            return $"'dateTo' must be a valid date in the format {Constants.DateFormat}.";
+            return $"'dateTo' must be a valid date in the format {Defaults.DateFormat}.";
 
         if (query.TryGetValue("top", out var topStr) && (!int.TryParse(topStr, out var topValue) || topValue <= 0))
             return "'top' must be a positive integer.";
@@ -46,7 +46,7 @@ internal sealed record FunctionQueryParams(DateOnly? DateFrom, DateOnly? DateTo,
         date = default;
         return query.TryGetValue(name, out var value) &&
                DateOnly.TryParseExact(value,
-                   Constants.DateFormat,
+                   Defaults.DateFormat,
                    CultureInfo.InvariantCulture,
                    DateTimeStyles.None,
                    out date);

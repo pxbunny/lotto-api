@@ -46,10 +46,10 @@ internal sealed class FunctionHandler(DrawResultsRepository repository, ILogger<
         var filter = "";
 
         if (dateFrom is not null)
-            filter = $"DrawDate ge '{((DateOnly)dateFrom).ToString(Constants.DateFormat, CultureInfo.InvariantCulture)}'";
+            filter = $"DrawDate ge '{((DateOnly)dateFrom).ToString(Defaults.DateFormat, CultureInfo.InvariantCulture)}'";
 
         if (dateTo is not null)
-            filter = $"{filter} and DrawDate le '{((DateOnly)dateTo).ToString(Constants.DateFormat, CultureInfo.InvariantCulture)}'";
+            filter = $"{filter} and DrawDate le '{((DateOnly)dateTo).ToString(Defaults.DateFormat, CultureInfo.InvariantCulture)}'";
 
         if (filter.StartsWith(" and", StringComparison.InvariantCulture))
             filter = filter[4..];

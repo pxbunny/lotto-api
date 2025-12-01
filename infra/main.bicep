@@ -191,6 +191,10 @@ resource functionApp 'Microsoft.Web/sites@2024-11-01' = {
           name: 'LottoApiKey'
           value: '@Microsoft.KeyVault(VaultName=${keyVault.name};SecretName=${lottoApiKeySecretName})'
         }
+        {
+          name: 'TableNames__DrawResults'
+          value: drawResultsTableName
+        }
       ], disabledFunctionsSettings)
     }
     httpsOnly: true

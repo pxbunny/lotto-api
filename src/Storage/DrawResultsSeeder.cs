@@ -1,4 +1,4 @@
-﻿using System.Globalization;
+using System.Globalization;
 using Azure;
 using Azure.Data.Tables;
 using Lotto.Storage.Entities;
@@ -10,15 +10,18 @@ namespace Lotto.Storage;
 internal sealed class DrawResultsSeeder(
     IWebHostEnvironment env,
     TableServiceClient tableServiceClient,
-    IRowKeyGenerator rowKeyGenerator) : IHostedService
+    IRowKeyGenerator rowKeyGenerator,
+    IOptions<TableOptions> tableOptions) : IHostedService
 {
+    private readonly string _tableName = tableOptions.Value.DrawResultsTableName;
+
     public async Task StartAsync(CancellationToken cancellationToken)
     {
         if (!env.IsDevelopment()) return;
 
         const int seedDateRangeInYears = 10;
 
-        var tableClient = tableServiceClient.GetTableClient(Constants.DrawResultsTableName);
+        var tableClient = tableServiceClient.GetTableClient(_tableName);
         var tableAlreadyExists = !await TryCreateTableAsync(tableClient, cancellationToken);
 
         if (tableAlreadyExists) return;
@@ -39,7 +42,7 @@ internal sealed class DrawResultsSeeder(
                 PartitionKey = "LottoData",
                 RowKey = rowKey,
                 Timestamp = now,
-                DrawDate = drawDate.ToString(Constants.DateFormat, CultureInfo.InvariantCulture),
+                DrawDate = drawDate.ToString(Defaults.DateFormat, CultureInfo.InvariantCulture),
                 LottoNumbers = string.Join(",", lotto),
                 PlusNumbers = string.Join(",", plus)
             };

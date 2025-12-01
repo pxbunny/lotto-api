@@ -1,16 +1,21 @@
-﻿using System.Globalization;
+using System.Globalization;
 using Azure.Data.Tables;
+using Lotto.Storage;
 using Lotto.Storage.Entities;
 
 namespace Lotto.Features.Timer.AddLatestDrawResults;
 
-internal sealed class DrawResultsRepository(TableServiceClient tableServiceClient, IRowKeyGenerator rowKeyGenerator)
+internal sealed class DrawResultsRepository(
+    TableServiceClient tableServiceClient,
+    IRowKeyGenerator rowKeyGenerator,
+    IOptions<TableOptions> tableOptions)
 {
     private const string PartitionKey = "LottoData";
+    private readonly string _tableName = tableOptions.Value.DrawResultsTableName;
 
     public async Task<DrawResultsEntity> GetLatestAsync(CancellationToken cancellationToken)
     {
-        var client = tableServiceClient.GetTableClient(Constants.DrawResultsTableName);
+        var client = tableServiceClient.GetTableClient(_tableName);
 
         var entity = await client
             .QueryAsync<DrawResultsEntity>(maxPerPage: 1, cancellationToken: cancellationToken)
@@ -33,7 +38,7 @@ internal sealed class DrawResultsRepository(TableServiceClient tableServiceClien
             PlusNumbers = data.PlusNumbersString
         };
 
-        var client = tableServiceClient.GetTableClient(Constants.DrawResultsTableName);
+        var client = tableServiceClient.GetTableClient(_tableName);
         await client.AddEntityAsync(entity, cancellationToken);
     }
 }

@@ -9,7 +9,7 @@ internal sealed class RowKeyGenerator : IRowKeyGenerator
         var dateDifference = DateTime.MaxValue - date;
         var dateReversed = DateTime.MinValue + dateDifference;
         return dateReversed.ToString(
-            Constants.DateFormat.Replace("-", "", StringComparison.InvariantCulture),
+            Defaults.DateFormat.Replace("-", "", StringComparison.InvariantCulture),
             CultureInfo.InvariantCulture);
     }
 }

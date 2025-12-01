@@ -3,6 +3,7 @@ global using Lotto.Models;
 global using Microsoft.AspNetCore.Http;
 global using Microsoft.Azure.Functions.Worker;
 global using Microsoft.Extensions.Logging;
+global using Microsoft.Extensions.Options;
 global using System;
 global using System.Collections.Generic;
 global using System.Linq;
