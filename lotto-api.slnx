@@ -9,7 +9,6 @@
   </Folder>
   <Folder Name="/tests/">
     <Project Path="tests/InfrastructureTests/InfrastructureTests.csproj" />
-    <Project Path="tests/IntegrationTests/IntegrationTests.csproj" />
     <Project Path="tests/UnitTests/UnitTests.csproj" />
     <File Path="tests/Directory.Build.props" />
   </Folder>
