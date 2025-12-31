@@ -82,6 +82,7 @@ jobs:
     name: Deploy Infrastructure
     runs-on: ubuntu-latest
     needs: [validate-infrastructure, build-functionapp]
+    if: github.event_name != 'pull_request'
     environment: production
     outputs:
       appName: ${{ steps.deploy.outputs.appName }}
@@ -146,6 +147,7 @@ jobs:
     name: Deploy Function App
     runs-on: ubuntu-latest
     needs: [build-functionapp, deploy-infrastructure]
+    if: github.event_name != 'pull_request'
     environment: production
 
     steps:
