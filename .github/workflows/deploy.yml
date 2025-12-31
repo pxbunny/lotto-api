@@ -34,7 +34,7 @@ jobs:
 
     steps:
       - name: Checkout Repository
-        uses: actions/checkout@v4
+        uses: actions/checkout@v6
 
       - name: Validate Bicep
         working-directory: ${{ env.INFRASTRUCTURE_DIRECTORY }}
@@ -49,7 +49,7 @@ jobs:
 
     steps:
       - name: Checkout Repository
-        uses: actions/checkout@v4
+        uses: actions/checkout@v6
 
       - name: Setup .NET
         uses: actions/setup-dotnet@v5
@@ -72,7 +72,7 @@ jobs:
           zip -r ../${{ env.FUNCTION_APP_ZIP_NAME }} .
 
       - name: Upload Function App Artifact
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v6
         with:
           name: ${{ env.FUNCTION_APP_ARTIFACT_NAME }}
           path: ${{ env.FUNCTION_APP_ZIP_NAME }}
@@ -90,7 +90,7 @@ jobs:
 
     steps:
       - name: Checkout Repository
-        uses: actions/checkout@v4
+        uses: actions/checkout@v6
 
       - name: Azure Login
         uses: azure/login@v2
@@ -150,7 +150,7 @@ jobs:
 
     steps:
       - name: Download Function App Artifact
-        uses: actions/download-artifact@v5
+        uses: actions/download-artifact@v7
         with:
           name: ${{ env.FUNCTION_APP_ARTIFACT_NAME }}
           path: functionapp
