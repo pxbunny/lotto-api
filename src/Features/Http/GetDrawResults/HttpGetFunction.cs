@@ -20,6 +20,9 @@ internal sealed class HttpGetFunction(
     [OpenApiParameter("dateTo", In = ParameterLocation.Query)]
     [OpenApiParameter("top", In = ParameterLocation.Query, Type = typeof(int))]
     [OpenApiResponseWithBody(HttpStatusCode.OK, "application/json", typeof(DrawResultsDto[]))]
+    [OpenApiResponseWithBody(HttpStatusCode.BadRequest, "application/json", typeof(ErrorResponse))]
+    [OpenApiResponseWithBody(HttpStatusCode.NotFound, "application/json", typeof(string))]
+    [OpenApiResponseWithBody(HttpStatusCode.NotAcceptable, "application/json", typeof(ErrorResponse))]
     [OpenApiResponseWithBody((HttpStatusCode)999, "application/octet-stream", typeof(byte[]))]
     public async Task<IActionResult> Run(
         [HttpTrigger("get", Route = "draw-results")] HttpRequest request,
@@ -48,7 +51,7 @@ internal sealed class HttpGetFunction(
         if (!string.IsNullOrEmpty(errorMessage))
         {
             logger.LogError("Query parameters validation failed: {ErrorMessage}", errorMessage);
-            return new BadRequestObjectResult(new { error = errorMessage });
+            return new BadRequestObjectResult(new ErrorResponse(errorMessage));
         }
 
         var (negotiationResult, contentType) = contentNegotiator.Negotiate(request);
@@ -65,7 +68,7 @@ internal sealed class HttpGetFunction(
     {
         var acceptHeader = request.Headers.Accept;
         logger.LogError("Unsupported 'Accept' header value: {AcceptHeader}", acceptHeader!);
-        return new ObjectResult(new { error = $"Unsupported 'Accept' header value: {acceptHeader}" })
+        return new ObjectResult(new ErrorResponse($"Unsupported 'Accept' header value: {acceptHeader}"))
         {
             StatusCode = StatusCodes.Status406NotAcceptable
         };

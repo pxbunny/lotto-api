@@ -19,6 +19,8 @@ internal sealed class HttpGetFunction(
     [OpenApiOperation(FunctionName, "Draw Results")]
     [OpenApiParameter("date", In = ParameterLocation.Path)]
     [OpenApiResponseWithBody(HttpStatusCode.OK, "application/json", typeof(DrawResultsDto))]
+    [OpenApiResponseWithBody(HttpStatusCode.BadRequest, "application/json", typeof(ErrorResponse))]
+    [OpenApiResponseWithBody(HttpStatusCode.NotFound, "application/json", typeof(string))]
     public async Task<IActionResult> Run(
         [HttpTrigger("get", Route = "draw-results/{date}")] HttpRequest _,
         string date,
@@ -43,7 +45,7 @@ internal sealed class HttpGetFunction(
         if (!TryParseDate(date, out var parsedDate, out var errorMessage))
         {
             logger.LogError("Route date validation failed: {ErrorMessage}", errorMessage);
-            return new BadRequestObjectResult(new { error = errorMessage });
+            return new BadRequestObjectResult(new ErrorResponse(errorMessage));
         }
 
         var result = await handler.HandleAsync(parsedDate, cancellationToken);
