@@ -1,4 +1,5 @@
-﻿using System.Globalization;
+using System.Globalization;
+using Lotto.Storage.Entities;
 
 namespace Lotto.Features.Http.GetDrawResults;
 
@@ -31,14 +32,7 @@ internal sealed class FunctionHandler(IDrawResultsRepository repository, ILogger
 
         logger.LogInformation("Handled GetDrawResult. Successfully retrieved {Count} results.", results.Count);
 
-        return results.Select(r => new DrawResults
-        {
-            DrawDate = r.DrawDate,
-            LottoNumbers = r.LottoNumbers.Split(',').Select(int.Parse),
-            PlusNumbers = !string.IsNullOrWhiteSpace(r.PlusNumbers) ? r.PlusNumbers.Split(',').Select(int.Parse) : [],
-            LottoNumbersString = r.LottoNumbers,
-            PlusNumbersString = r.PlusNumbers
-        });
+        return results.Select(r => r.ToDrawResults());
     }
 
     private static string BuildGetDrawResultsFilter(DateOnly? dateFrom, DateOnly? dateTo)

@@ -19,3 +19,20 @@ internal sealed class DrawResultsEntity : ITableEntity
 
     public string? PlusNumbers { get; init; }
 }
+
+internal static class DrawResultsEntityExtensions
+{
+    public static DrawResults ToDrawResults(this DrawResultsEntity entity)
+    {
+        return new DrawResults
+        {
+            DrawDate = entity.DrawDate,
+            LottoNumbers = entity.LottoNumbers.Split(',').Select(int.Parse),
+            PlusNumbers = !string.IsNullOrWhiteSpace(entity.PlusNumbers)
+                ? entity.PlusNumbers.Split(',').Select(int.Parse)
+                : [],
+            LottoNumbersString = entity.LottoNumbers,
+            PlusNumbersString = entity.PlusNumbers
+        };
+    }
+}

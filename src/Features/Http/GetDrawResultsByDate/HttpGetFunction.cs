@@ -45,7 +45,7 @@ internal sealed class HttpGetFunction(
         if (!TryParseDate(date, out var parsedDate, out var errorMessage))
         {
             logger.LogError("Route date validation failed: {ErrorMessage}", errorMessage);
-            return new BadRequestObjectResult(new ErrorResponse(errorMessage));
+            return new BadRequestObjectResult(new ErrorResponse(errorMessage!));
         }
 
         var result = await handler.HandleAsync(parsedDate, cancellationToken);
