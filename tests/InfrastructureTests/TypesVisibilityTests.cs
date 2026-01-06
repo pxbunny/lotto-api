@@ -8,34 +8,34 @@ namespace Lotto.InfrastructureTests;
 public sealed class TypesVisibilityTests
 {
     [Fact]
-    void AllTypes_Should_BeInternal()
+    private void AllTypes_Should_BeInternal()
     {
         var visibleTypes = GetNotGeneratedCode().Where(t => !IsInternal(t) && t.Name != "Program");
         Assert.Empty(visibleTypes);
     }
 
     [Fact]
-    void AllNonAbstractTypes_Should_BeSealed()
+    private void AllNonAbstractTypes_Should_BeSealed()
     {
         var nonSealedTypes = GetNotGeneratedCode()
             .Where(t => t is { IsAbstract: false, IsSealed: false } &&t.Name != "Program");
         Assert.Empty(nonSealedTypes);
     }
 
-    static IEnumerable<Type> GetNotGeneratedCode()
+    private static IEnumerable<Type> GetNotGeneratedCode()
     {
         var assembly = typeof(IAssemblyMarker).Assembly;
         return assembly.GetTypes().Where(t => !IsGeneratedCode(t));
     }
 
-    static bool IsGeneratedCode(MemberInfo t)
+    private static bool IsGeneratedCode(MemberInfo t)
     {
         return t.IsDefined(typeof(CompilerGeneratedAttribute), false) ||
                t.IsDefined(typeof(GeneratedCodeAttribute), false) ||
                t.IsDefined(typeof(DebuggerNonUserCodeAttribute), false);
     }
 
-    static bool IsInternal(Type t) => t is
+    private static bool IsInternal(Type t) => t is
     {
         IsVisible: false,
         IsPublic: false,

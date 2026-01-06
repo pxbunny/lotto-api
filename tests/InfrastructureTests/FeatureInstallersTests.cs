@@ -2,17 +2,17 @@
 
 public sealed class FeatureInstallersTests
 {
-    const string FeaturesNamespace = "Lotto.Features";
+    private const string FeaturesNamespace = "Lotto.Features";
 
     [Fact]
-    void MainInstaller_Should_FindFeatureInstallers()
+    private void MainInstaller_Should_FindFeatureInstallers()
     {
         var installerTypes = GetFeatureInstallerTypes();
         Assert.NotEmpty(installerTypes);
     }
 
     [Fact]
-    void AllFeatureInstallers_Should_HavePublicParameterlessConstructor()
+    private void AllFeatureInstallers_Should_HavePublicParameterlessConstructor()
     {
         var installerTypes = GetFeatureInstallerTypes().ToList();
         Assert.NotEmpty(installerTypes);
@@ -20,14 +20,14 @@ public sealed class FeatureInstallersTests
     }
 
     [Fact]
-    void AllFeatureInstallers_Should_HaveCorrectNamespace()
+    private void AllFeatureInstallers_Should_HaveCorrectNamespace()
     {
         var installerTypes = GetFeatureInstallerTypes().ToList();
         Assert.All(installerTypes, t => Assert.StartsWith($"{FeaturesNamespace}.", t.Namespace));
     }
 
     [Fact]
-    void AllFeatureInstallers_Should_HaveExpectedNamespaceDepthLevel()
+    private void AllFeatureInstallers_Should_HaveExpectedNamespaceDepthLevel()
     {
         const int expectedNamespaceDepthLevel = 4;
         var installerTypes = GetFeatureInstallerTypes().ToList();
@@ -36,14 +36,14 @@ public sealed class FeatureInstallersTests
     }
 
     [Fact]
-    void EachFeature_Should_HaveOneInstaller()
+    private void EachFeature_Should_HaveOneInstaller()
     {
         var installerTypes = GetFeatureInstallerTypes().ToList();
         var namespaces = installerTypes.Select(t => t.Namespace).ToList();
         Assert.Equal(namespaces.Count, namespaces.Distinct().Count());
     }
 
-    static IEnumerable<Type> GetFeatureInstallerTypes()
+    private static IEnumerable<Type> GetFeatureInstallerTypes()
     {
         var assembly = typeof(IAssemblyMarker).Assembly;
         return Installers.GetFeatureInstallerTypes(assembly);

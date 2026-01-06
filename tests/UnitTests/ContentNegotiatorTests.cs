@@ -28,7 +28,7 @@ public sealed class ContentNegotiatorTests
     [InlineData("text/plain", false)]
     [InlineData("application/xml", false)]
     [InlineData("application/json; version=2", true, ContentType.ApplicationJson)] // Ignores parameters
-    void Negotiate_VariousAcceptHeaders_ReturnsExpected(
+    private void Negotiate_VariousAcceptHeaders_ReturnsExpected(
         string? acceptHeader,
         bool success,
         ContentType? expected = null)
