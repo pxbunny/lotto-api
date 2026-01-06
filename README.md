@@ -6,8 +6,8 @@ A **REST API** providing draw results for Polish **Lotto** and **Lotto Plus** ga
 
 ## Features
 
-- **Historical Data Endpoint**: Fetch draw results via `/api/draw-results`.
-- **Multiple Formats**: Set `Accept: application/json` (default) or `Accept: application/octet-stream` (to download a CSV file).
+- **Historical Data Endpoints**: Fetch draw results via `/api/draw-results` or a single date via `/api/draw-results/{date}`.
+- **Multiple Formats**: Use `Accept: application/json` (default) or `Accept: application/octet-stream` (CSV) for `/api/draw-results`.
 - **Auto-Update**: New results are added automatically 45 minutes after each draw (Tue/Thu/Sat at 22:45 CET/CEST).
 - **Initialization Tools**: Python scripts to populate the database with historical data.
 
