@@ -1,7 +1,7 @@
 using System.Globalization;
 using System.Net;
 using System.Text.Json;
-using Lotto.Features.Http.GetDrawResults.FunctionHelpers;
+using Lotto.Common;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Azure.WebJobs.Extensions.OpenApi.Core.Attributes;
 using Microsoft.OpenApi.Models;

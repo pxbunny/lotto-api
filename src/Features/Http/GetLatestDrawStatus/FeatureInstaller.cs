@@ -2,7 +2,7 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 
-namespace Lotto.Features.Timer.AddLatestDrawResults;
+namespace Lotto.Features.Http.GetLatestDrawStatus;
 
 internal sealed class FeatureInstaller : IFeatureInstaller
 {

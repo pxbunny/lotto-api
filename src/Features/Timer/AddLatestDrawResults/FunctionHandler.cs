@@ -1,4 +1,4 @@
-﻿namespace Lotto.Features.Timer.AddLatestDrawResults;
+namespace Lotto.Features.Timer.AddLatestDrawResults;
 
 internal sealed class FunctionHandler(
     IDrawResultsRepository repository,
@@ -44,3 +44,4 @@ internal sealed class FunctionHandler(
         logger.LogInformation("{FunctionName} handler finished successfully.", FunctionName);
     }
 }
+

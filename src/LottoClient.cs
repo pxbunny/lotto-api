@@ -1,8 +1,8 @@
-﻿using System.Globalization;
+using System.Globalization;
 using System.Net.Http;
 using System.Net.Http.Json;
 
-namespace Lotto.Features.Timer.AddLatestDrawResults;
+namespace Lotto;
 
 internal sealed class LottoClient(HttpClient client)
 {
