@@ -1,10 +1,15 @@
-﻿using System.Net;
+using System.Net;
+using Azure.Data.Tables;
+using Lotto.Storage;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Azure.WebJobs.Extensions.OpenApi.Core.Attributes;
 
 namespace Lotto.Features.Development.CreateDrawResultsTable;
 
-internal sealed class HttpPostFunction(DrawResultsRepository repository, ILogger<HttpPostFunction> logger)
+internal sealed class HttpPostFunction(
+    TableServiceClient tableServiceClient,
+    IOptions<TableOptions> tableOptions,
+    ILogger<HttpPostFunction> logger)
 {
     private const string FunctionName = "CreateDrawResultsTable";
 
@@ -16,7 +21,9 @@ internal sealed class HttpPostFunction(DrawResultsRepository repository, ILogger
         CancellationToken cancellationToken)
     {
         logger.LogInformation("{FunctionName} triggered.", FunctionName);
-        await repository.CreateTableIfNotExistsAsync(cancellationToken);
+        var tableName = tableOptions.Value.DrawResultsTableName;
+        var client = tableServiceClient.GetTableClient(tableName);
+        await client.CreateIfNotExistsAsync(cancellationToken);
         logger.LogInformation("{FunctionName} finished.", FunctionName);
         return new OkResult();
     }

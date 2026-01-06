@@ -1,10 +1,15 @@
-﻿using System.Net;
+using System.Net;
+using Azure.Data.Tables;
+using Lotto.Storage;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Azure.WebJobs.Extensions.OpenApi.Core.Attributes;
 
 namespace Lotto.Features.Development.DropDrawResultsTable;
 
-internal sealed class HttpDeleteFunction(DrawResultsRepository repository, ILogger<HttpDeleteFunction> logger)
+internal sealed class HttpDeleteFunction(
+    TableServiceClient tableServiceClient,
+    IOptions<TableOptions> tableOptions,
+    ILogger<HttpDeleteFunction> logger)
 {
     private const string FunctionName = "DropDrawResultsTable";
 
@@ -16,7 +21,9 @@ internal sealed class HttpDeleteFunction(DrawResultsRepository repository, ILogg
         CancellationToken cancellationToken)
     {
         logger.LogInformation("{FunctionName} triggered.", FunctionName);
-        await repository.DropTableAsync(cancellationToken);
+        var tableName = tableOptions.Value.DrawResultsTableName;
+        var client = tableServiceClient.GetTableClient(tableName);
+        await client.DeleteAsync(cancellationToken);
         logger.LogInformation("{FunctionName} finished.", FunctionName);
         return new OkResult();
     }

@@ -1,7 +1,7 @@
 ﻿namespace Lotto.Features.Timer.AddLatestDrawResults;
 
 internal sealed class FunctionHandler(
-    DrawResultsRepository repository,
+    IDrawResultsRepository repository,
     LottoClient lottoClient,
     ILogger<FunctionHandler> logger)
 {

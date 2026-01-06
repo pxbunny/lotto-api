@@ -17,6 +17,7 @@ internal static class DependencyInjection
             .ValidateOnStart();
 
         services.AddSingleton<IRowKeyGenerator, RowKeyGenerator>();
+        services.AddScoped<IDrawResultsRepository, DrawResultsRepository>();
 
         services.AddAzureClients(clientBuilder =>
         {

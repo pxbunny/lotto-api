@@ -4,7 +4,7 @@ namespace Lotto.Features.Http.GetDrawResults;
 
 internal sealed record Request(DateOnly? DateFrom, DateOnly? DateTo, int? Top);
 
-internal sealed class FunctionHandler(DrawResultsRepository repository, ILogger<FunctionHandler> logger)
+internal sealed class FunctionHandler(IDrawResultsRepository repository, ILogger<FunctionHandler> logger)
 {
     public async Task<IEnumerable<DrawResults>> HandleAsync(Request request, CancellationToken cancellationToken)
     {
