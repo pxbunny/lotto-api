@@ -2,7 +2,8 @@
 
 [![License: GPL-3.0](https://img.shields.io/badge/License-GPLv3-blue.svg)](LICENSE)
 
-A **REST API** providing draw results for Polish **Lotto** and **Lotto Plus** games. The API supports JSON and CSV formats and includes automated updates for new draws.
+> A **REST API** providing draw results for Polish **Lotto** and **Lotto Plus** games.
+> The API supports JSON and CSV formats and includes automated updates for new draws.
 
 ## Features
 
@@ -20,6 +21,7 @@ A **REST API** providing draw results for Polish **Lotto** and **Lotto Plus** ga
 - Azure CLI
 - Python (for initialization scripts, version 3.12+ recommended)
 - Lotto API key from [Lotto Developers Portal](https://developers.lotto.pl/)
+- Bash shell (Linux/macOS, or WSL/Git Bash on Windows for `azure_init.sh`)
 
 ## Deployment via GitHub Actions
 
@@ -37,19 +39,35 @@ A **REST API** providing draw results for Polish **Lotto** and **Lotto Plus** ga
 
 3. **Trigger deployment workflow**:
 
-   Push to main branch or manually run "Build and Deploy Azure Resources" action
+   Push to main branch or manually run **Build and Deploy Azure Resources** action
 
 ## Post-Deployment Setup
 
 1. **Prepare python environment**:
+
+   Linux / MacOS
    ```bash
    cd tools
    python -m venv .venv
-   source .venv/bin/activate  # Linux/MacOS
+   source .venv/bin/activate
+   pip install -r requirements.txt
+   ```
+   Windows (PowerShell):
+   ```powershell
+   cd tools
+   python -m venv .venv
+   .\.venv\Scripts\Activate.ps1
+   pip install -r requirements.txt
+   ```
+   Windows (Command Prompt):
+   ```cmd
+   cd tools
+   python -m venv .venv
+   .venv\Scripts\activate.bat
    pip install -r requirements.txt
    ```
 
-2. **Configure environment**:
+3. **Configure environment**:
    Copy `.env.template` to `.env` and update values:
    ```env
    LOTTO_API_KEY="<your-api-key>"
@@ -57,7 +75,7 @@ A **REST API** providing draw results for Polish **Lotto** and **Lotto Plus** ga
    STORAGE_CONNECTION_STRING="<from Azure Portal>"
    ```
 
-3. **Initialize data**:
+4. **Initialize data**:
    ```bash
    # Fetch data from Lotto.pl API (default start date: 2000-01-01)
    python fetch_to_csv.py -d 2000-01-01 -f data.csv
