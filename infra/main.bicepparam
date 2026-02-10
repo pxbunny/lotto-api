@@ -13,7 +13,7 @@ param disabledFunctions = [
   'CreateDrawResultsTable'
   'DropDrawResultsTable'
   'RenderOAuth2Redirect'
-  'RenderOpenApiDocument'
+  // 'RenderOpenApiDocument'
   'RenderSwaggerDocument'
   'RenderSwaggerUI'
 ]
