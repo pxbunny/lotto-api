@@ -11,8 +11,8 @@ builder.ConfigureFunctionsWebApplication();
 
 builder.Services.AddSingleton(new JsonSerializerOptions
 {
-    PropertyNamingPolicy = JsonNamingPolicy.SnakeCaseLower,
-    DictionaryKeyPolicy = JsonNamingPolicy.SnakeCaseLower,
+    PropertyNamingPolicy = JsonNamingPolicy.CamelCase,
+    DictionaryKeyPolicy = JsonNamingPolicy.CamelCase,
     WriteIndented = false
 });
 
