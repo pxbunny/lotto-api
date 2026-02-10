@@ -23,7 +23,8 @@ internal sealed class HttpGetFunction(
     [OpenApiResponseWithBody(HttpStatusCode.BadRequest, "application/json", typeof(ErrorResponse))]
     [OpenApiResponseWithBody(HttpStatusCode.NotFound, "application/json", typeof(string))]
     [OpenApiResponseWithBody(HttpStatusCode.NotAcceptable, "application/json", typeof(ErrorResponse))]
-    [OpenApiResponseWithBody((HttpStatusCode)999, "application/octet-stream", typeof(byte[]))]
+    // [OpenApiResponseWithBody(HttpStatusCode.OK, "application/octet-stream", typeof(byte[]))]
+    [FunctionKeySecurity]
     public async Task<IActionResult> Run(
         [HttpTrigger("get", Route = "draw-results")] HttpRequest request,
         CancellationToken cancellationToken)

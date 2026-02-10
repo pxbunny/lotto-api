@@ -36,4 +36,5 @@ internal sealed record LottoDrawResultsResponse(
     string GameType,
     IEnumerable<LottoDrawResultsItem> Results);
 
-internal sealed record LottoDrawResultsItem(IEnumerable<int> ResultsJson);
+internal sealed record LottoDrawResultsItem(
+    IEnumerable<int> ResultsJson);

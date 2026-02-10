@@ -1,5 +1,6 @@
 using System.Net;
 using Azure.Data.Tables;
+using Lotto.Features.Http;
 using Lotto.Storage;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Azure.WebJobs.Extensions.OpenApi.Core.Attributes;
@@ -16,6 +17,7 @@ internal sealed class HttpPostFunction(
     [Function(FunctionName)]
     [OpenApiOperation(FunctionName, "Development")]
     [OpenApiResponseWithoutBody(HttpStatusCode.OK)]
+    [FunctionKeySecurity]
     public async Task<IActionResult> Run(
         [HttpTrigger("post", Route = "draw-results-table")] HttpRequest _,
         CancellationToken cancellationToken)

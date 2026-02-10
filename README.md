@@ -16,6 +16,7 @@
 ## API Endpoints
 
 All routes use the default Azure Functions prefix: `/api`.
+All HTTP endpoints require a Function key sent in header: `x-functions-key: <function-key>`.
 
 ### `GET /api/draw-results`
 Returns historical draw results from storage.

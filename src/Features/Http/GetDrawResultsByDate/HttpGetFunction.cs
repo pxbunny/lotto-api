@@ -20,6 +20,7 @@ internal sealed class HttpGetFunction(
     [OpenApiResponseWithBody(HttpStatusCode.OK, "application/json", typeof(DrawResultsDto))]
     [OpenApiResponseWithBody(HttpStatusCode.BadRequest, "application/json", typeof(ErrorResponse))]
     [OpenApiResponseWithBody(HttpStatusCode.NotFound, "application/json", typeof(string))]
+    [FunctionKeySecurity]
     public async Task<IActionResult> Run(
         [HttpTrigger("get", Route = "draw-results/{date:datetime}")] HttpRequest _,
         string date,

@@ -18,6 +18,7 @@ internal sealed class HttpGetFunction(
     [OpenApiResponseWithBody(HttpStatusCode.OK, "application/json", typeof(SyncDto))]
     [OpenApiResponseWithBody(HttpStatusCode.BadGateway, "application/json", typeof(ErrorResponse))]
     [OpenApiResponseWithBody(HttpStatusCode.InternalServerError, "application/json", typeof(ErrorResponse))]
+    [FunctionKeySecurity]
     public async Task<IActionResult> Run(
         [HttpTrigger("get", Route = "sync")] HttpRequest _,
         CancellationToken cancellationToken)

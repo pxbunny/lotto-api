@@ -17,6 +17,7 @@ internal sealed class HttpGetFunction(
     [OpenApiOperation(FunctionName, "Draw Results")]
     [OpenApiResponseWithBody(HttpStatusCode.OK, "application/json", typeof(DrawResultsDto))]
     [OpenApiResponseWithBody(HttpStatusCode.NotFound, "application/json", typeof(string))]
+    [FunctionKeySecurity]
     public async Task<IActionResult> Run(
         [HttpTrigger("get", Route = "draw-results/latest")] HttpRequest _,
         CancellationToken cancellationToken)
