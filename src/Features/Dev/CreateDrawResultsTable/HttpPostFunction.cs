@@ -14,9 +14,11 @@ internal sealed class HttpPostFunction(
     private const string FunctionName = "CreateDrawResultsTable";
 
     [Function(FunctionName)]
+#if DEBUG
     [Operation(FunctionName, "Development")]
     [NoBodyResponse(HttpStatusCode.OK)]
     [FunctionKeySecurity]
+#endif
     public async Task<IActionResult> Run(
         [HttpTrigger("post", Route = "draw-results-table")] HttpRequest _,
         CancellationToken cancellationToken)

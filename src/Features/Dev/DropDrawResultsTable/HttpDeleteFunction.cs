@@ -14,9 +14,11 @@ internal sealed class HttpDeleteFunction(
     private const string FunctionName = "DropDrawResultsTable";
 
     [Function(FunctionName)]
+#if DEBUG
     [Operation(FunctionName, "Development")]
     [NoBodyResponse(HttpStatusCode.OK)]
     [FunctionKeySecurity]
+#endif
     public async Task<IActionResult> Run(
         [HttpTrigger("delete", Route = "draw-results-table")] HttpRequest _,
         CancellationToken cancellationToken)
