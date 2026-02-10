@@ -7,11 +7,40 @@
 
 ## Features
 
-- **Historical Data Endpoints**: Fetch draw results via `/api/draw-results` or a single date via `/api/draw-results/{date}`.
-- **Sync Status**: Check if storage is up to date via `/api/draw/status`.
-- **Multiple Formats**: Use `Accept: application/json` (default) or `Accept: application/octet-stream` (CSV) for `/api/draw-results`.
+- **Historical Data Endpoints**: Fetch draw results via `/api/draw-results`, `/api/draw-results/{date}`, or `/api/draw-results/latest`.
+- **Sync Status**: Check if storage is up to date via `/api/sync`.
+- **Multiple Formats**: Use `Accept: application/json` for JSON and `Accept: application/octet-stream` for CSV in `/api/draw-results`.
 - **Auto-Update**: New results are added automatically 45 minutes after each draw (Tue/Thu/Sat at 22:45 CET/CEST).
 - **Initialization Tools**: Python scripts to populate the database with historical data.
+
+## API Endpoints
+
+All routes use the default Azure Functions prefix: `/api`.
+
+### `GET /api/draw-results`
+Returns historical draw results from storage.
+
+Optional query parameters:
+- `dateFrom` (`yyyy-MM-dd`)
+- `dateTo` (`yyyy-MM-dd`)
+- `top` (positive integer)
+
+Supported `Accept` headers:
+- `application/json`, `application/*`, `*/*` -> JSON response
+- `application/octet-stream` -> CSV file download
+
+Possible status codes: `200`, `400`, `404`, `406`.
+
+### `GET /api/draw-results/{date}`
+Returns draw results for a single date from storage. `date` must use `yyyy-MM-dd` format.
+
+Possible status codes: `200`, `400`, `404`.
+
+### `GET /api/draw-results/latest`
+Returns the latest draw results available in storage.
+
+### `GET /api/sync`
+Returns synchronization status between storage and the external Lotto API.
 
 ## Getting Started
 
@@ -39,11 +68,11 @@
 
 3. **Trigger deployment workflow**:
 
-   Push to main branch or manually run **Build and Deploy Azure Resources** action
+   Push to main branch or manually run **Build and Deploy** action
 
 ## Post-Deployment Setup
 
-1. **Prepare python environment**:
+1. **Prepare Python environment**:
 
    Linux / MacOS
    ```bash
@@ -67,7 +96,7 @@
    pip install -r requirements.txt
    ```
 
-3. **Configure environment**:
+2. **Configure environment**:
    Copy `.env.template` to `.env` and update values:
    ```env
    LOTTO_API_KEY="<your-api-key>"
@@ -75,7 +104,7 @@
    STORAGE_CONNECTION_STRING="<from Azure Portal>"
    ```
 
-4. **Initialize data**:
+3. **Initialize data**:
    ```bash
    # Fetch data from Lotto.pl API (default start date: 2000-01-01)
    python fetch_to_csv.py -d 2000-01-01 -f data.csv
