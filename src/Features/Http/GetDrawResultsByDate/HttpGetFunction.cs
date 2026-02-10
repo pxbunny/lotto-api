@@ -1,7 +1,6 @@
 using System.Globalization;
 using System.Net;
 using System.Text.Json;
-using Lotto.Common;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Azure.WebJobs.Extensions.OpenApi.Core.Attributes;
 using Microsoft.OpenApi.Models;
@@ -22,7 +21,7 @@ internal sealed class HttpGetFunction(
     [OpenApiResponseWithBody(HttpStatusCode.BadRequest, "application/json", typeof(ErrorResponse))]
     [OpenApiResponseWithBody(HttpStatusCode.NotFound, "application/json", typeof(string))]
     public async Task<IActionResult> Run(
-        [HttpTrigger("get", Route = "draw-results/{date}")] HttpRequest _,
+        [HttpTrigger("get", Route = "draw-results/{date:datetime}")] HttpRequest _,
         string date,
         CancellationToken cancellationToken)
     {
@@ -50,7 +49,10 @@ internal sealed class HttpGetFunction(
 
         var result = await handler.HandleAsync(parsedDate, cancellationToken);
 
-        if (result is null) return new NotFoundObjectResult("No draw results found for the given date.");
+        if (result is null)
+        {
+            return new NotFoundObjectResult("No draw results found for the given date.");
+        }
 
         var dto = new DrawResultsDto(result.DrawDate, result.LottoNumbers, result.PlusNumbers);
 

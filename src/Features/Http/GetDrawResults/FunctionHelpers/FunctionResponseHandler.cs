@@ -3,7 +3,6 @@ using System.IO;
 using System.Text;
 using System.Text.Json;
 using CsvHelper;
-using Lotto.Common;
 using Microsoft.AspNetCore.Mvc;
 
 namespace Lotto.Features.Http.GetDrawResults.FunctionHelpers;

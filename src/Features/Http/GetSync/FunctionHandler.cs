@@ -1,13 +1,13 @@
-namespace Lotto.Features.Http.GetLatestDrawStatus;
+namespace Lotto.Features.Http.GetSync;
 
 internal sealed class FunctionHandler(
     IDrawResultsRepository repository,
     LottoClient lottoClient,
     ILogger<FunctionHandler> logger)
 {
-    public async Task<LatestDrawStatusDto> HandleAsync(CancellationToken cancellationToken)
+    public async Task<SyncDto> HandleAsync(CancellationToken cancellationToken)
     {
-        logger.LogInformation("Handling GetLatestDrawStatus.");
+        logger.LogInformation("Handling GetSync.");
 
         string? storageDate = null;
 
@@ -24,9 +24,9 @@ internal sealed class FunctionHandler(
         var isUpToDate = !string.IsNullOrWhiteSpace(storageDate) && storageDate == apiDate;
 
         logger.LogInformation(
-            "Latest draw status - StorageDate: {StorageDate}, ApiDate: {ApiDate}, UpToDate: {UpToDate}",
+            "Sync status - StorageDate: {StorageDate}, ApiDate: {ApiDate}, UpToDate: {UpToDate}",
             storageDate, apiDate, isUpToDate);
 
-        return new LatestDrawStatusDto(storageDate, apiDate, isUpToDate);
+        return new SyncDto(storageDate, apiDate, isUpToDate);
     }
 }

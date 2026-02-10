@@ -4,12 +4,12 @@ internal sealed class TimerFunction(FunctionHandler handler, ILogger<TimerFuncti
 {
     private const string FunctionName = "AddLatestDrawResults";
 
-    [Function(FunctionName), FixedDelayRetry(3, "00:15:00")]
+    //[Function(FunctionName), FixedDelayRetry(3, "00:15:00")]
     public async Task Run(
 #if RELEASE
-        [TimerTrigger("%DataSyncSchedule%", UseMonitor = false, RunOnStartup = true)] TimerInfo timer,
+        [TimerTrigger("%DataSyncSchedule%", UseMonitor = false, RunOnStartup = true)] TimerInfo _,
 #else
-        [TimerTrigger("%DataSyncSchedule%", UseMonitor = false)] TimerInfo timer,
+        [TimerTrigger("%DataSyncSchedule%", UseMonitor = false)] TimerInfo _,
 #endif
         CancellationToken cancellationToken)
     {
@@ -24,9 +24,5 @@ internal sealed class TimerFunction(FunctionHandler handler, ILogger<TimerFuncti
             logger.LogError("{FunctionName} Failed. Error: {ErrorMessage}", FunctionName, e.Message);
             throw;
         }
-
-        if (timer.ScheduleStatus is null) return;
-
-        logger.LogInformation("Next timer schedule at: {NextScheduledTrigger}", timer.ScheduleStatus.Next);
     }
 }

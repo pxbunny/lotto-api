@@ -35,8 +35,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="Features\Development\" />
-    <Folder Include="Features\Http\" />
+    <Folder Include="Features\Dev\" />
     <Folder Include="Features\Timer\" />
   </ItemGroup>
 

@@ -22,8 +22,6 @@ internal sealed class FunctionHandler(IDrawResultsRepository repository, ILogger
             return null;
         }
 
-        logger.LogInformation("Handled GetDrawResultsByDate. Successfully retrieved draw results.");
-
         return result.ToDrawResults();
     }
 }
