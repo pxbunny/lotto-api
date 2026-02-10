@@ -2,7 +2,6 @@ using System.Net;
 using System.Text.Json;
 using Lotto.Storage.Entities;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.Azure.WebJobs.Extensions.OpenApi.Core.Attributes;
 
 namespace Lotto.Features.Http.GetLatestDrawResults;
 
@@ -14,9 +13,9 @@ internal sealed class HttpGetFunction(
     private const string FunctionName = "GetLatestDrawResults";
 
     [Function(FunctionName)]
-    [OpenApiOperation(FunctionName, "Draw Results")]
-    [OpenApiResponseWithBody(HttpStatusCode.OK, "application/json", typeof(DrawResultsDto))]
-    [OpenApiResponseWithBody(HttpStatusCode.NotFound, "application/json", typeof(string))]
+    [Operation(FunctionName, "Draw Results")]
+    [JsonResponse(HttpStatusCode.OK, typeof(DrawResultsDto))]
+    [JsonResponse(HttpStatusCode.NotFound, typeof(string))]
     [FunctionKeySecurity]
     public async Task<IActionResult> Run(
         [HttpTrigger("get", Route = "draw-results/latest")] HttpRequest _,

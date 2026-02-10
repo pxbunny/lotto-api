@@ -2,8 +2,6 @@ using System.Globalization;
 using System.Net;
 using System.Text.Json;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.Azure.WebJobs.Extensions.OpenApi.Core.Attributes;
-using Microsoft.OpenApi.Models;
 
 namespace Lotto.Features.Http.GetDrawResultsByDate;
 
@@ -15,11 +13,11 @@ internal sealed class HttpGetFunction(
     private const string FunctionName = "GetDrawResultsByDate";
 
     [Function(FunctionName)]
-    [OpenApiOperation(FunctionName, "Draw Results")]
-    [OpenApiParameter("date", In = ParameterLocation.Path)]
-    [OpenApiResponseWithBody(HttpStatusCode.OK, "application/json", typeof(DrawResultsDto))]
-    [OpenApiResponseWithBody(HttpStatusCode.BadRequest, "application/json", typeof(ErrorResponse))]
-    [OpenApiResponseWithBody(HttpStatusCode.NotFound, "application/json", typeof(string))]
+    [Operation(FunctionName, "Draw Results")]
+    [PathParam("date")]
+    [JsonResponse(HttpStatusCode.OK, typeof(DrawResultsDto))]
+    [JsonResponse(HttpStatusCode.BadRequest, typeof(ErrorResponse))]
+    [JsonResponse(HttpStatusCode.NotFound, typeof(string))]
     [FunctionKeySecurity]
     public async Task<IActionResult> Run(
         [HttpTrigger("get", Route = "draw-results/{date:datetime}")] HttpRequest _,

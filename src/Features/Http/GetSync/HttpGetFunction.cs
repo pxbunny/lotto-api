@@ -2,7 +2,6 @@ using System.Net;
 using System.Net.Http;
 using System.Text.Json;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.Azure.WebJobs.Extensions.OpenApi.Core.Attributes;
 
 namespace Lotto.Features.Http.GetSync;
 
@@ -14,10 +13,10 @@ internal sealed class HttpGetFunction(
     private const string FunctionName = "GetSync";
 
     [Function(FunctionName)]
-    [OpenApiOperation(FunctionName, "Sync")]
-    [OpenApiResponseWithBody(HttpStatusCode.OK, "application/json", typeof(SyncDto))]
-    [OpenApiResponseWithBody(HttpStatusCode.BadGateway, "application/json", typeof(ErrorResponse))]
-    [OpenApiResponseWithBody(HttpStatusCode.InternalServerError, "application/json", typeof(ErrorResponse))]
+    [Operation(FunctionName, "Sync")]
+    [JsonResponse(HttpStatusCode.OK, typeof(SyncDto))]
+    [JsonResponse(HttpStatusCode.BadGateway, typeof(ErrorResponse))]
+    [JsonResponse(HttpStatusCode.InternalServerError, typeof(ErrorResponse))]
     [FunctionKeySecurity]
     public async Task<IActionResult> Run(
         [HttpTrigger("get", Route = "sync")] HttpRequest _,

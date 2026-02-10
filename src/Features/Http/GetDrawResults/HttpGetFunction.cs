@@ -1,8 +1,6 @@
 ﻿using System.Net;
 using Lotto.Features.Http.GetDrawResults.FunctionHelpers;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.Azure.WebJobs.Extensions.OpenApi.Core.Attributes;
-using Microsoft.OpenApi.Models;
 
 namespace Lotto.Features.Http.GetDrawResults;
 
@@ -15,15 +13,14 @@ internal sealed class HttpGetFunction(
     private const string FunctionName = "GetDrawResults";
 
     [Function(FunctionName)]
-    [OpenApiOperation(FunctionName, "Draw Results")]
-    [OpenApiParameter("dateFrom", In = ParameterLocation.Query)]
-    [OpenApiParameter("dateTo", In = ParameterLocation.Query)]
-    [OpenApiParameter("top", In = ParameterLocation.Query, Type = typeof(int))]
-    [OpenApiResponseWithBody(HttpStatusCode.OK, "application/json", typeof(DrawResultsDto[]))]
-    [OpenApiResponseWithBody(HttpStatusCode.BadRequest, "application/json", typeof(ErrorResponse))]
-    [OpenApiResponseWithBody(HttpStatusCode.NotFound, "application/json", typeof(string))]
-    [OpenApiResponseWithBody(HttpStatusCode.NotAcceptable, "application/json", typeof(ErrorResponse))]
-    // [OpenApiResponseWithBody(HttpStatusCode.OK, "application/octet-stream", typeof(byte[]))]
+    [Operation(FunctionName, "Draw Results")]
+    [QueryParam("dateFrom")]
+    [QueryParam("dateTo")]
+    [QueryParam("top", typeof(int))]
+    [JsonResponse(HttpStatusCode.OK, typeof(DrawResultsDto[]))]
+    [JsonResponse(HttpStatusCode.BadRequest, typeof(ErrorResponse))]
+    [JsonResponse(HttpStatusCode.NotFound, typeof(string))]
+    [JsonResponse(HttpStatusCode.NotAcceptable, typeof(ErrorResponse))]
     [FunctionKeySecurity]
     public async Task<IActionResult> Run(
         [HttpTrigger("get", Route = "draw-results")] HttpRequest request,
