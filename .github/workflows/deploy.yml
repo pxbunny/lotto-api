@@ -8,14 +8,11 @@ on:
       - 'src/**'
       - '.github/workflows/**'
 
-  pull_request:
-    branches: [ main ]
-    paths:
-      - 'infra/**'
-      - 'src/**'
-      - '.github/workflows/**'
-
   workflow_dispatch:
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
 
 env:
   FUNCTION_APP_SRC_DIRECTORY: src/
