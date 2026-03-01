@@ -4,7 +4,7 @@ updates:
   - package-ecosystem: nuget
     directory: /
     schedule:
-      interval: monthly
+      interval: weekly
     groups:
       dotnet:
         patterns:
@@ -13,7 +13,7 @@ updates:
   - package-ecosystem: pip
     directory: /tools
     schedule:
-      interval: monthly
+      interval: weekly
     groups:
       python:
         patterns:
@@ -22,7 +22,7 @@ updates:
   - package-ecosystem: github-actions
     directory: /.github/workflows
     schedule:
-      interval: monthly
+      interval: weekly
     groups:
       github-actions:
         patterns:
