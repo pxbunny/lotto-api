@@ -45,7 +45,7 @@ public sealed class FeatureInstallersTests
 
     private static IEnumerable<Type> GetFeatureInstallerTypes()
     {
-        var assembly = typeof(IAssemblyMarker).Assembly;
+        var assembly = typeof(Installers).Assembly;
         return Installers.GetFeatureInstallerTypes(assembly);
     }
 }

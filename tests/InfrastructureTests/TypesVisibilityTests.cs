@@ -25,7 +25,7 @@ public sealed class TypesVisibilityTests
     private static IEnumerable<Type> GetNotGeneratedCode()
     {
         var assembly = typeof(IAssemblyMarker).Assembly;
-        return assembly.GetTypes().Where(t => !IsGeneratedCode(t));
+        return assembly.GetTypes().Where(t => !IsGeneratedCode(t) && t.Name != nameof(IAssemblyMarker));
     }
 
     private static bool IsGeneratedCode(MemberInfo t)
