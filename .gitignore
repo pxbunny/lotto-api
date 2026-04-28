@@ -18,6 +18,7 @@ Desktop.ini
 .env
 
 tools/*.csv
+init_azure.sh
 azure-credentials.json
 
 TODOs.md

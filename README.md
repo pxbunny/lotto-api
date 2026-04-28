@@ -51,16 +51,18 @@ Returns synchronization status between storage and the external Lotto API.
 - Azure CLI
 - Python (for initialization scripts, version 3.12+ recommended)
 - Lotto API key from [Lotto Developers Portal](https://developers.lotto.pl/)
-- Bash shell (Linux/macOS, or WSL/Git Bash on Windows for `azure_init.sh`)
 
 ## Deployment via GitHub Actions
 
 1. **Initialize Azure resources**:
+   Download the `init_azure.sh` script from the [rafalczajka/scripts](https://github.com/rafalczajka/scripts), then run it from the root of this repository (requires Bash shell: Linux/macOS, or WSL/Git Bash on Windows):
+
    ```bash
-   ./azure_init.sh
+   chmod +x init_azure.sh
+   ./init_azure.sh
    ```
 
-   Follow prompts to create resources. It generates an `azure-credentials.json` file in the root of the repository.
+   Follow prompts to create resources. The script generates an `azure-credentials.json` file.
 
 2. **Configure secrets** in your GitHub repository:
    - `LOTTO_API_KEY`: Your Lotto.pl API key
