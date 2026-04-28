@@ -18,7 +18,9 @@
 All routes use the default Azure Functions prefix: `/api`.
 All HTTP endpoints require a Function key sent in header: `x-functions-key: <function-key>`.
 
-### `GET /api/draw-results`
+<details>
+<summary><code>GET /api/draw-results</code></summary>
+
 Returns historical draw results from storage.
 
 Optional query parameters:
@@ -32,16 +34,30 @@ Supported `Accept` headers:
 
 Possible status codes: `200`, `400`, `404`, `406`.
 
-### `GET /api/draw-results/{date}`
+</details>
+
+<details>
+<summary><code>GET /api/draw-results/{date}</code></summary>
+
 Returns draw results for a single date from storage. `date` must use `yyyy-MM-dd` format.
 
 Possible status codes: `200`, `400`, `404`.
 
-### `GET /api/draw-results/latest`
+</details>
+
+<details>
+<summary><code>GET /api/draw-results/latest</code></summary>
+
 Returns the latest draw results available in storage.
 
-### `GET /api/sync`
+</details>
+
+<details>
+<summary><code>GET /api/sync</code></summary>
+
 Returns synchronization status between storage and the external Lotto API.
+
+</details>
 
 ## Getting Started
 
