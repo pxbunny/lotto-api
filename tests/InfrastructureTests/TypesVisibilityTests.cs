@@ -28,12 +28,10 @@ public sealed class TypesVisibilityTests
         return assembly.GetTypes().Where(t => !IsGeneratedCode(t) && t.Name != nameof(IAssemblyMarker));
     }
 
-    private static bool IsGeneratedCode(MemberInfo t)
-    {
-        return t.IsDefined(typeof(CompilerGeneratedAttribute), false) ||
-               t.IsDefined(typeof(GeneratedCodeAttribute), false) ||
-               t.IsDefined(typeof(DebuggerNonUserCodeAttribute), false);
-    }
+    private static bool IsGeneratedCode(MemberInfo t) =>
+        t.IsDefined(typeof(CompilerGeneratedAttribute), false) ||
+        t.IsDefined(typeof(GeneratedCodeAttribute), false) ||
+        t.IsDefined(typeof(DebuggerNonUserCodeAttribute), false);
 
     private static bool IsInternal(Type t) => t is
     {
