@@ -9,6 +9,7 @@ internal sealed class FeatureInstaller : IFeatureInstaller
 {
     public void Install(IServiceCollection services, IConfiguration configuration, IHostEnvironment environment)
     {
+        services.AddMemoryCache();
         services.AddScoped<FunctionHandler>();
         services.AddScoped<FunctionResponseHandler>();
 
