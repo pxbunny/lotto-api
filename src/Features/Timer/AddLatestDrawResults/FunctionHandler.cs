@@ -1,3 +1,5 @@
+using Lotto.Draws;
+
 namespace Lotto.Features.Timer.AddLatestDrawResults;
 
 internal sealed class FunctionHandler(

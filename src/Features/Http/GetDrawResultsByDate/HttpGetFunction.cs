@@ -1,6 +1,7 @@
 using System.Globalization;
 using System.Net;
 using System.Text.Json;
+using Lotto.Attributes;
 using Microsoft.AspNetCore.Mvc;
 
 namespace Lotto.Features.Http.GetDrawResultsByDate;

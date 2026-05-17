@@ -1,5 +1,4 @@
-﻿using Lotto.Features.Http.GetDrawResults.FunctionHelpers;
-using Microsoft.Extensions.Configuration;
+﻿using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 
@@ -11,7 +10,7 @@ internal sealed class FeatureInstaller : IFeatureInstaller
     {
         services.AddMemoryCache();
         services.AddScoped<FunctionHandler>();
-        services.AddScoped<FunctionResponseHandler>();
+        services.AddScoped<ResponseHandler>();
 
         services.AddSingleton<IContentNegotiator<ContentType>>(new ContentNegotiator<ContentType>(config =>
         {

@@ -3,13 +3,14 @@ using System.IO;
 using System.Text;
 using System.Text.Json;
 using CsvHelper;
+using Lotto.Draws;
 using Microsoft.AspNetCore.Mvc;
 
-namespace Lotto.Features.Http.GetDrawResults.FunctionHelpers;
+namespace Lotto.Features.Http.GetDrawResults;
 
-internal sealed class FunctionResponseHandler(
+internal sealed class ResponseHandler(
     JsonSerializerOptions jsonSerializerOptions,
-    ILogger<FunctionResponseHandler> logger)
+    ILogger<ResponseHandler> logger)
 {
     public async Task<IActionResult> HandleAsync(
         IList<DrawResults> results,

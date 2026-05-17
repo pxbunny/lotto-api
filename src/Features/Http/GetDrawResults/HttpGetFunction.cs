@@ -1,12 +1,12 @@
 ﻿using System.Net;
-using Lotto.Features.Http.GetDrawResults.FunctionHelpers;
+using Lotto.Attributes;
 using Microsoft.AspNetCore.Mvc;
 
 namespace Lotto.Features.Http.GetDrawResults;
 
 internal sealed class HttpGetFunction(
     FunctionHandler handler,
-    FunctionResponseHandler responseHandler,
+    ResponseHandler responseHandler,
     IContentNegotiator<ContentType> contentNegotiator,
     ILogger<HttpGetFunction> logger)
 {
@@ -44,7 +44,7 @@ internal sealed class HttpGetFunction(
 
     private async Task<IActionResult> HandleRequestAsync(HttpRequest request, CancellationToken cancellationToken)
     {
-        var queryParams = FunctionQueryParams.Parse(request.Query, out var errorMessage);
+        var queryParams = QueryParams.Parse(request.Query, out var errorMessage);
 
         if (!string.IsNullOrEmpty(errorMessage))
         {

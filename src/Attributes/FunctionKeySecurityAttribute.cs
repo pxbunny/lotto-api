@@ -2,7 +2,7 @@ using Microsoft.Azure.WebJobs.Extensions.OpenApi.Core.Attributes;
 using Microsoft.Azure.WebJobs.Extensions.OpenApi.Core.Enums;
 using Microsoft.OpenApi.Models;
 
-namespace Lotto.Features.Http;
+namespace Lotto.Attributes;
 
 [AttributeUsage(AttributeTargets.Method, Inherited = false)]
 internal sealed class FunctionKeySecurityAttribute : OpenApiSecurityAttribute

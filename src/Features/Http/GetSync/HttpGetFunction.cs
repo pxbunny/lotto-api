@@ -1,6 +1,7 @@
 using System.Net;
 using System.Net.Http;
 using System.Text.Json;
+using Lotto.Attributes;
 using Microsoft.AspNetCore.Mvc;
 
 namespace Lotto.Features.Http.GetSync;

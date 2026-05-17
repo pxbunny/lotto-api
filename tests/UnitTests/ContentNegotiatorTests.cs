@@ -1,4 +1,4 @@
-﻿using Lotto.Features.Http.GetDrawResults.FunctionHelpers;
+﻿using Lotto.Features.Http.GetDrawResults;
 using Microsoft.AspNetCore.Http;
 
 namespace Lotto.UnitTests;

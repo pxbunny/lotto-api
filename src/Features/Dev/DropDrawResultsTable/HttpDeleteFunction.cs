@@ -1,6 +1,6 @@
 using System.Net;
 using Azure.Data.Tables;
-using Lotto.Features.Http;
+using Lotto.Attributes;
 using Lotto.Storage;
 using Microsoft.AspNetCore.Mvc;
 

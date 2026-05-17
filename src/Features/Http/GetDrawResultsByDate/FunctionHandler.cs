@@ -1,4 +1,5 @@
 using System.Globalization;
+using Lotto.Draws;
 using Lotto.Storage.Entities;
 
 namespace Lotto.Features.Http.GetDrawResultsByDate;

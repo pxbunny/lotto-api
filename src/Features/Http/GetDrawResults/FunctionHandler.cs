@@ -1,4 +1,5 @@
 using System.Globalization;
+using Lotto.Draws;
 using Lotto.Storage.Entities;
 using Microsoft.Extensions.Caching.Memory;
 

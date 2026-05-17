@@ -1,5 +1,6 @@
 using System.Text.Json;
 using Lotto;
+using Lotto.Draws;
 using Lotto.Storage;
 using Microsoft.Azure.Functions.Worker.Builder;
 using Microsoft.Extensions.DependencyInjection;

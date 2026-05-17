@@ -1,3 +1,4 @@
+using Lotto.Draws;
 using Lotto.Storage.Entities;
 
 namespace Lotto.Interfaces;

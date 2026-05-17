@@ -1,5 +1,7 @@
 using System.Net;
 using System.Text.Json;
+using Lotto.Attributes;
+using Lotto.Draws;
 using Lotto.Storage.Entities;
 using Microsoft.AspNetCore.Mvc;
 

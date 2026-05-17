@@ -1,3 +1,5 @@
+using Lotto.Draws;
+
 namespace Lotto.Features.Http.GetSync;
 
 internal sealed class FunctionHandler(

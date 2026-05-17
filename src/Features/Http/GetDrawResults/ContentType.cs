@@ -1,4 +1,4 @@
-﻿namespace Lotto.Features.Http.GetDrawResults.FunctionHelpers;
+﻿namespace Lotto.Features.Http.GetDrawResults;
 
 internal enum ContentType
 {

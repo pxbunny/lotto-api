@@ -1,5 +1,6 @@
 using System.Globalization;
 using Azure.Data.Tables;
+using Lotto.Draws;
 using Lotto.Storage.Entities;
 
 namespace Lotto.Storage;

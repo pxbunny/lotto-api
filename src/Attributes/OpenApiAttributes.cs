@@ -2,32 +2,19 @@ using System.Net;
 using Microsoft.Azure.WebJobs.Extensions.OpenApi.Core.Attributes;
 using Microsoft.OpenApi.Models;
 
-namespace Lotto.Features.Http;
+namespace Lotto.Attributes;
 
 [AttributeUsage(AttributeTargets.Method, Inherited = false)]
-internal sealed class OperationAttribute : OpenApiOperationAttribute
-{
-    public OperationAttribute(string operationId, string tag) : base(operationId, tag)
-    {
-    }
-}
+internal sealed class OperationAttribute(string operationId, string tag)
+    : OpenApiOperationAttribute(operationId, tag);
 
 [AttributeUsage(AttributeTargets.Method, AllowMultiple = true, Inherited = false)]
-internal sealed class JsonResponseAttribute : OpenApiResponseWithBodyAttribute
-{
-    public JsonResponseAttribute(HttpStatusCode statusCode, Type bodyType)
-        : base(statusCode, "application/json", bodyType)
-    {
-    }
-}
+internal sealed class JsonResponseAttribute(HttpStatusCode statusCode, Type bodyType)
+    : OpenApiResponseWithBodyAttribute(statusCode, "application/json", bodyType);
 
 [AttributeUsage(AttributeTargets.Method, AllowMultiple = true, Inherited = false)]
-internal sealed class NoBodyResponseAttribute : OpenApiResponseWithoutBodyAttribute
-{
-    public NoBodyResponseAttribute(HttpStatusCode statusCode) : base(statusCode)
-    {
-    }
-}
+internal sealed class NoBodyResponseAttribute(HttpStatusCode statusCode)
+    : OpenApiResponseWithoutBodyAttribute(statusCode);
 
 [AttributeUsage(AttributeTargets.Method, AllowMultiple = true, Inherited = false)]
 internal sealed class QueryParamAttribute : OpenApiParameterAttribute
